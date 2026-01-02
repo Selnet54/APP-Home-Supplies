@@ -1646,27 +1646,27 @@ def prikazi_heder():
     col1, col2, col3, col4, col5 = st.columns([1, 1.5, 1, 1, 1])
     
     with col1: 
-        if st.button("🏠 Home", key="h_home"):
+        if st.button("Home", key="h_home"):
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col2: 
-        if st.button("📁 Kategorije", key="h_kat"):
+        if st.button("Kategorije", key="h_kat"):
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col3: 
-        if st.button("📦 Zalihe", key="h_zal"):
+        if st.button("Zalihe", key="h_zal"):
             st.session_state.korak = "zalihe"
             st.rerun()
     
     with col4: 
-        if st.button("🛒 Spisak", key="h_spis"):
+        if st.button("Spisak", key="h_spis"):
             st.session_state.korak = "spisak"
             st.rerun()
     
     with col5: 
-        if st.button("❌ Izlaz", key="h_izl"):
+        if st.button("Izlaz", key="h_izl"):
             st.session_state.korak = "jezik"
             st.rerun()
     
@@ -1675,10 +1675,7 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika - ISPRAVLJENA SA KLIKOM"""
-    
-    # NIKAKVI NASLOVI - SAMO JEZICI
-    # HEDER ĆE BITI PRIKAZAN AUTOMATSKI IZ GLAVNOG TOKA
+    """Stranica za odabir jezika - centrirano, klik na tekst"""
     
     jezici_lista = [
         ("Srpski", "Srpski"), 
@@ -1693,31 +1690,46 @@ def stranica_jezik():
         ("Francuski", "Français")
     ]
     
-    # CSS ZA UKLANJANJE RAZMAKA
+    # CSS za centriranje i uklanjanje razmaka
     st.markdown("""
         <style>
-        /* UKLONI SVE NEŽELJENE RAZMAKE */
-        .stButton > button {
-            margin: 0 !important;
-            padding: 0 !important;
-            border: none !important;
-            background: transparent !important;
+        /* CENTRIRAJ SVE */
+        .lang-container {
+            text-align: center;
+            padding: 10px 5px;
+            cursor: pointer;
         }
         
-        /* UKLONI VERTIKALNE RAZMAKE */
+        /* UKLONI SVE RAZMAKE */
         div[data-testid="stVerticalBlock"] {
             gap: 0.1rem !important;
         }
         
-        /* UKLONI HORIZONTALNE RAZMAKE */
-        [data-testid="column"] {
-            padding-left: 2px !important;
-            padding-right: 2px !important;
+        /* UKLONI MARGINE OD SLIKA */
+        .stImage {
+            margin: 0 auto !important;
+            display: block !important;
+        }
+        
+        /* TEKST ISPOD ZASTAVE */
+        .lang-text {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+        
+        /* UKLONI BORDER OD DUGMETA */
+        div.stButton > button {
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    # PRIKAZ JEZIKA U GRIDU 3 KOLONE
+    # GRID 3 KOLONE
     for i in range(0, len(jezici_lista), 3):
         cols = st.columns(3)
         
@@ -1727,33 +1739,35 @@ def stranica_jezik():
                 fajl, ime = jezici_lista[idx]
                 
                 with cols[j]:
-                    # ⭐⭐ DUGME KOJE RADI ⭐⭐
-                    if st.button(
-                        "",  # PRAZAN TEKST
-                        key=f"lang_btn_{idx}",
-                        help=f"Odaberi {ime}"  # TOOLTIP
-                    ):
-                        # ⭐⭐ OVO SE IZVRŠAVA NA KLIK ⭐⭐
-                        st.session_state.izabrani_jezik_kod = fajl
-                        st.session_state.izabrani_jezik_naziv = ime
-                        st.session_state.jezik_kljuc = jezik_mapa(fajl)
-                        st.session_state.korak = "kategorije"
-                        st.rerun()
+                    # KONTEJNER
+                    st.markdown('<div class="lang-container">', unsafe_allow_html=True)
                     
-                    # ZASTAVA
+                    # ZASTAVA (centrirana)
                     path = f"icons/{fajl}.png"
                     if os.path.exists(path):
                         try:
                             st.image(path, width=80)
                         except:
                             # FALLBACK
-                            st.markdown(f"<div style='text-align:center;'>🌍</div>", unsafe_allow_html=True)
+                            st.markdown('<div style="text-align:center; font-size:40px;">🌍</div>', unsafe_allow_html=True)
                     else:
                         # AKO NEMA SLIKE
-                        st.markdown(f"<div style='text-align:center;'>🌍</div>", unsafe_allow_html=True)
+                        st.markdown('<div style="text-align:center; font-size:40px;">🌍</div>', unsafe_allow_html=True)
                     
-                    # NAZIV JEZIKA
-                    st.markdown(f"<div style='text-align:center; font-weight:bold;'>{ime}</div>", unsafe_allow_html=True)
+                    # TEKST JEZIKA (klikabilan)
+                    if st.button(
+                        ime,  # ⭐ TEKST JE DUGME
+                        key=f"jezik_{idx}",
+                        help=f"Klikni da odabereš {ime}",
+                        use_container_width=True
+                    ):
+                        st.session_state.izabrani_jezik_kod = fajl
+                        st.session_state.izabrani_jezik_naziv = ime
+                        st.session_state.jezik_kljuc = jezik_mapa(fajl)
+                        st.session_state.korak = "kategorije"
+                        st.rerun()
+                    
+                    st.markdown('</div>', unsafe_allow_html=True)
 
 def stranica_zalihe():
     """Stranica za pregled zaliha"""
