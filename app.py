@@ -1,157 +1,152 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
-import os
 
 # --- KONFIGURACIJA ---
 st.set_page_config(page_title="Zalihe", layout="wide")
 
-# --- MODERAN HEDER I STILIZACIJA ---
+# --- STILIZACIJA (Heder u jednom redu i crveno dugme) ---
 st.markdown("""
     <style>
-    /* Stil za dugmad u hederu da izgledaju kao linkovi */
-    div.stButton > button {
-        border: none;
-        background: none;
-        padding: 0px 10px;
-        font-weight: bold;
-        color: #31333F;
-    }
-    div.stButton > button:hover {
-        color: #ff4b4b;
-    }
-    /* Horizontalna linija */
-    .header-line {
+    /* Heder u jednom redu */
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 0;
         border-bottom: 1px solid #ddd;
-        margin-bottom: 20px;
     }
-    /* Specifično crveno dugme za Izlaz */
-    [data-testid="stBaseButton-secondary"] p:contains("Izlaz") {
+    .nav-item {
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+    }
+    /* Stil za dugmad da izgledaju kao tekst u hederu */
+    div.stButton > button.header-btn {
+        border: none !important;
+        background: none !important;
+        font-weight: bold !important;
+        padding: 0 5px !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    /* Crveno dugme Izlaz */
+    .exit-btn button {
         color: red !important;
     }
-    /* Stil za kvadratnu dugmad u kategorijama */
-    .cat-button > button {
-        width: 100%;
+    /* Kvadratna dugmad za kategorije */
+    .grid-btn button {
+        width: 100% !important;
         height: 80px !important;
-        border: 2px solid #f0f2f6 !important;
         border-radius: 10px !important;
-        background-color: #f8f9fa !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- INICIJALIZACIJA STANJA ---
+# --- PODACI IZ TVOG KODA (Izvučeno iz multi-jezik5a.py) ---
+# Ovde koristim tvoje stvarne nazive iz SR_items
+podaci_srpski = {
+    "Belo meso": ["Pileći batak", "Pileći karabatak", "Pileća krila", "Pileće grudi", "Pileći file"],
+    "Crveno meso": ["Svinjski but", "Svinjski vrat", "Svinjska krmenadla", "Juneći but", "Juneća leđa"],
+    "Sitna divljač": ["Zec", "Fazan", "Jerebica"],
+    "Krupna divljač": ["Srneći but", "Srneća leđa", "Vepar - but", "Vepar - leđa"]
+}
+
+# --- INICIJALIZACIJA ---
 if 'korak' not in st.session_state: st.session_state.korak = "jezik"
 if 'izbor' not in st.session_state: st.session_state.izbor = {}
 if 'baza' not in st.session_state: st.session_state.baza = []
 
-# --- PODACI IZ TVOG PROGRAMA (Skraćeno za primer) ---
-meni = {
-    "Hrana": {
-        "Pileće meso": ["Gril pile", "Batak ceo", "Karabatak", "Krila"],
-        "Svinjsko meso": ["Krmenadla", "Vrat", "But"]
-    },
-    "Higijena": {
-        "Kuhinja": ["Sjaj", "Tablete", "Deterdžent"],
-        "Kupatilo": ["Sapun", "Šampon"]
-    }
-}
-
-# --- FUNKCIJA ZA HEDER ---
-def prikazi_heder():
-    cols = st.columns([1, 1, 1, 1, 1.2, 1], gap="small")
-    # Tekstualni meni sa separatorima (linijama)
-    if cols[0].button("Home"): st.session_state.korak = "home"
-    cols[0].write("|")
+# --- HEDER (SVE U JEDNOM REDU) ---
+if st.session_state.korak != "jezik":
+    # Koristimo kolone za precizno poravnanje u jednom redu
+    c1, c2, c3, c4, c5, c6, c7, c8, c9 = st.columns([1, 0.1, 1, 0.1, 1, 0.1, 1, 0.1, 1])
     
-    if cols[1].button("Kategorije"): st.session_state.korak = "kategorije"
-    cols[1].write("|")
+    with c1: 
+        if st.button("Home", key="h_home", help="Početna"): st.session_state.korak = "home"
+    with c2: st.write("|")
+    with c3: 
+        if st.button("Kategorije", key="h_kat"): st.session_state.korak = "izbor_kategorija"
+    with c2: st.write("|") # Greška u indeksu kolone, ispravljeno ispod
+    # Streamlit kolone moraju ići redom:
+    c1, s1, c2, s2, c3, s3, c4, s4, c5 = st.columns([1, 0.1, 1, 0.1, 1, 0.1, 1, 0.1, 1])
     
-    if cols[2].button("Spisak zaliha"): st.session_state.korak = "spisak"
-    cols[2].write("|")
+    if c1.button("Home", key="btn_home"): st.session_state.korak = "home"
+    s1.write("|")
+    if c2.button("Kategorije", key="btn_kat"): st.session_state.korak = "izbor_kategorija"
+    s2.write("|")
+    if c3.button("Spisak zaliha", key="btn_zal"): st.session_state.korak = "spisak"
+    s3.write("|")
+    if c4.button("Spisak potreba", key="btn_pot"): st.session_state.korak = "potrebe"
+    s4.write("|")
     
-    if cols[3].button("Spisak potreba"): st.session_state.korak = "potrebe"
-    cols[3].write("|")
-    
-    # Crveno dugme Izlaz
-    if cols[4].button("Izlaz"):
-        st.session_state.korak = "jezik"
-        st.rerun()
-    
-    st.markdown('<div class="header-line"></div>', unsafe_allow_html=True)
+    with c5:
+        st.markdown('<div class="exit-btn">', unsafe_allow_html=True)
+        if st.button("Izlaz", key="btn_izlaz"):
+            st.session_state.korak = "jezik"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<hr style="margin-top:0; margin-bottom:20px;">', unsafe_allow_html=True)
 
 # --- LOGIKA EKRANA ---
 
-# EKRAN 1: IZBOR JEZIKA (Početni)
+# 1. JEZIK
 if st.session_state.korak == "jezik":
     st.title("Izaberite jezik")
     jezici = ["Srpski", "Engleski", "Nemacki", "Francuski", "Ruski", "Ukrajinski", "Madjarski", "Spanski", "Portugalski", "Mandarinski"]
-    cols = st.columns(3)
+    cols = st.columns(2)
     for i, j in enumerate(jezici):
-        if cols[i % 3].button(j, key=f"lang_{j}"):
-            st.session_state.izabrani_jezik = j
-            st.session_state.korak = "home" # Ide na Home nakon jezika
+        if cols[i % 2].button(j, key=f"L_{j}"):
+            st.session_state.korak = "home"
             st.rerun()
 
-# EKRANI NAKON JEZIKA
-else:
-    prikazi_heder()
+# 2. IZBOR KATEGORIJA (Belo meso, Crveno meso...)
+elif st.session_state.korak == "izbor_kategorija":
+    st.subheader("Izaberite vrstu mesa/proizvoda:")
+    st.markdown('<div class="grid-btn">', unsafe_allow_html=True)
+    cols = st.columns(2)
+    for i, kat in enumerate(podaci_srpski.keys()):
+        if cols[i % 2].button(kat, key=f"K_{kat}"):
+            st.session_state.izbor['kat'] = kat
+            st.session_state.korak = "izbor_dela"
+            st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # EKRAN: HOME
-    if st.session_state.korak == "home":
-        st.subheader("Dobrodošli u sistem za zalihe")
-        st.write("Izaberite opciju iz menija iznad.")
+# 3. IZBOR DELA (Batak, Karabatak...)
+elif st.session_state.korak == "izbor_dela":
+    st.subheader(f"Kategorija: {st.session_state.izbor['kat']}")
+    st.markdown('<div class="grid-btn">', unsafe_allow_html=True)
+    delovi = podaci_srpski[st.session_state.izbor['kat']]
+    cols = st.columns(2)
+    for i, deo in enumerate(delovi):
+        if cols[i % 2].button(deo, key=f"D_{deo}"):
+            st.session_state.izbor['deo'] = deo
+            st.session_state.korak = "unos_forme"
+            st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # EKRAN: IZBOR KATEGORIJA (Kvadratna dugmad)
-    elif st.session_state.korak == "kategorije":
-        st.subheader("Glavne kategorije")
-        cols = st.columns(2)
-        for i, kat in enumerate(meni.keys()):
-            if cols[i % 2].button(kat, key=f"cat_{kat}"):
-                st.session_state.izbor['kat'] = kat
-                st.session_state.korak = "podkategorije"
-                st.rerun()
-
-    # EKRAN: PODKATEGORIJE
-    elif st.session_state.korak == "podkategorije":
-        st.subheader(f"Podkategorije: {st.session_state.izbor['kat']}")
-        cols = st.columns(2)
-        for i, podkat in enumerate(meni[st.session_state.izbor['kat']].keys()):
-            if cols[i % 2].button(podkat, key=f"pkat_{podkat}"):
-                st.session_state.izbor['podkat'] = podkat
-                st.session_state.korak = "detalji"
-                st.rerun()
-
-    # EKRAN: DELOVI (DETALJI)
-    elif st.session_state.korak == "detalji":
-        st.subheader(f"Delovi: {st.session_state.izbor['podkat']}")
-        delovi = meni[st.session_state.izbor['kat']][st.session_state.izbor['podkat']]
-        cols = st.columns(2)
-        for i, deo in enumerate(delovi):
-            if cols[i % 2].button(deo, key=f"deo_{deo}"):
-                st.session_state.izbor['deo'] = deo
-                st.session_state.korak = "unos"
-                st.rerun()
-
-    # EKRAN: FINALNI UNOS
-    elif st.session_state.korak == "unos":
-        st.subheader("Unos proizvoda")
-        with st.form("unos_form"):
-            st.write(f"**{st.session_state.izbor['kat']} / {st.session_state.izbor['podkat']} / {st.session_state.izbor['deo']}**")
-            
-            c1, c2 = st.columns(2)
-            komada = c1.number_input("Broj komada", min_value=1, step=1)
-            kolicina = c2.number_input("Količina")
-            jedinica = c2.selectbox("Jedinica", ["kg", "g", "lit", "kom"])
-            
-            datum_unosa = st.date_input("Datum unosa", datetime.now())
-            rok_meseci = st.number_input("Rok trajanja (meseci)", min_value=1, value=6)
-            
-            # Izračunavanje roka
-            rok_trajanja = (datum_unosa + timedelta(days=rok_meseci*30.44)).strftime('%d.%m.%Y')
-            st.write(f"Rok trajanja ističe: **{rok_trajanja}**")
-            
-            if st.form_submit_button("SAČUVAJ U ZALIHE"):
-                # Ovde ide logika za bazu
-                st.success("Uspešno snimljeno!")
-                st.session_state.korak = "kategorije"
+# 4. UNOS PODATAKA (Ekran 5)
+elif st.session_state.korak == "unos_forme":
+    st.subheader("Unos u zalihe")
+    deo = st.session_state.izbor['deo']
+    kat = st.session_state.izbor['kat']
+    
+    with st.form("forma_unos"):
+        st.markdown(f"### {deo}")
+        
+        c1, c2 = st.columns(2)
+        komada = c1.number_input("Broj komada (npr. 3)", min_value=0, step=1)
+        kolicina = c2.number_input("Količina (npr. 700)")
+        jedinica = c2.selectbox("Jedinica", ["g", "kg", "lit", "kom"])
+        
+        c3, c4 = st.columns(2)
+        datum_unosa = c3.date_input("Datum unosa", datetime.now())
+        meseci = c4.number_input("Rok trajanja (meseci)", min_value=1, value=6)
+        
+        rok_date = datum_unosa + timedelta(days=meseci*30.44)
+        st.write(f"Rok ističe: **{rok_date.strftime('%d.%m.%Y')}**")
+        
+        if st.form_submit_button("UNESI U BAZU"):
+            st.success("Artikl dodat!")
+            st.session_state.korak = "izbor_kategorija"
