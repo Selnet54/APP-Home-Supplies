@@ -1670,25 +1670,15 @@ def prikazi_heder():
             st.session_state.korak = "jezik"
             st.rerun()
     
-    # Prikaz jezika
-    if 'izabrani_jezik_kod' in st.session_state:
-        kod = st.session_state.izabrani_jezik_kod
-        naziv = st.session_state.izabrani_jezik_naziv
-        path = f"icons/{kod}.png"
-        
-        if os.path.exists(path):
-            col_icon, col_text = st.columns([0.1, 0.9])
-            with col_icon:
-                st.image(path, width=30)
-            with col_text:
-                st.markdown(f"<p style='margin-top:10px; font-weight:bold;'>{naziv}</p>", unsafe_allow_html=True)
-    
     st.markdown("<hr>", unsafe_allow_html=True)
 
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika - minimalno"""
+    """Stranica za odabir jezika - ISPRAVLJENA SA KLIKOM"""
+    
+    # NIKAKVI NASLOVI - SAMO JEZICI
+    # HEDER ĆE BITI PRIKAZAN AUTOMATSKI IZ GLAVNOG TOKA
     
     jezici_lista = [
         ("Srpski", "Srpski"), 
@@ -1703,168 +1693,67 @@ def stranica_jezik():
         ("Francuski", "Français")
     ]
     
-    # CSS ZA MINIMALNE RAZMAKE
+    # CSS ZA UKLANJANJE RAZMAKA
     st.markdown("""
         <style>
-        /* SMANJI GLOBALNE RAZMAKE */
-        .main .block-container {
-            padding-top: 0.2rem !important;
+        /* UKLONI SVE NEŽELJENE RAZMAKE */
+        .stButton > button {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            background: transparent !important;
         }
         
-        /* UKLONI VERTIKALNE RAZMAKE IZMEĐU REDOVA */
-        div[data-testid="stVerticalBlock"] > div {
+        /* UKLONI VERTIKALNE RAZMAKE */
+        div[data-testid="stVerticalBlock"] {
             gap: 0.1rem !important;
         }
         
         /* UKLONI HORIZONTALNE RAZMAKE */
-        div[data-testid="column"] {
+        [data-testid="column"] {
             padding-left: 2px !important;
             padding-right: 2px !important;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    # PRVI RED: 3 JEZIKA
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if st.button(" ", key="jezik_srpski"):
-            st.session_state.izabrani_jezik_kod = "Srpski"
-            st.session_state.izabrani_jezik_naziv = "Srpski"
-            st.session_state.jezik_kljuc = "srpski"
-            st.session_state.korak = "kategorije"
-            st.rerun()
+    # PRIKAZ JEZIKA U GRIDU 3 KOLONE
+    for i in range(0, len(jezici_lista), 3):
+        cols = st.columns(3)
         
-        path = "icons/Srpski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Srpski**")
-    
-    with col2:
-        if st.button(" ", key="jezik_engleski"):
-            st.session_state.izabrani_jezik_kod = "Engleski"
-            st.session_state.izabrani_jezik_naziv = "English"
-            st.session_state.jezik_kljuc = "english"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Engleski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**English**")
-    
-    with col3:
-        if st.button(" ", key="jezik_nemacki"):
-            st.session_state.izabrani_jezik_kod = "Nemacki"
-            st.session_state.izabrani_jezik_naziv = "Deutsch"
-            st.session_state.jezik_kljuc = "deutsch"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Nemacki.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Deutsch**")
-    
-    # DRUGI RED: 3 JEZIKA
-    col4, col5, col6 = st.columns(3)
-    
-    with col4:
-        if st.button(" ", key="jezik_ruski"):
-            st.session_state.izabrani_jezik_kod = "Ruski"
-            st.session_state.izabrani_jezik_naziv = "Русский"
-            st.session_state.jezik_kljuc = "ruski"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Ruski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Русский**")
-    
-    with col5:
-        if st.button(" ", key="jezik_ukrajinski"):
-            st.session_state.izabrani_jezik_kod = "Ukrajinski"
-            st.session_state.izabrani_jezik_naziv = "Українська"
-            st.session_state.jezik_kljuc = "ukrajinski"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Ukrajinski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Українська**")
-    
-    with col6:
-        if st.button(" ", key="jezik_madjarski"):
-            st.session_state.izabrani_jezik_kod = "Madjarski"
-            st.session_state.izabrani_jezik_naziv = "Magyar"
-            st.session_state.jezik_kljuc = "hungary"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Madjarski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Magyar**")
-    
-    # TREĆI RED: 3 JEZIKA
-    col7, col8, col9 = st.columns(3)
-    
-    with col7:
-        if st.button(" ", key="jezik_spanski"):
-            st.session_state.izabrani_jezik_kod = "Spanski"
-            st.session_state.izabrani_jezik_naziv = "Español"
-            st.session_state.jezik_kljuc = "espanol"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Spanski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Español**")
-    
-    with col8:
-        if st.button(" ", key="jezik_portugalski"):
-            st.session_state.izabrani_jezik_kod = "Portugalski"
-            st.session_state.izabrani_jezik_naziv = "Português"
-            st.session_state.jezik_kljuc = "portugalski"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Portugalski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Português**")
-    
-    with col9:
-        if st.button(" ", key="jezik_mandarinski"):
-            st.session_state.izabrani_jezik_kod = "Mandarinski"
-            st.session_state.izabrani_jezik_naziv = "中文"
-            st.session_state.jezik_kljuc = "mandarinski"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Mandarinski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**中文**")
-    
-    # ČETVRTI RED: 1 JEZIK (centriran)
-    col10, col11, col12 = st.columns([1, 1, 1])
-    
-    with col11:  # SREDNJA KOLONA
-        if st.button(" ", key="jezik_francuski"):
-            st.session_state.izabrani_jezik_kod = "Francuski"
-            st.session_state.izabrani_jezik_naziv = "Français"
-            st.session_state.jezik_kljuc = "francais"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        
-        path = "icons/Francuski.png"
-        if os.path.exists(path):
-            st.image(path, width=80)
-        st.markdown("**Français**")
+        for j in range(3):
+            idx = i + j
+            if idx < len(jezici_lista):
+                fajl, ime = jezici_lista[idx]
+                
+                with cols[j]:
+                    # ⭐⭐ DUGME KOJE RADI ⭐⭐
+                    if st.button(
+                        "",  # PRAZAN TEKST
+                        key=f"lang_btn_{idx}",
+                        help=f"Odaberi {ime}"  # TOOLTIP
+                    ):
+                        # ⭐⭐ OVO SE IZVRŠAVA NA KLIK ⭐⭐
+                        st.session_state.izabrani_jezik_kod = fajl
+                        st.session_state.izabrani_jezik_naziv = ime
+                        st.session_state.jezik_kljuc = jezik_mapa(fajl)
+                        st.session_state.korak = "kategorije"
+                        st.rerun()
+                    
+                    # ZASTAVA
+                    path = f"icons/{fajl}.png"
+                    if os.path.exists(path):
+                        try:
+                            st.image(path, width=80)
+                        except:
+                            # FALLBACK
+                            st.markdown(f"<div style='text-align:center;'>🌍</div>", unsafe_allow_html=True)
+                    else:
+                        # AKO NEMA SLIKE
+                        st.markdown(f"<div style='text-align:center;'>🌍</div>", unsafe_allow_html=True)
+                    
+                    # NAZIV JEZIKA
+                    st.markdown(f"<div style='text-align:center; font-weight:bold;'>{ime}</div>", unsafe_allow_html=True)
 
 def stranica_zalihe():
     """Stranica za pregled zaliha"""
