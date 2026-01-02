@@ -1688,7 +1688,7 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika"""
+    """Stranica za odabir jezika - KOMPAKTNA VERZIJA"""
     
     jezici_lista = [
         ("Srpski", "Srpski"), 
@@ -1703,88 +1703,98 @@ def stranica_jezik():
         ("Francuski", "Français")
     ]
     
-    # Emoji zastave kao fallback
-    flag_emojis = {
-        "Srpski": "🇷🇸",
-        "Engleski": "🇬🇧", 
-        "Nemacki": "🇩🇪",
-        "Ruski": "🇷🇺",
-        "Ukrajinski": "🇺🇦",
-        "Madjarski": "🇭🇺",
-        "Spanski": "🇪🇸",
-        "Portugalski": "🇵🇹",
-        "Mandarinski": "🇨🇳",
-        "Francuski": "🇫🇷"
-    }
-    
-    # CSS
+    # EMERGENCY CSS za UKLANJANJE RAZMAKA
     st.markdown("""
         <style>
-        .lang-container {
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            margin: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
+        /* UKLONI SVE NEŽELJENE RAZMAKE */
+        div[data-testid="stVerticalBlock"] > div[style*="flex-direction"] {
+            gap: 0.1rem !important;
         }
-        .lang-container:hover {
-            background-color: #f5f5f5;
-            border-color: #4CAF50;
+        
+        /* KOMPAKTNE KOLONE */
+        .stColumn {
+            padding: 1px !important;
         }
-        .lang-flag {
-            font-size: 40px;
-            margin-bottom: 5px;
+        
+        /* MINIMALNI RAZMAK IZMEĐU JEZIKA */
+        .lang-item {
+            margin: 2px 0 !important;
+            padding: 0 !important;
         }
+        
+        /* SMANJI VELIČINU SLIKE */
+        .lang-item img {
+            width: 50px !important;
+            height: 35px !important;
+            margin: 0 auto 2px auto !important;
+            display: block;
+        }
+        
+        /* SMANJI FONT ZA NAZIV */
         .lang-name {
+            font-size: 12px !important;
             font-weight: bold;
-            font-size: 16px;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1;
+        }
+        
+        /* UKLONI BORDER I PADDING OD DUGMETA */
+        div.stButton > button {
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            min-height: auto !important;
+        }
+        
+        /* UKLONI HOVER EFEKTE */
+        div.stButton > button:hover {
+            background: transparent !important;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    # 3 kolone
+    # GRID 3 KOLONE - MINIMALNO
     for i in range(0, len(jezici_lista), 3):
         cols = st.columns(3)
+        
         for j in range(3):
             idx = i + j
             if idx < len(jezici_lista):
                 fajl, ime = jezici_lista[idx]
                 
                 with cols[j]:
-                    # Klikabilni kontejner
-                    if st.button("", key=f"container_{idx}", use_container_width=True):
+                    # KONTEJNER BEZ RAZMAKA
+                    st.markdown('<div class="lang-item">', unsafe_allow_html=True)
+                    
+                    # PROVERI DA LI POSTOJI SLIKA
+                    path = f"icons/{fajl}.png"
+                    
+                    # DUGME KOJE ĆE BITI TRANSPARENTNO
+                    if st.button(
+                        "",  # PRAZAN TEKST
+                        key=f"lang_btn_{idx}",
+                        help=ime  # TOOLTIP
+                    ):
                         st.session_state.izabrani_jezik_kod = fajl
                         st.session_state.izabrani_jezik_naziv = ime
                         st.session_state.jezik_kljuc = jezik_mapa(fajl)
                         st.session_state.korak = "kategorije"
                         st.rerun()
                     
-                    # Unutar kontejnera
-                    st.markdown(f'<div class="lang-container">', unsafe_allow_html=True)
-                    
-                    # Proba da se učita zastava
-                    path = f"icons/{fajl}.png"
-                    image_loaded = False
-                    
+                    # PRIKAŽI ZASTAVU
                     if os.path.exists(path):
                         try:
-                            # Pokušaj da učitaš sliku
-                            from PIL import Image
-                            img = Image.open(path)
-                            st.image(img, width=60)
-                            image_loaded = True
+                            st.image(path, width=50)
                         except:
-                            # Ako ne uspe, koristi emoji
-                            emoji = flag_emojis.get(fajl, "🌍")
-                            st.markdown(f'<div class="lang-flag">{emoji}</div>', unsafe_allow_html=True)
+                            # FALLBACK
+                            st.markdown(f'<div class="lang-name">{ime}</div>', unsafe_allow_html=True)
                     else:
-                        # Ako fajl ne postoji
-                        emoji = flag_emojis.get(fajl, "🌍")
-                        st.markdown(f'<div class="lang-flag">{emoji}</div>', unsafe_allow_html=True)
+                        # AKO NEMA SLIKE, PRIKAŽI SAMO TEKST
+                        st.markdown(f'<div class="lang-name">{ime}</div>', unsafe_allow_html=True)
                     
-                    # Ime jezika
+                    # NAZIV JEZIKA (VRLO MALIM FONTOM)
                     st.markdown(f'<div class="lang-name">{ime}</div>', unsafe_allow_html=True)
                     
                     st.markdown('</div>', unsafe_allow_html=True)
