@@ -5,26 +5,26 @@ from datetime import datetime, timedelta
 # --- KONFIGURACIJA ---
 st.set_page_config(page_title="Zalihe", layout="centered")
 
-# --- CSS ZA RUČNO POZICIONIRANJE DUGMADI ---
+# --- CSS ZA FIKSIRANJE POLOŽAJA ---
 st.markdown("""
     <style>
-    /* Maksimalno podizanje i sužavanje */
+    /* Podizanje svega na vrh */
     .block-container {
         padding-top: 0px !important;
-        margin-top: -20px !important;
         max-width: 350px !important; 
         margin: auto;
     }
 
-    /* Forsiranje horizontala */
+    /* Forsiranje horizontala za mobilni */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
+        justify-content: center !important;
         gap: 0px !important;
     }
 
-    /* Stil svih dugmadi u hederu */
+    /* Stil dugmadi u hederu */
     div.stButton > button {
         border: none !important;
         background: none !important;
@@ -35,42 +35,13 @@ st.markdown("""
         white-space: nowrap !important;
     }
 
-    /* PRECIZNO POMERANJE SVAKOG DUGMETA POJEDINAČNO */
+    div.stButton > button:contains("Izlaz") { color: red !important; }
+
+    /* Centriranje slika u gridu */
+    .stImage > img { margin: 0 auto; display: block; }
     
-    /* Home ostaje levo */
-    div.stButton > button[key="h_home"] {
-        text-align: left !important;
-    }
-
-    /* KATEGORIJA - Pomeranje ulevo (negativna margina) */
-    div.stButton > button[key="h_kat"] {
-        margin-left: -40px !important; 
-    }
-
-    /* ZALIHE - Pomeranje udesno (pozitivna margina) da se odlepi od Kategorije */
-    div.stButton > button[key="h_zal"] {
-        margin-left: 20px !important;
-    }
-
-    /* SPISAK - Malo udesno */
-    div.stButton > button[key="h_spis"] {
-        margin-left: 15px !important;
-    }
-
-    /* IZLAZ - Skroz desno */
-    div.stButton > button[key="h_izl"] {
-        color: red !important;
-        text-align: right !important;
-    }
-
-    /* Red za zastavu i tekst */
-    .flag-container-row {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 8px;
-        margin: 0px 0px 5px 5px;
-    }
+    /* Smanjenje razmaka kod linije */
+    hr { margin: 2px 0 !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -78,10 +49,19 @@ st.markdown("""
 if 'korak' not in st.session_state: st.session_state.korak = "jezik"
 if 'izbor' not in st.session_state: st.session_state.izbor = {}
 
+# --- PODACI (Skraćena lista za test) ---
+jezici_lista = [
+    ("Srpski", "Srpski"), ("Engleski", "English"), ("Nemacki", "Deutsch"),
+    ("Ruski", "Русский"), ("Ukrajinski", "Ukrainska"), ("Madjarski", "Magyar"),
+    ("Spanski", "Espanol"), ("Portugalski", "Portugues"), ("Mandarinski", "中文"),
+    ("Francuski", "Francais")
+]
+
 # --- FUNKCIJA ZA HEDER ---
 def prikazi_heder():
-    # Definišemo kolone
-    c1, c2, c3, c4, c5 = st.columns([0.7, 1.5, 1, 1, 0.7])
+    # Podešavamo širine kolona: 
+    # Kolona 2 (Kategorija) je namerno široka, a kolona 1 (Home) uska da pogura Kategoriju ulevo
+    c1, c2, c3, c4, c5 = st.columns([0.6, 1.4, 0.9, 0.9, 0.7])
     
     with c1: st.button("Home", key="h_home")
     with c2: st.button("Kategorija", key="h_kat")
@@ -92,40 +72,46 @@ def prikazi_heder():
             st.session_state.korak = "jezik"
             st.rerun()
     
-    # Zastava i tekst (Zbijeno u jedan red bez kolona)
+    # ZASTAVA I TEKST U ISTOM REDU (Siguran metod)
     if 'izabrani_jezik_kod' in st.session_state:
         kod = st.session_state.izabrani_jezik_kod
         naziv = st.session_state.izabrani_jezik_naziv
         path = f"icons/{kod}.png"
-        if os.path.exists(path):
-            # Koristimo HTML za fiksni red zastave i teksta
-            st.markdown(f"""
-                <div class="flag-container-row">
-                    <img src="https://raw.githubusercontent.com/tvoj-user/tvoj-repo/main/icons/{kod}.png" width="25" style="vertical-align: middle;">
-                    <span style="font-weight:bold; font-size:14px; vertical-align: middle;">{naziv}</span>
-                </div>
-            """, unsafe_allow_html=True)
-            # Ako gornji link ne radi (jer je lokalan), koristi običan Streamlit red:
-            # col_a, col_b = st.columns([1, 8])
-            # with col_a: st.image(path, width=25)
-            # with col_b: st.markdown(f"**{naziv}**")
+        
+        # Pravimo 2 kolone samo za zastavu i tekst
+        f_col1, f_col2 = st.columns([1, 5])
+        with f_col1:
+            if os.path.exists(path):
+                st.image(path, width=25)
+        with f_col2:
+            st.markdown(f"**{naziv}**")
             
-    st.markdown("<hr style='margin:2px 0'>", unsafe_allow_html=True)
+    st.markdown("<hr>", unsafe_allow_html=True)
 
 # --- LOGIKA EKRANA ---
 prikazi_heder()
 
-# (Ovde ide ostatak tvog koda za izbor jezika, kategorija itd.)
 if st.session_state.korak == "jezik":
-    jezici_lista = [("Srpski", "Srpski"), ("Engleski", "English"), ("Nemacki", "Deutsch"), ("Francuski", "Français")] # primer
+    # 3 kolone po redu
     for i in range(0, len(jezici_lista), 3):
         cols = st.columns(3)
         for j in range(3):
             if i + j < len(jezici_lista):
                 fajl, ime = jezici_lista[i + j]
                 with cols[j]:
+                    path = f"icons/{fajl}.png"
+                    if os.path.exists(path):
+                        st.image(path, width=35)
+                    # Tekst ispod zastave
                     if st.button(ime, key=f"L_{fajl}"):
                         st.session_state.izabrani_jezik_kod = fajl
                         st.session_state.izabrani_jezik_naziv = ime
                         st.session_state.korak = "kategorije"
                         st.rerun()
+
+elif st.session_state.korak == "kategorije":
+    st.write("Izaberite kategoriju:")
+    # Ovde dodaj svoje kategorije (Belo meso itd.)
+    if st.button("Belo meso"):
+        st.session_state.korak = "podkategorije"
+        st.rerun()
