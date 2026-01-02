@@ -1690,10 +1690,6 @@ def prikazi_heder():
 def stranica_jezik():
     """Stranica za odabir jezika"""
     
-    # Dodaj mali naslov ako želiš
-    st.markdown("<h3 style='text-align: center;'>🌍 Odaberite jezik</h3>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>🌍 Choose language</h3>", unsafe_allow_html=True)
-    
     jezici_lista = [
         ("Srpski", "Srpski"), 
         ("Engleski", "English"),
@@ -1707,7 +1703,48 @@ def stranica_jezik():
         ("Francuski", "Français")
     ]
     
-    # Grid 3x4 za 10 jezika + 2 prazna
+    # Emoji zastave kao fallback
+    flag_emojis = {
+        "Srpski": "🇷🇸",
+        "Engleski": "🇬🇧", 
+        "Nemacki": "🇩🇪",
+        "Ruski": "🇷🇺",
+        "Ukrajinski": "🇺🇦",
+        "Madjarski": "🇭🇺",
+        "Spanski": "🇪🇸",
+        "Portugalski": "🇵🇹",
+        "Mandarinski": "🇨🇳",
+        "Francuski": "🇫🇷"
+    }
+    
+    # CSS
+    st.markdown("""
+        <style>
+        .lang-container {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .lang-container:hover {
+            background-color: #f5f5f5;
+            border-color: #4CAF50;
+        }
+        .lang-flag {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+        .lang-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # 3 kolone
     for i in range(0, len(jezici_lista), 3):
         cols = st.columns(3)
         for j in range(3):
@@ -1716,41 +1753,41 @@ def stranica_jezik():
                 fajl, ime = jezici_lista[idx]
                 
                 with cols[j]:
-                    # Kontejner za svaki jezik
-                    container = st.container()
+                    # Klikabilni kontejner
+                    if st.button("", key=f"container_{idx}", use_container_width=True):
+                        st.session_state.izabrani_jezik_kod = fajl
+                        st.session_state.izabrani_jezik_naziv = ime
+                        st.session_state.jezik_kljuc = jezik_mapa(fajl)
+                        st.session_state.korak = "kategorije"
+                        st.rerun()
                     
-                    with container:
-                        # Centriraj sve
-                        st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-                        
-                        path = f"icons/{fajl}.png"
-                        if os.path.exists(path):
-                            # Koristi st.button da napraviš klikabilnu sliku
-                            if st.button(
-                                "",  # Prazan tekst
-                                key=f"img_btn_{idx}",
-                                help=f"Odaberi {ime}",  # Tooltip
-                            ):
-                                st.session_state.izabrani_jezik_kod = fajl
-                                st.session_state.izabrani_jezik_naziv = ime
-                                st.session_state.jezik_kljuc = jezik_mapa(fajl)
-                                st.session_state.korak = "kategorije"
-                                st.rerun()
-                            
-                            # Prikaži sliku
-                            st.image(path, width=70)
-                        else:
-                            # Fallback ikona
-                            if st.button(f"🌍", key=f"icon_btn_{idx}", use_container_width=True):
-                                st.session_state.izabrani_jezik_kod = fajl
-                                st.session_state.izabrani_jezik_naziv = ime
-                                st.session_state.jezik_kljuc = jezik_mapa(fajl)
-                                st.session_state.korak = "kategorije"
-                                st.rerun()
-                        
-                        # Naziv jezika
-                        st.markdown(f"**{ime}**")
-                        st.markdown("</div>", unsafe_allow_html=True)
+                    # Unutar kontejnera
+                    st.markdown(f'<div class="lang-container">', unsafe_allow_html=True)
+                    
+                    # Proba da se učita zastava
+                    path = f"icons/{fajl}.png"
+                    image_loaded = False
+                    
+                    if os.path.exists(path):
+                        try:
+                            # Pokušaj da učitaš sliku
+                            from PIL import Image
+                            img = Image.open(path)
+                            st.image(img, width=60)
+                            image_loaded = True
+                        except:
+                            # Ako ne uspe, koristi emoji
+                            emoji = flag_emojis.get(fajl, "🌍")
+                            st.markdown(f'<div class="lang-flag">{emoji}</div>', unsafe_allow_html=True)
+                    else:
+                        # Ako fajl ne postoji
+                        emoji = flag_emojis.get(fajl, "🌍")
+                        st.markdown(f'<div class="lang-flag">{emoji}</div>', unsafe_allow_html=True)
+                    
+                    # Ime jezika
+                    st.markdown(f'<div class="lang-name">{ime}</div>', unsafe_allow_html=True)
+                    
+                    st.markdown('</div>', unsafe_allow_html=True)
 
 def stranica_kategorije():
     """Stranica glavnih kategorija"""
