@@ -2313,8 +2313,31 @@ with st.sidebar.expander("🔧 Debug Info", expanded=False):
         st.rerun()
     if st.button("Test → Kategorije"):
         st.session_state.korak = "kategorije"
-        st.rerun()		
+        st.rerun()
+    # ⚠️ NEMA ELSE OVDE ⚠️
+
+# --- GLAVNI ROUTER ---
+if st.session_state.korak == "jezik":
+    stranica_jezik()
+elif st.session_state.korak == "kategorije":
+    stranica_kategorije()
+elif st.session_state.korak == "podkategorije":
+    stranica_podkategorije()
+elif st.session_state.korak == "delovi_proizvoda":
+    stranica_delovi_proizvoda()
+elif st.session_state.korak == "unos":
+    stranica_unos()
+elif st.session_state.korak == "zalihe":
+    stranica_zalihe()
+elif st.session_state.korak == "spisak":
+    stranica_spisak()
+elif st.session_state.korak == "email":
+    st.title("📧 Pošalji email")
+    st.info("Funkcionalnost slanja email-a će biti implementirana uskoro.")
+    if st.button("⬅️ Nazad"):
+        st.session_state.korak = "spisak"
+        st.rerun()
 else:
-    # Fallback ako je nepoznat korak
+    # ✅ OVO ELSE JE OK - deo je if/elif chaina
     st.session_state.korak = "jezik"
     st.rerun()
