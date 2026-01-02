@@ -1688,7 +1688,7 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika"""
+    """Stranica za odabir jezika - minimalno"""
     
     jezici_lista = [
         ("Srpski", "Srpski"), 
@@ -1703,426 +1703,168 @@ def stranica_jezik():
         ("Francuski", "Français")
     ]
     
-    # CSS za UKLANJANJE RAZMAKA I POLJA
+    # CSS ZA MINIMALNE RAZMAKE
     st.markdown("""
         <style>
-        /* UKLONI SVE VERTIKALNE RAZMAKE */
+        /* SMANJI GLOBALNE RAZMAKE */
+        .main .block-container {
+            padding-top: 0.2rem !important;
+        }
+        
+        /* UKLONI VERTIKALNE RAZMAKE IZMEĐU REDOVA */
         div[data-testid="stVerticalBlock"] > div {
-            gap: 0rem !important;
+            gap: 0.1rem !important;
         }
         
-        /* UKLONI PADDING IZ KOLONA */
-        .stColumn {
-            padding-top: 0px !important;
-            padding-bottom: 0px !important;
-        }
-        
-        /* UKLONI MARGINE OD DUGMADI */
-        div.stButton > button {
-            margin: 0px !important;
-            padding: 0px !important;
-            min-height: auto !important;
-        }
-        
-        /* UKLONI WHITESPACE KOJI STREAMLIT DODAJE */
-        div.stButton {
-            margin: 0px !important;
-            padding: 0px !important;
-            height: auto !important;
-        }
-        
-        /* UKLONI RAZMAK ISPOD SLIKE */
-        .stImage {
-            margin-bottom: 0px !important;
-        }
-        
-        /* CENTRIRAJ SADRŽAJ */
-        .lang-cell {
-            text-align: center;
-            padding: 2px !important;
+        /* UKLONI HORIZONTALNE RAZMAKE */
+        div[data-testid="column"] {
+            padding-left: 2px !important;
+            padding-right: 2px !important;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    # KORISTI HTML ZA GRID UMESTO ST.COLUMNS
-    html_grid = """
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px;">
-    """
+    # PRVI RED: 3 JEZIKA
+    col1, col2, col3 = st.columns(3)
     
-    for idx, (fajl, ime) in enumerate(jezici_lista):
-        html_grid += f"""
-        <div class="lang-cell" style="text-align: center;">
-            <form>
-                <input type="hidden" name="jezik" value="{fajl}">
-                <button type="submit" style="
-                    border: none; 
-                    background: none; 
-                    padding: 0; 
-                    cursor: pointer;
-                    display: block;
-                    margin: 0 auto;">
-        """
-        
-        # DODAJ SLIKU ILI TEKST
-        path = f"icons/{fajl}.png"
-        if os.path.exists(path):
-            html_grid += f'<img src="{path}" width="80" style="display: block; margin: 0 auto;"><br>'
-        else:
-            html_grid += f'<div style="font-size: 40px; margin: 0 auto;">🌍</div><br>'
-        
-        html_grid += f"""
-                    <div style="font-weight: bold; font-size: 16px;">{ime}</div>
-                </button>
-            </form>
-        </div>
-        """
-    
-    html_grid += "</div>"
-    
-    # PRIKAŽI HTML GRID
-    st.markdown(html_grid, unsafe_allow_html=True)
-    
-    # OBRADI KLIK NA JEZIK (Streamlit ne može direktno, koristimo session state)
-    # Ovo zahteva JavaScript, ali evo jednostavniji način:
-    
-    # UMEŠTO HTML FORM, KORISTI STREAMLIT KOLONE ALI SA HAKOM
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-    
-    # 3 KOLONE - MINIMALNO
-    for i in range(0, len(jezici_lista), 3):
-        # KREIRAJ KOLONE SA MINIMALNIM PRAZNOG PROSTORA
-        col1, col2, col3 = st.columns(3)
-        
-        # PRVA KOLONA U REDU
-        idx1 = i
-        if idx1 < len(jezici_lista):
-            fajl1, ime1 = jezici_lista[idx1]
-            with col1:
-                # KORISTI st.markdown SA ON_CLICK UMESTO st.button
-                st.markdown(f"""
-                <div style="text-align: center; cursor: pointer;" onclick="window.location.href='?jezik={fajl1}'">
-                """, unsafe_allow_html=True)
-                
-                path = f"icons/{fajl1}.png"
-                if os.path.exists(path):
-                    st.image(path, width=80)
-                else:
-                    st.markdown("🌍", unsafe_allow_html=True)
-                
-                st.markdown(f"**{ime1}**")
-                st.markdown("</div>", unsafe_allow_html=True)
-                
-                # SKRIVENO DUGME
-                if st.button("", key=f"lang_{idx1}_hidden", help=f"Odaberi {ime1}"):
-                    st.session_state.izabrani_jezik_kod = fajl1
-                    st.session_state.izabrani_jezik_naziv = ime1
-                    st.session_state.jezik_kljuc = jezik_mapa(fajl1)
-                    st.session_state.korak = "kategorije"
-                    st.rerun()
-        
-        # DRUGA KOLONA U REDU
-        idx2 = i + 1
-        if idx2 < len(jezici_lista):
-            fajl2, ime2 = jezici_lista[idx2]
-            with col2:
-                st.markdown(f"""
-                <div style="text-align: center; cursor: pointer;" onclick="window.location.href='?jezik={fajl2}'">
-                """, unsafe_allow_html=True)
-                
-                path = f"icons/{fajl2}.png"
-                if os.path.exists(path):
-                    st.image(path, width=80)
-                else:
-                    st.markdown("🌍", unsafe_allow_html=True)
-                
-                st.markdown(f"**{ime2}**")
-                st.markdown("</div>", unsafe_allow_html=True)
-                
-                if st.button("", key=f"lang_{idx2}_hidden", help=f"Odaberi {ime2}"):
-                    st.session_state.izabrani_jezik_kod = fajl2
-                    st.session_state.izabrani_jezik_naziv = ime2
-                    st.session_state.jezik_kljuc = jezik_mapa(fajl2)
-                    st.session_state.korak = "kategorije"
-                    st.rerun()
-        
-        # TREĆA KOLONA U REDU
-        idx3 = i + 2
-        if idx3 < len(jezici_lista):
-            fajl3, ime3 = jezici_lista[idx3]
-            with col3:
-                st.markdown(f"""
-                <div style="text-align: center; cursor: pointer;" onclick="window.location.href='?jezik={fajl3}'">
-                """, unsafe_allow_html=True)
-                
-                path = f"icons/{fajl3}.png"
-                if os.path.exists(path):
-                    st.image(path, width=80)
-                else:
-                    st.markdown("🌍", unsafe_allow_html=True)
-                
-                st.markdown(f"**{ime3}**")
-                st.markdown("</div>", unsafe_allow_html=True)
-                
-                if st.button("", key=f"lang_{idx3}_hidden", help=f"Odaberi {ime3}"):
-                    st.session_state.izabrani_jezik_kod = fajl3
-                    st.session_state.izabrani_jezik_naziv = ime3
-                    st.session_state.jezik_kljuc = jezik_mapa(fajl3)
-                    st.session_state.korak = "kategorije"
-                    st.rerun()
-
-def stranica_kategorije():
-    """Stranica glavnih kategorija"""
-	# PRIKAZI HEDER
-    prikazi_heder()
-    st.title(f"📂 {t('glavne_kategorije')}")
-    
-    # Preuzmi kategorije za trenutni jezik
-    kategorije = main_categories_translations.get(
-        st.session_state.jezik_kljuc, 
-        main_categories_translations["srpski"]
-    )
-    
-    # Boje za kategorije
-    category_colors = {
-        "Belo meso": "#FFE295", 
-        "Crveno meso": "#F1624B",
-        "Sitna divljač": "#F59AA6", 
-        "Krupna divljač": "#E19E94",
-        "Riba": "#00BBF1", 
-        "Mlečni proizvodi": "#ACE1F9",
-        "Povrće": "#8FC74A", 
-        "Zimnica i kompoti": "#CC98C4",
-        "Testo i Slatkiši": "#FFECAB", 
-        "Pića": "#F8E06D",
-        "Hemija i higijena": "#98D6D2", 
-        "Ostalo": "#F58634"
-    }
-    
-    # Prikaz kategorija u gridu 2x2
-    for i in range(0, len(kategorije), 2):
-        cols = st.columns(2)
-        for j in range(2):
-            if i + j < len(kategorije):
-                kat = kategorije[i + j]
-                color = category_colors.get(kat, '#D9D9D9')
-                
-                with cols[j]:
-                    # Custom dugme sa bojom
-                    button_html = f"""
-                    <style>
-                    .stButton button[katt="{kat}"] {{
-                        background-color: {color} !important;
-                        color: black !important;
-                        border-radius: 10px !important;
-                        border: 2px solid {color} !important;
-                        padding: 15px !important;
-                        font-weight: bold !important;
-                        font-size: 14px !important;
-                    }}
-                    </style>
-                    """
-                    st.markdown(button_html, unsafe_allow_html=True)
-                    
-                    if st.button(kat, key=f"kat_{kat}", use_container_width=True):
-                        st.session_state.trenutna_kategorija = kat
-                        st.session_state.korak = "podkategorije"
-                        st.rerun()
-    
-    # Debug info (možeš obrisati kasnije)
-    with st.expander("Debug info"):
-        st.write(f"Trenutni jezik: {st.session_state.jezik_kljuc}")
-        st.write(f"Broj kategorija: {len(kategorije)}")
-
-def stranica_podkategorije():
-    """Stranica podkategorija"""
-    if 'trenutna_kategorija' not in st.session_state:
-        st.session_state.korak = "kategorije"
-        st.rerun()
-    
-    trenutna_kategorija = st.session_state.trenutna_kategorija
-    st.title(f"📁 {t('podkategorije')} {trenutna_kategorija}")
-    
-    # Preuzmi podkategorije za trenutni jezik
-    podkategorije_dict = subcategories_translations.get(
-        st.session_state.jezik_kljuc,
-        subcategories_translations["srpski"]
-    )
-    
-    # Fallback ako ne postoje podkategorije za ovu kategoriju
-    if trenutna_kategorija in podkategorije_dict:
-        podkategorije = podkategorije_dict[trenutna_kategorija]
-    else:
-        # Pokušaj da pronađeš u srpskom
-        podkategorije = subcategories_translations["srpski"].get(
-            trenutna_kategorija, ["Ostalo"]
-        )
-    
-    # Ako je samo "Ostalo", idi direktno na unos
-    if len(podkategorije) == 1 and podkategorije[0] == t("Ostalo"):
-        st.session_state.trenutna_podkategorija = podkategorije[0]
-        st.session_state.korak = "unos"
-        st.rerun()
-    
-    # Prikaz podkategorija
-    for i in range(0, len(podkategorije), 2):
-        cols = st.columns(2)
-        for j in range(2):
-            if i + j < len(podkategorije):
-                podkat = podkategorije[i + j]
-                
-                with cols[j]:
-                    if st.button(podkat, key=f"podkat_{podkat}", use_container_width=True):
-                        st.session_state.trenutna_podkategorija = podkat
-                        st.session_state.korak = "delovi_proizvoda"
-                        st.rerun()
-    
-    # Dugme za nazad
-    col1, col2 = st.columns([3, 1])
-    with col2:
-        if st.button("⬅️ Nazad", key="nazad_podkat"):
+    with col1:
+        if st.button(" ", key="jezik_srpski"):
+            st.session_state.izabrani_jezik_kod = "Srpski"
+            st.session_state.izabrani_jezik_naziv = "Srpski"
+            st.session_state.jezik_kljuc = "srpski"
             st.session_state.korak = "kategorije"
             st.rerun()
-
-def stranica_delovi_proizvoda():
-    """Stranica delova proizvoda"""
-    if 'trenutna_podkategorija' not in st.session_state:
-        st.session_state.korak = "podkategorije"
-        st.rerun()
+        
+        path = "icons/Srpski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Srpski**")
     
-    trenutna_podkategorija = st.session_state.trenutna_podkategorija
-    
-    st.title(f"🔪 {t('delovi_proizvoda')} {trenutna_podkategorija}")
-    
-    # Preuzmi delove proizvoda
-    delovi_dict = product_parts_translations.get(
-        st.session_state.jezik_kljuc,
-        product_parts_translations["srpski"]
-    )
-    
-    if trenutna_podkategorija in delovi_dict:
-        delovi = delovi_dict[trenutna_podkategorija]
-    else:
-        # Fallback na srpski
-        delovi = product_parts_translations["srpski"].get(
-            trenutna_podkategorija, ["Ostalo"]
-        )
-    
-    # Ako je samo "Ostalo" ili "Napomena:", idi na unos
-    if len(delovi) == 1 and (
-        "Ostalo" in delovi[0] or 
-        "Napomena:" in delovi[0] or
-        delovi[0] == t("Ostalo")
-    ):
-        st.session_state.trenutni_deo_proizvoda = delovi[0]
-        st.session_state.korak = "unos"
-        st.rerun()
-    
-    # Prikaz delova u gridu
-    for i in range(0, len(delovi), 2):
-        cols = st.columns(2)
-        for j in range(2):
-            if i + j < len(delovi):
-                deo = delovi[i + j]
-                
-                with cols[j]:
-                    if st.button(deo, key=f"deo_{deo}", use_container_width=True):
-                        st.session_state.trenutni_deo_proizvoda = deo
-                        st.session_state.korak = "unos"
-                        st.rerun()
-    
-    # Dugme za nazad
-    col1, col2 = st.columns([3, 1])
     with col2:
-        if st.button("⬅️ Nazad", key="nazad_delovi"):
-            st.session_state.korak = "podkategorije"
+        if st.button(" ", key="jezik_engleski"):
+            st.session_state.izabrani_jezik_kod = "Engleski"
+            st.session_state.izabrani_jezik_naziv = "English"
+            st.session_state.jezik_kljuc = "english"
+            st.session_state.korak = "kategorije"
             st.rerun()
-
-def stranica_unos():
-    """Stranica za unos podataka"""
-    st.title("📝 Unos podataka")
+        
+        path = "icons/Engleski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**English**")
     
-    with st.form("unos_forma"):
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            product_name = st.text_input(
-                t("naziv_proizvoda"), 
-                value=st.session_state.get('trenutni_deo_proizvoda', '')
-            )
-            description = st.text_input(
-                t("opis"),
-                value=st.session_state.get('trenutna_podkategorija', '')
-            )
-            piece = st.text_input(t("komad"))
-            quantity = st.number_input(t("kolicina"), min_value=0.0, step=0.1, value=1.0)
-        
-        with col2:
-            unit_options = ["kg", "g", "kom", "l", "ml", "pak", "flaša", "kutija"]
-            unit = st.selectbox(t("jedinica_mere"), unit_options, index=0)
-            
-            entry_date = st.date_input(t("datum_unosa"), datetime.now())
-            
-            shelf_life = st.number_input(
-                t("rok_trajanja"), 
-                min_value=0, 
-                step=1, 
-                value=12
-            )
-            
-            storage_options = [
-                t("zamrzivac_1"), 
-                t("zamrzivac_2"), 
-                t("zamrzivac_3"), 
-                t("frizider"), 
-                t("ostava"),
-                t("Ostalo")
-            ]
-            storage = st.selectbox(t("mesto_skladistenja"), storage_options, index=5)
-        
-        # Izračunaj datum isteka
-        expiry_date = entry_date + timedelta(days=shelf_life * 30)
-        st.info(f"{t('automatski_rok')}: {expiry_date.strftime('%Y-%m-%d')}")
-        
-        # Dugmad
-        col_save, col_back, col_empty = st.columns([1, 1, 2])
-        with col_save:
-            submit_save = st.form_submit_button("💾 Sačuvaj", use_container_width=True)
-        
-        with col_back:
-            submit_back = st.form_submit_button("⬅️ Nazad", use_container_width=True)
-        
-        if submit_save:
-            if product_name and piece:
-                save_product_to_db(
-                    product_name, description, piece, quantity,
-                    unit, entry_date, shelf_life, expiry_date, storage
-                )
-                st.success("✅ Proizvod sačuvan!")
-                # Reset polja
-                st.session_state.trenutni_deo_proizvoda = ""
-                st.rerun()
-            else:
-                st.error("❌ Popunite obavezna polja (Proizvod i Komad)!")
-        
-        if submit_back:
-            st.session_state.korak = "delovi_proizvoda"
+    with col3:
+        if st.button(" ", key="jezik_nemacki"):
+            st.session_state.izabrani_jezik_kod = "Nemacki"
+            st.session_state.izabrani_jezik_naziv = "Deutsch"
+            st.session_state.jezik_kljuc = "deutsch"
+            st.session_state.korak = "kategorije"
             st.rerun()
-
-def save_product_to_db(product_name, description, piece, quantity, unit, entry_date, shelf_life, expiry_date, storage):
-    """Čuva proizvod u bazu"""
-    conn = sqlite3.connect('inventory.db')
-    c = conn.cursor()
+        
+        path = "icons/Nemacki.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Deutsch**")
     
-    c.execute('''INSERT INTO products 
-                 (product_name, description, piece, quantity, unit, 
-                  entry_date, shelf_life_months, expiry_date, storage_location)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-              (product_name, description, piece, quantity, unit,
-               entry_date.strftime("%Y-%m-%d"), shelf_life,
-               expiry_date.strftime("%Y-%m-%d"), storage))
+    # DRUGI RED: 3 JEZIKA
+    col4, col5, col6 = st.columns(3)
     
-    conn.commit()
-    conn.close()
+    with col4:
+        if st.button(" ", key="jezik_ruski"):
+            st.session_state.izabrani_jezik_kod = "Ruski"
+            st.session_state.izabrani_jezik_naziv = "Русский"
+            st.session_state.jezik_kljuc = "ruski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+        
+        path = "icons/Ruski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Русский**")
+    
+    with col5:
+        if st.button(" ", key="jezik_ukrajinski"):
+            st.session_state.izabrani_jezik_kod = "Ukrajinski"
+            st.session_state.izabrani_jezik_naziv = "Українська"
+            st.session_state.jezik_kljuc = "ukrajinski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+        
+        path = "icons/Ukrajinski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Українська**")
+    
+    with col6:
+        if st.button(" ", key="jezik_madjarski"):
+            st.session_state.izabrani_jezik_kod = "Madjarski"
+            st.session_state.izabrani_jezik_naziv = "Magyar"
+            st.session_state.jezik_kljuc = "hungary"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+        
+        path = "icons/Madjarski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Magyar**")
+    
+    # TREĆI RED: 3 JEZIKA
+    col7, col8, col9 = st.columns(3)
+    
+    with col7:
+        if st.button(" ", key="jezik_spanski"):
+            st.session_state.izabrani_jezik_kod = "Spanski"
+            st.session_state.izabrani_jezik_naziv = "Español"
+            st.session_state.jezik_kljuc = "espanol"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+        
+        path = "icons/Spanski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Español**")
+    
+    with col8:
+        if st.button(" ", key="jezik_portugalski"):
+            st.session_state.izabrani_jezik_kod = "Portugalski"
+            st.session_state.izabrani_jezik_naziv = "Português"
+            st.session_state.jezik_kljuc = "portugalski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+        
+        path = "icons/Portugalski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Português**")
+    
+    with col9:
+        if st.button(" ", key="jezik_mandarinski"):
+            st.session_state.izabrani_jezik_kod = "Mandarinski"
+            st.session_state.izabrani_jezik_naziv = "中文"
+            st.session_state.jezik_kljuc = "mandarinski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+        
+        path = "icons/Mandarinski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**中文**")
+    
+    # ČETVRTI RED: 1 JEZIK (centriran)
+    col10, col11, col12 = st.columns([1, 1, 1])
+    
+    with col11:  # SREDNJA KOLONA
+        if st.button(" ", key="jezik_francuski"):
+            st.session_state.izabrani_jezik_kod = "Francuski"
+            st.session_state.izabrani_jezik_naziv = "Français"
+            st.session_state.jezik_kljuc = "francais"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+        
+        path = "icons/Francuski.png"
+        if os.path.exists(path):
+            st.image(path, width=80)
+        st.markdown("**Français**")
 
 def stranica_zalihe():
     """Stranica za pregled zaliha"""
