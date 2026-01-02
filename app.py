@@ -1597,7 +1597,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- DINAMIČKI HEDER ---
-ddef prikazi_heder():
+def prikazi_heder():
     # CSS za podizanje hedera
     st.markdown("""
         <style>
