@@ -5,6 +5,24 @@ import pandas as pd
 
 # --- 1. OSNOVNA PODEŠAVANJA I DIZAJN ---
 st.set_page_config(page_title="Moje Zalihe", layout="wide")
+# --- STILIZACIJA DUGMADI (CSS) ---
+st.markdown("""
+    <style>
+    /* Zeleno dugme za Snimanje */
+    div.stButton > button:first-child {
+        background-color: #28a745;
+        color: white;
+        border-radius: 5px;
+        height: 3em;
+        width: 100%;
+    }
+    /* Crveno dugme za Brisanje */
+    div.stButton > button:last-child {
+        background-color: #dc3545;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # Putanja do ikona
 icon_path = "icons/512.png"
