@@ -1643,6 +1643,16 @@ st.markdown("""
 
 # --- DINAMIČKI HEDER ---
 def prikazi_heder():
+    # CSS za podizanje hedera
+    st.markdown("""
+        <style>
+        /* PODIŽEM HEDER NA VRH */
+        .main .block-container {
+            padding-top: 0.5rem !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
     col1, col2, col3, col4, col5 = st.columns([1, 1.5, 1, 1, 1])
     
     with col1: 
@@ -1675,7 +1685,7 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika - centrirano, klik na tekst"""
+    """Stranica za odabir jezika - jednostavno i poravnano"""
     
     jezici_lista = [
         ("Srpski", "Srpski"), 
@@ -1690,84 +1700,127 @@ def stranica_jezik():
         ("Francuski", "Français")
     ]
     
-    # CSS za centriranje i uklanjanje razmaka
+    # CSS za centriranje
     st.markdown("""
         <style>
-        /* CENTRIRAJ SVE */
-        .lang-container {
-            text-align: center;
-            padding: 10px 5px;
-            cursor: pointer;
-        }
-        
-        /* UKLONI SVE RAZMAKE */
-        div[data-testid="stVerticalBlock"] {
-            gap: 0.1rem !important;
-        }
-        
-        /* UKLONI MARGINE OD SLIKA */
-        .stImage {
-            margin: 0 auto !important;
-            display: block !important;
-        }
-        
-        /* TEKST ISPOD ZASTAVE */
-        .lang-text {
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: 5px;
-            cursor: pointer;
-        }
-        
-        /* UKLONI BORDER OD DUGMETA */
+        /* CENTRIRAJ TEKST U DUGMADIMA */
         div.stButton > button {
-            border: none !important;
-            background: transparent !important;
-            padding: 0 !important;
-            margin: 0 !important;
+            text-align: center !important;
+            display: block !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        
+        /* CENTRIRAJ SLIKE */
+        .stImage {
+            margin-left: auto !important;
+            margin-right: auto !important;
+            display: block !important;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    # GRID 3 KOLONE
-    for i in range(0, len(jezici_lista), 3):
-        cols = st.columns(3)
-        
-        for j in range(3):
-            idx = i + j
-            if idx < len(jezici_lista):
-                fajl, ime = jezici_lista[idx]
-                
-                with cols[j]:
-                    # KONTEJNER
-                    st.markdown('<div class="lang-container">', unsafe_allow_html=True)
-                    
-                    # ZASTAVA (centrirana)
-                    path = f"icons/{fajl}.png"
-                    if os.path.exists(path):
-                        try:
-                            st.image(path, width=80)
-                        except:
-                            # FALLBACK
-                            st.markdown('<div style="text-align:center; font-size:40px;">🌍</div>', unsafe_allow_html=True)
-                    else:
-                        # AKO NEMA SLIKE
-                        st.markdown('<div style="text-align:center; font-size:40px;">🌍</div>', unsafe_allow_html=True)
-                    
-                    # TEKST JEZIKA (klikabilan)
-                    if st.button(
-                        ime,  # ⭐ TEKST JE DUGME
-                        key=f"jezik_{idx}",
-                        help=f"Klikni da odabereš {ime}",
-                        use_container_width=True
-                    ):
-                        st.session_state.izabrani_jezik_kod = fajl
-                        st.session_state.izabrani_jezik_naziv = ime
-                        st.session_state.jezik_kljuc = jezik_mapa(fajl)
-                        st.session_state.korak = "kategorije"
-                        st.rerun()
-                    
-                    st.markdown('</div>', unsafe_allow_html=True)
+    # PRVI RED
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.image("icons/Srpski.png", width=80)
+        if st.button("Srpski", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Srpski"
+            st.session_state.izabrani_jezik_naziv = "Srpski"
+            st.session_state.jezik_kljuc = "srpski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    with col2:
+        st.image("icons/Engleski.png", width=80)
+        if st.button("English", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Engleski"
+            st.session_state.izabrani_jezik_naziv = "English"
+            st.session_state.jezik_kljuc = "english"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    with col3:
+        st.image("icons/Nemacki.png", width=80)
+        if st.button("Deutsch", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Nemacki"
+            st.session_state.izabrani_jezik_naziv = "Deutsch"
+            st.session_state.jezik_kljuc = "deutsch"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    # DRUGI RED
+    col4, col5, col6 = st.columns(3)
+    
+    with col4:
+        st.image("icons/Ruski.png", width=80)
+        if st.button("Русский", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Ruski"
+            st.session_state.izabrani_jezik_naziv = "Русский"
+            st.session_state.jezik_kljuc = "ruski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    with col5:
+        st.image("icons/Ukrajinski.png", width=80)
+        if st.button("Українська", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Ukrajinski"
+            st.session_state.izabrani_jezik_naziv = "Українська"
+            st.session_state.jezik_kljuc = "ukrajinski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    with col6:
+        st.image("icons/Madjarski.png", width=80)
+        if st.button("Magyar", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Madjarski"
+            st.session_state.izabrani_jezik_naziv = "Magyar"
+            st.session_state.jezik_kljuc = "hungary"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    # TREĆI RED
+    col7, col8, col9 = st.columns(3)
+    
+    with col7:
+        st.image("icons/Spanski.png", width=80)
+        if st.button("Español", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Spanski"
+            st.session_state.izabrani_jezik_naziv = "Español"
+            st.session_state.jezik_kljuc = "espanol"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    with col8:
+        st.image("icons/Portugalski.png", width=80)
+        if st.button("Português", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Portugalski"
+            st.session_state.izabrani_jezik_naziv = "Português"
+            st.session_state.jezik_kljuc = "portugalski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    with col9:
+        st.image("icons/Mandarinski.png", width=80)
+        if st.button("中文", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Mandarinski"
+            st.session_state.izabrani_jezik_naziv = "中文"
+            st.session_state.jezik_kljuc = "mandarinski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
+    
+    # ČETVRTI RED
+    col10, col11, col12 = st.columns([1, 1, 1])
+    
+    with col11:
+        st.image("icons/Francuski.png", width=80)
+        if st.button("Français", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Francuski"
+            st.session_state.izabrani_jezik_naziv = "Français"
+            st.session_state.jezik_kljuc = "francais"
+            st.session_state.korak = "kategorije"
+            st.rerun()
 
 def stranica_zalihe():
     """Stranica za pregled zaliha"""
