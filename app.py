@@ -2130,7 +2130,7 @@ def stranica_zalihe():
         st.rerun()
 
 def stranica_spisak():
-    ""Stranica spiska potreba""
+    """Stranica spiska potreba"""
     st.title("🛒 Spisak potreba")
     
     # Učitaj spisak iz baze
