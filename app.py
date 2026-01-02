@@ -1688,7 +1688,7 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika - KOMPAKTNA VERZIJA"""
+    """Stranica za odabir jezika"""
     
     jezici_lista = [
         ("Srpski", "Srpski"), 
@@ -1703,101 +1703,172 @@ def stranica_jezik():
         ("Francuski", "Français")
     ]
     
-    # EMERGENCY CSS za UKLANJANJE RAZMAKA
+    # CSS za UKLANJANJE RAZMAKA I POLJA
     st.markdown("""
         <style>
-        /* UKLONI SVE NEŽELJENE RAZMAKE */
-        div[data-testid="stVerticalBlock"] > div[style*="flex-direction"] {
-            gap: 0.1rem !important;
+        /* UKLONI SVE VERTIKALNE RAZMAKE */
+        div[data-testid="stVerticalBlock"] > div {
+            gap: 0rem !important;
         }
         
-        /* KOMPAKTNE KOLONE */
+        /* UKLONI PADDING IZ KOLONA */
         .stColumn {
-            padding: 1px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
         }
         
-        /* MINIMALNI RAZMAK IZMEĐU JEZIKA */
-        .lang-item {
-            margin: 2px 0 !important;
-            padding: 0 !important;
-        }
-        
-        /* SMANJI VELIČINU SLIKE */
-        .lang-item img {
-            width: 50px !important;
-            height: 35px !important;
-            margin: 0 auto 2px auto !important;
-            display: block;
-        }
-        
-        /* SMANJI FONT ZA NAZIV */
-        .lang-name {
-            font-size: 12px !important;
-            font-weight: bold;
-            margin: 0 !important;
-            padding: 0 !important;
-            line-height: 1;
-        }
-        
-        /* UKLONI BORDER I PADDING OD DUGMETA */
+        /* UKLONI MARGINE OD DUGMADI */
         div.stButton > button {
-            border: none !important;
-            background: transparent !important;
-            padding: 0 !important;
-            margin: 0 !important;
+            margin: 0px !important;
+            padding: 0px !important;
             min-height: auto !important;
         }
         
-        /* UKLONI HOVER EFEKTE */
-        div.stButton > button:hover {
-            background: transparent !important;
+        /* UKLONI WHITESPACE KOJI STREAMLIT DODAJE */
+        div.stButton {
+            margin: 0px !important;
+            padding: 0px !important;
+            height: auto !important;
+        }
+        
+        /* UKLONI RAZMAK ISPOD SLIKE */
+        .stImage {
+            margin-bottom: 0px !important;
+        }
+        
+        /* CENTRIRAJ SADRŽAJ */
+        .lang-cell {
+            text-align: center;
+            padding: 2px !important;
         }
         </style>
     """, unsafe_allow_html=True)
     
-    # GRID 3 KOLONE - MINIMALNO
-    for i in range(0, len(jezici_lista), 3):
-        cols = st.columns(3)
+    # KORISTI HTML ZA GRID UMESTO ST.COLUMNS
+    html_grid = """
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px;">
+    """
+    
+    for idx, (fajl, ime) in enumerate(jezici_lista):
+        html_grid += f"""
+        <div class="lang-cell" style="text-align: center;">
+            <form>
+                <input type="hidden" name="jezik" value="{fajl}">
+                <button type="submit" style="
+                    border: none; 
+                    background: none; 
+                    padding: 0; 
+                    cursor: pointer;
+                    display: block;
+                    margin: 0 auto;">
+        """
         
-        for j in range(3):
-            idx = i + j
-            if idx < len(jezici_lista):
-                fajl, ime = jezici_lista[idx]
+        # DODAJ SLIKU ILI TEKST
+        path = f"icons/{fajl}.png"
+        if os.path.exists(path):
+            html_grid += f'<img src="{path}" width="80" style="display: block; margin: 0 auto;"><br>'
+        else:
+            html_grid += f'<div style="font-size: 40px; margin: 0 auto;">🌍</div><br>'
+        
+        html_grid += f"""
+                    <div style="font-weight: bold; font-size: 16px;">{ime}</div>
+                </button>
+            </form>
+        </div>
+        """
+    
+    html_grid += "</div>"
+    
+    # PRIKAŽI HTML GRID
+    st.markdown(html_grid, unsafe_allow_html=True)
+    
+    # OBRADI KLIK NA JEZIK (Streamlit ne može direktno, koristimo session state)
+    # Ovo zahteva JavaScript, ali evo jednostavniji način:
+    
+    # UMEŠTO HTML FORM, KORISTI STREAMLIT KOLONE ALI SA HAKOM
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    
+    # 3 KOLONE - MINIMALNO
+    for i in range(0, len(jezici_lista), 3):
+        # KREIRAJ KOLONE SA MINIMALNIM PRAZNOG PROSTORA
+        col1, col2, col3 = st.columns(3)
+        
+        # PRVA KOLONA U REDU
+        idx1 = i
+        if idx1 < len(jezici_lista):
+            fajl1, ime1 = jezici_lista[idx1]
+            with col1:
+                # KORISTI st.markdown SA ON_CLICK UMESTO st.button
+                st.markdown(f"""
+                <div style="text-align: center; cursor: pointer;" onclick="window.location.href='?jezik={fajl1}'">
+                """, unsafe_allow_html=True)
                 
-                with cols[j]:
-                    # KONTEJNER BEZ RAZMAKA
-                    st.markdown('<div class="lang-item">', unsafe_allow_html=True)
-                    
-                    # PROVERI DA LI POSTOJI SLIKA
-                    path = f"icons/{fajl}.png"
-                    
-                    # DUGME KOJE ĆE BITI TRANSPARENTNO
-                    if st.button(
-                        "",  # PRAZAN TEKST
-                        key=f"lang_btn_{idx}",
-                        help=ime  # TOOLTIP
-                    ):
-                        st.session_state.izabrani_jezik_kod = fajl
-                        st.session_state.izabrani_jezik_naziv = ime
-                        st.session_state.jezik_kljuc = jezik_mapa(fajl)
-                        st.session_state.korak = "kategorije"
-                        st.rerun()
-                    
-                    # PRIKAŽI ZASTAVU
-                    if os.path.exists(path):
-                        try:
-                            st.image(path, width=50)
-                        except:
-                            # FALLBACK
-                            st.markdown(f'<div class="lang-name">{ime}</div>', unsafe_allow_html=True)
-                    else:
-                        # AKO NEMA SLIKE, PRIKAŽI SAMO TEKST
-                        st.markdown(f'<div class="lang-name">{ime}</div>', unsafe_allow_html=True)
-                    
-                    # NAZIV JEZIKA (VRLO MALIM FONTOM)
-                    st.markdown(f'<div class="lang-name">{ime}</div>', unsafe_allow_html=True)
-                    
-                    st.markdown('</div>', unsafe_allow_html=True)
+                path = f"icons/{fajl1}.png"
+                if os.path.exists(path):
+                    st.image(path, width=80)
+                else:
+                    st.markdown("🌍", unsafe_allow_html=True)
+                
+                st.markdown(f"**{ime1}**")
+                st.markdown("</div>", unsafe_allow_html=True)
+                
+                # SKRIVENO DUGME
+                if st.button("", key=f"lang_{idx1}_hidden", help=f"Odaberi {ime1}"):
+                    st.session_state.izabrani_jezik_kod = fajl1
+                    st.session_state.izabrani_jezik_naziv = ime1
+                    st.session_state.jezik_kljuc = jezik_mapa(fajl1)
+                    st.session_state.korak = "kategorije"
+                    st.rerun()
+        
+        # DRUGA KOLONA U REDU
+        idx2 = i + 1
+        if idx2 < len(jezici_lista):
+            fajl2, ime2 = jezici_lista[idx2]
+            with col2:
+                st.markdown(f"""
+                <div style="text-align: center; cursor: pointer;" onclick="window.location.href='?jezik={fajl2}'">
+                """, unsafe_allow_html=True)
+                
+                path = f"icons/{fajl2}.png"
+                if os.path.exists(path):
+                    st.image(path, width=80)
+                else:
+                    st.markdown("🌍", unsafe_allow_html=True)
+                
+                st.markdown(f"**{ime2}**")
+                st.markdown("</div>", unsafe_allow_html=True)
+                
+                if st.button("", key=f"lang_{idx2}_hidden", help=f"Odaberi {ime2}"):
+                    st.session_state.izabrani_jezik_kod = fajl2
+                    st.session_state.izabrani_jezik_naziv = ime2
+                    st.session_state.jezik_kljuc = jezik_mapa(fajl2)
+                    st.session_state.korak = "kategorije"
+                    st.rerun()
+        
+        # TREĆA KOLONA U REDU
+        idx3 = i + 2
+        if idx3 < len(jezici_lista):
+            fajl3, ime3 = jezici_lista[idx3]
+            with col3:
+                st.markdown(f"""
+                <div style="text-align: center; cursor: pointer;" onclick="window.location.href='?jezik={fajl3}'">
+                """, unsafe_allow_html=True)
+                
+                path = f"icons/{fajl3}.png"
+                if os.path.exists(path):
+                    st.image(path, width=80)
+                else:
+                    st.markdown("🌍", unsafe_allow_html=True)
+                
+                st.markdown(f"**{ime3}**")
+                st.markdown("</div>", unsafe_allow_html=True)
+                
+                if st.button("", key=f"lang_{idx3}_hidden", help=f"Odaberi {ime3}"):
+                    st.session_state.izabrani_jezik_kod = fajl3
+                    st.session_state.izabrani_jezik_naziv = ime3
+                    st.session_state.jezik_kljuc = jezik_mapa(fajl3)
+                    st.session_state.korak = "kategorije"
+                    st.rerun()
 
 def stranica_kategorije():
     """Stranica glavnih kategorija"""
