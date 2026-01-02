@@ -2084,7 +2084,7 @@ with st.sidebar.expander("🔧 Debug Info", expanded=False):
         st.rerun()
     if st.button("Test → Kategorije"):
         st.session_state.korak = "kategorije"
-		def stranica_kategorije():
+def stranica_kategorije():
     """Stranica glavnih kategorija"""
     
     # Prikazi heder
