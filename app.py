@@ -1689,6 +1689,8 @@ def prikazi_heder():
 
 def stranica_jezik():
     """Stranica za odabir jezika"""
+    prikazi_heder()  # DODAJ OVO!
+    
     st.title("🌍 Izaberite jezik / Choose language")
     
     jezici_lista = [
@@ -1704,23 +1706,26 @@ def stranica_jezik():
         ("Francuski", "Francuski")
     ]
     
-    # Prikaz u gridu
-    for i in range(0, len(jezici_lista), 3):
+    # ⭐⭐ ISPRAVKA: Koristi UNIQUE keys ⭐⭐
+    for i, (fajl, ime) in enumerate(jezici_lista):
         cols = st.columns(3)
         for j in range(3):
-            if i + j < len(jezici_lista):
-                fajl, ime = jezici_lista[i + j]
+            idx = i * 3 + j
+            if idx < len(jezici_lista):
+                fajl, ime = jezici_lista[idx]
+                
                 with cols[j]:
                     path = f"icons/{fajl}.png"
                     if os.path.exists(path):
                         try:
                             st.image(path, width=80)
                         except:
-                            st.write(f"🔄 {ime}")
+                            st.write(f"🌍 {ime}")
                     else:
                         st.write(f"📄 {ime}")
                     
-                    if st.button(ime, key=f"L_{fajl}", use_container_width=True):
+                    # ⭐⭐ KLJUČ MORA BITI JEDINSTVEN ⭐⭐
+                    if st.button(ime, key=f"jezik_btn_{idx}_{fajl}", use_container_width=True):
                         st.session_state.izabrani_jezik_kod = fajl
                         st.session_state.izabrani_jezik_naziv = ime
                         st.session_state.jezik_kljuc = jezik_mapa(fajl)
