@@ -1597,11 +1597,10 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- DINAMIČKI HEDER ---
-def prikazi_heder():
+ddef prikazi_heder():
     # CSS za podizanje hedera
     st.markdown("""
         <style>
-        /* PODIŽEM HEDER NA VRH */
         .main .block-container {
             padding-top: 0.5rem !important;
         }
@@ -1610,28 +1609,31 @@ def prikazi_heder():
     
     col1, col2, col3, col4, col5 = st.columns([1, 1.5, 1, 1, 1])
     
+    # ⭐⭐ KORISTI PAGE_NAME U KEY ZA UNIQUE ⭐⭐
+    page_name = st.session_state.get('korak', 'unknown')
+    
     with col1: 
-        if st.button("Home", key="h_home"):
+        if st.button("Home", key=f"h_home_{page_name}"):
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col2: 
-        if st.button("Kategorije", key="h_kat"):
+        if st.button("Kategorije", key=f"h_kat_{page_name}"):
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col3: 
-        if st.button("Zalihe", key="h_zal"):
+        if st.button("Zalihe", key=f"h_zal_{page_name}"):
             st.session_state.korak = "zalihe"
             st.rerun()
     
     with col4: 
-        if st.button("Spisak", key="h_spis"):
+        if st.button("Spisak", key=f"h_spis_{page_name}"):
             st.session_state.korak = "spisak"
             st.rerun()
     
     with col5: 
-        if st.button("Izlaz", key="h_izl"):
+        if st.button("Izlaz", key=f"h_izl_{page_name}"):
             st.session_state.korak = "jezik"
             st.rerun()
     
