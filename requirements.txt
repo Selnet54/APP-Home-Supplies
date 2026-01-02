@@ -1,3 +1,4 @@
 streamlit
 pandas
 Pillow
+pyperclip  # za kopiranje u clipboard (opcionalno)
