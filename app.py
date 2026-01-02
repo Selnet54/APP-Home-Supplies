@@ -1689,48 +1689,68 @@ def prikazi_heder():
 
 def stranica_jezik():
     """Stranica za odabir jezika"""
-    prikazi_heder()  # DODAJ OVO!
     
-    st.title("🌍 Izaberite jezik / Choose language")
+    # Dodaj mali naslov ako želiš
+    st.markdown("<h3 style='text-align: center;'>🌍 Odaberite jezik</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>🌍 Choose language</h3>", unsafe_allow_html=True)
     
     jezici_lista = [
         ("Srpski", "Srpski"), 
-        ("Engleski", "English"), 
+        ("Engleski", "English"),
         ("Nemacki", "Deutsch"),
-        ("Ruski", "Ruski"), 
-        ("Ukrajinski", "Ukrajinski"), 
-        ("Madjarski", "Madjarski"),
-        ("Spanski", "Spanski"), 
-        ("Portugalski", "Portugalski"), 
-        ("Mandarinski", "Mandarinski"),
-        ("Francuski", "Francuski")
+        ("Ruski", "Русский"),
+        ("Ukrajinski", "Українська"),
+        ("Madjarski", "Magyar"),
+        ("Spanski", "Español"),
+        ("Portugalski", "Português"),
+        ("Mandarinski", "中文"),
+        ("Francuski", "Français")
     ]
     
-    # ⭐⭐ ISPRAVKA: Koristi UNIQUE keys ⭐⭐
-    for i, (fajl, ime) in enumerate(jezici_lista):
+    # Grid 3x4 za 10 jezika + 2 prazna
+    for i in range(0, len(jezici_lista), 3):
         cols = st.columns(3)
         for j in range(3):
-            idx = i * 3 + j
+            idx = i + j
             if idx < len(jezici_lista):
                 fajl, ime = jezici_lista[idx]
                 
                 with cols[j]:
-                    path = f"icons/{fajl}.png"
-                    if os.path.exists(path):
-                        try:
-                            st.image(path, width=80)
-                        except:
-                            st.write(f"🌍 {ime}")
-                    else:
-                        st.write(f"📄 {ime}")
+                    # Kontejner za svaki jezik
+                    container = st.container()
                     
-                    # ⭐⭐ KLJUČ MORA BITI JEDINSTVEN ⭐⭐
-                    if st.button(ime, key=f"jezik_btn_{idx}_{fajl}", use_container_width=True):
-                        st.session_state.izabrani_jezik_kod = fajl
-                        st.session_state.izabrani_jezik_naziv = ime
-                        st.session_state.jezik_kljuc = jezik_mapa(fajl)
-                        st.session_state.korak = "kategorije"
-                        st.rerun()
+                    with container:
+                        # Centriraj sve
+                        st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+                        
+                        path = f"icons/{fajl}.png"
+                        if os.path.exists(path):
+                            # Koristi st.button da napraviš klikabilnu sliku
+                            if st.button(
+                                "",  # Prazan tekst
+                                key=f"img_btn_{idx}",
+                                help=f"Odaberi {ime}",  # Tooltip
+                            ):
+                                st.session_state.izabrani_jezik_kod = fajl
+                                st.session_state.izabrani_jezik_naziv = ime
+                                st.session_state.jezik_kljuc = jezik_mapa(fajl)
+                                st.session_state.korak = "kategorije"
+                                st.rerun()
+                            
+                            # Prikaži sliku
+                            st.image(path, width=70)
+                        else:
+                            # Fallback ikona
+                            if st.button(f"🌍", key=f"icon_btn_{idx}", use_container_width=True):
+                                st.session_state.izabrani_jezik_kod = fajl
+                                st.session_state.izabrani_jezik_naziv = ime
+                                st.session_state.jezik_kljuc = jezik_mapa(fajl)
+                                st.session_state.korak = "kategorije"
+                                st.rerun()
+                        
+                        # Naziv jezika
+                        st.markdown(f"**{ime}**")
+                        st.markdown("</div>", unsafe_allow_html=True)
 
 def stranica_kategorije():
     """Stranica glavnih kategorija"""
@@ -2110,7 +2130,7 @@ def stranica_zalihe():
         st.rerun()
 
 def stranica_spisak():
-    """Stranica spiska potreba"""
+    ""Stranica spiska potreba""
     st.title("🛒 Spisak potreba")
     
     # Učitaj spisak iz baze
@@ -2275,33 +2295,8 @@ def delete_items_from_list(items):
 
 # Inicijalizacija baze
 init_db()
-
 # Prikaz hedera
 prikazi_heder()
-
-# Ruter za stranice
-if st.session_state.korak == "jezik":
-    stranica_jezik()
-elif st.session_state.korak == "kategorije":
-    stranica_kategorije()
-elif st.session_state.korak == "podkategorije":
-    stranica_podkategorije()
-elif st.session_state.korak == "delovi_proizvoda":
-    stranica_delovi_proizvoda()
-elif st.session_state.korak == "unos":
-    stranica_unos()
-elif st.session_state.korak == "delovi_proizvoda":
-    stranica_delovi_proizvoda()	
-elif st.session_state.korak == "zalihe":
-    stranica_zalihe()
-elif st.session_state.korak == "spisak":
-    stranica_spisak()
-elif st.session_state.korak == "email":
-    st.title("📧 Pošalji email")
-    st.info("Funkcionalnost slanja email-a će biti implementirana uskoro.")
-    if st.button("⬅️ Nazad"):
-        st.session_state.korak = "spisak"
-        st.rerun()
 # DEBUG PANEL (možeš da obrišeš kasnije)
 with st.sidebar.expander("🔧 Debug Info", expanded=False):
     st.write(f"Trenutni korak: {st.session_state.korak}")
@@ -2322,8 +2317,6 @@ with st.sidebar.expander("🔧 Debug Info", expanded=False):
     # ⚠️ NEMA ELSE OVDE ⚠️
 
 # --- GLAVNI ROUTER ---
-if st.session_state.korak == "jezik":
-    stranica_jezik()
 elif st.session_state.korak == "kategorije":
     stranica_kategorije()
 elif st.session_state.korak == "podkategorije":
