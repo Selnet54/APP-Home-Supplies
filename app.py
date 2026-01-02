@@ -6,51 +6,46 @@ import os
 # --- KONFIGURACIJA ---
 st.set_page_config(page_title="Zalihe", layout="centered")
 
-# --- NAPREDNI CSS ZA MOBILNI HORIZONTALNI RASPODRED ---
+# --- CSS ZA ZBIJANJE I HEDER ---
 st.markdown("""
     <style>
-    /* Smanjenje margina celog ekrana */
-    .block-container { padding: 10px 5px !important; }
+    /* Smanjenje širine stranice da kolone budu bliže sredini */
+    .block-container {
+        max-width: 500px !important;
+        padding-top: 5px !important;
+    }
     
-    /* Heder: Sve u jedan red, fiksno */
-    .nav-row {
+    /* Heder: Jedan red, bez okvira, fiksiran na vrhu */
+    .nav-bar {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         align-items: center;
         border-bottom: 1px solid #ddd;
         padding-bottom: 5px;
-        margin-bottom: 10px;
-    }
-
-    /* SILA HORIZONTALNOG RASPODREDA ZA MOBILNI (3 kolone) */
-    [data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        align-items: flex-start !important;
-        gap: 5px !important;
+        margin-bottom: 5px;
     }
     
-    [data-testid="column"] {
-        flex: 1 1 0% !important;
-        min-width: 0 !important;
-    }
-
-    /* Dugmad: bez okvira, tekstualna */
+    /* Dugmad u hederu */
     div.stButton > button {
         border: none !important;
         background: none !important;
-        padding: 2px !important;
+        padding: 0px 5px !important;
         font-weight: bold !important;
         font-size: 14px !important;
-        width: 100% !important;
+        color: black !important;
     }
     
-    /* Crveni Izlaz */
-    .exit-btn button { color: red !important; }
-    
-    /* Centriranje slika zastava */
-    .stImage > img { margin: 0 auto; display: block; }
+    /* Razmak između kolona (oko 2cm na ekranu) */
+    [data-testid="stHorizontalBlock"] {
+        gap: 30px !important; 
+        justify-content: center !important;
+    }
+
+    /* Crveni izlaz */
+    div.stButton > button:contains("Izlaz") { color: red !important; }
+
+    /* Centriranje zastave */
+    .flag-container { text-align: center; margin-bottom: 10px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -58,100 +53,118 @@ st.markdown("""
 if 'korak' not in st.session_state: st.session_state.korak = "jezik"
 if 'izbor' not in st.session_state: st.session_state.izbor = {}
 
-# --- PODACI ---
-jezici = ["Srpski", "Engleski", "Nemacki", "Francuski", "Ruski", "Ukrajinski", "Madjarski", "Spanski", "Portugalski", "Mandarinski"]
-# Ovde ubaci ostatak rečnika iz tvog fajla
-podaci_sr = {
-    "Belo meso": ["Pileći batak", "Pileći karabatak", "Pileća krila", "Pileće grudi"],
-    "Crveno meso": ["Svinjski but", "Svinjski vrat", "Svinjska krmenadla"],
-    "Divljač": ["Zec", "Srna", "Fazan"]
+# --- TVOJI PODACI (Primjer hijerarhije) ---
+podaci = {
+    "Belo meso": {
+        "Piletina": ["Gril pile", "Batak", "Karabatak", "Belo meso", "Krila"],
+        "Ćuretina": ["Ćureći file", "Ćureći batak"]
+    },
+    "Crveno meso": {
+        "Svinjetina": ["Krmenadla", "Vrat", "But"],
+        "Junetina": ["Biftek", "But"]
+    }
 }
 
 # --- FUNKCIJA ZA HEDER I ZASTAVU ---
-def prikazi_zaglavlje():
-    # Heder red
-    c1, c2, c3, c4, c5 = st.columns([1, 1, 1.2, 1.2, 0.8])
+def zaglavlje():
+    # Heder u jednom redu (bez okvira)
+    c1, s1, c2, s2, c3, s3, c4, s4, c5 = st.columns([1, 0.1, 1, 0.1, 1.2, 0.1, 1.2, 0.1, 1])
     with c1: 
         if st.button("Home"): st.session_state.korak = "home"
-    with c2:
+    s1.write("|")
+    with c2: 
         if st.button("Kat."): st.session_state.korak = "kategorije"
-    with c3:
+    s2.write("|")
+    with c3: 
         if st.button("Zalihe"): st.session_state.korak = "spisak"
-    with c4:
+    s3.write("|")
+    with c4: 
         if st.button("Potrebe"): st.session_state.korak = "potrebe"
-    with c5:
-        if st.button("Izlaz", key="ex"): 
+    s4.write("|")
+    with c5: 
+        if st.button("Izlaz"): 
             st.session_state.korak = "jezik"
             st.rerun()
     
-    # Zastava izabranog jezika ispod hedera
-    izabrani = st.session_state.get('izabrani_jezik', 'Srpski')
-    if os.path.exists(f"icons/{izabrani}.png"):
-        st.image(f"icons/{izabrani}.png", width=40)
-    st.markdown("<hr style='margin:2px 0'>", unsafe_allow_html=True)
+    # Zastava odmah ispod hedera
+    jezik = st.session_state.get('izabrani_jezik', 'Srpski')
+    st.markdown(f'<div class="flag-container">', unsafe_allow_html=True)
+    if os.path.exists(f"icons/{jezik}.png"):
+        st.image(f"icons/{jezik}.png", width=40)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# --- LOGIKA EKRANA ---
+# --- EKRANI ---
 
-# 1. EKRAN: JEZICI (Grid 3 kolone)
+# 1. JEZIK (Grid 3 kolone)
 if st.session_state.korak == "jezik":
+    jezici = ["Srpski", "Engleski", "Nemacki", "Francuski", "Ruski", "Ukrajinski", "Madjarski", "Spanski", "Portugalski", "Mandarinski"]
     for i in range(0, len(jezici), 3):
         cols = st.columns(3)
         for j in range(3):
             if i + j < len(jezici):
-                lang = jezici[i + j]
+                l = jezici[i + j]
                 with cols[j]:
-                    if os.path.exists(f"icons/{lang}.png"):
-                        st.image(f"icons/{lang}.png", width=40)
-                    if st.button(lang, key=f"L_{lang}"):
-                        st.session_state.izabrani_jezik = lang
+                    if os.path.exists(f"icons/{l}.png"): st.image(f"icons/{l}.png", width=40)
+                    if st.button(l, key=l):
+                        st.session_state.izabrani_jezik = l
                         st.session_state.korak = "kategorije"
                         st.rerun()
 
-# 2. EKRAN: KATEGORIJE (Grid 3 kolone)
+# 2. KATEGORIJE (npr. Belo meso, Crveno meso)
 elif st.session_state.korak == "kategorije":
-    prikazi_zaglavlje()
-    kategorije = list(podaci_sr.keys())
+    zaglavlje()
+    kategorije = list(podaci.keys())
     for i in range(0, len(kategorije), 3):
         cols = st.columns(3)
         for j in range(3):
-            if i + j < len(kategorije):
-                kat = kategorije[i + j]
+            if i+j < len(kategorije):
+                kat = kategorije[i+j]
                 with cols[j]:
-                    # Ovde možeš staviti ikonice za meso, higijenu itd.
-                    if st.button(kat, key=f"K_{kat}"):
+                    if st.button(kat, key=f"k_{kat}"):
                         st.session_state.izbor['kat'] = kat
-                        st.session_state.korak = "podkat"
+                        st.session_state.korak = "podkategorije"
                         st.rerun()
 
-# 3. EKRAN: PODKATEGORIJE
-elif st.session_state.korak == "podkat":
-    prikazi_zaglavlje()
-    stavke = podaci_sr[st.session_state.izbor['kat']]
-    for i in range(0, len(stavke), 3):
+# 3. PODKATEGORIJE (npr. Piletina)
+elif st.session_state.korak == "podkategorije":
+    zaglavlje()
+    podkat_lista = list(podaci[st.session_state.izbor['kat']].keys())
+    for i in range(0, len(podkat_lista), 3):
         cols = st.columns(3)
         for j in range(3):
-            if i + j < len(stavke):
-                s = stavke[i + j]
+            if i+j < len(podkat_lista):
+                pk = podkat_lista[i+j]
                 with cols[j]:
-                    if st.button(s, key=f"S_{s}"):
-                        st.session_state.izbor['deo'] = s
+                    if st.button(pk, key=f"pk_{pk}"):
+                        st.session_state.izbor['podkat'] = pk
+                        st.session_state.korak = "delovi"
+                        st.rerun()
+
+# 4. DIJELOVI PROIZVODA (npr. Gril pile, Batak...)
+elif st.session_state.korak == "delovi":
+    zaglavlje()
+    delovi = podaci[st.session_state.izbor['kat']][st.session_state.izbor['podkat']]
+    for i in range(0, len(delovi), 3):
+        cols = st.columns(3)
+        for j in range(3):
+            if i+j < len(delovi):
+                d = delovi[i+j]
+                with cols[j]:
+                    if st.button(d, key=f"d_{d}"):
+                        st.session_state.izbor['deo'] = d
                         st.session_state.korak = "unos"
                         st.rerun()
 
-# 4. EKRAN: UNOS
+# 5. UNOS PODATAKA
 elif st.session_state.korak == "unos":
-    prikazi_zaglavlje()
+    zaglavlje()
     st.write(f"**{st.session_state.izbor['deo']}**")
-    
-    with st.form("form_u"):
+    with st.form("form"):
         c1, c2 = st.columns(2)
-        kom = c1.number_input("Kom:", min_value=1, step=1)
-        kol = c2.number_input("Kol:")
-        jed = c2.selectbox("", ["g", "kg", "lit", "kom"], label_visibility="collapsed")
-        
-        dat = st.date_input("Unos:", datetime.now())
-        rok = st.number_input("Meseci:", min_value=1, value=6)
-        
-        if st.form_submit_button("SAČUVAJ"):
-            st.success("Dodato!")
+        kom = c1.number_input("Komada:", min_value=1, step=1)
+        kol = c2.number_input("Težina/Količina:")
+        jed = c2.selectbox("", ["g", "kg", "lit"], label_visibility="collapsed")
+        rok = st.number_input("Rok trajanja (meseci):", value=6)
+        if st.form_submit_button("SNIMI"):
+            st.success("Dodano!")
             st.session_state.korak = "kategorije"
