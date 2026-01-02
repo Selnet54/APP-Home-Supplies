@@ -2084,6 +2084,61 @@ with st.sidebar.expander("🔧 Debug Info", expanded=False):
         st.rerun()
     if st.button("Test → Kategorije"):
         st.session_state.korak = "kategorije"
+		def stranica_kategorije():
+    """Stranica glavnih kategorija"""
+    
+    # Prikazi heder
+    prikazi_heder()
+    
+    # Naslov
+    st.markdown("<h3 style='text-align: center;'>📂 Glavne kategorije</h3>", unsafe_allow_html=True)
+    
+    # Preuzmi kategorije za trenutni jezik
+    kategorije = main_categories_translations.get(
+        st.session_state.jezik_kljuc, 
+        main_categories_translations["srpski"]
+    )
+    
+    # Proveri da li imamo kategorije
+    if not kategorije:
+        st.error("Nema dostupnih kategorija za ovaj jezik")
+        return
+    
+    # Prikaz kategorija u gridu 2x2
+    for i in range(0, len(kategorije), 2):
+        col1, col2 = st.columns(2)
+        
+        # Prva kolona u redu
+        kat1 = kategorije[i]
+        
+        with col1:
+            if st.button(
+                kat1,
+                key=f"kat_{i}",
+                use_container_width=True
+            ):
+                st.session_state.trenutna_kategorija = kat1
+                st.session_state.korak = "podkategorije"
+                st.rerun()
+        
+        # Druga kolona u redu (ako postoji)
+        if i + 1 < len(kategorije):
+            kat2 = kategorije[i + 1]
+            
+            with col2:
+                if st.button(
+                    kat2,
+                    key=f"kat_{i+1}",
+                    use_container_width=True
+                ):
+                    st.session_state.trenutna_kategorija = kat2
+                    st.session_state.korak = "podkategorije"
+                    st.rerun()
+    
+    # Dugme za nazad
+    if st.button("⬅️ Nazad na jezike"):
+        st.session_state.korak = "jezik"
+        st.rerun()
  # --- GLAVNI ROUTER ---
 if st.session_state.korak == "jezik":
     stranica_jezik()
