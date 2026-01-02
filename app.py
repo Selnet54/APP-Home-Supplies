@@ -2313,10 +2313,9 @@ with st.sidebar.expander("🔧 Debug Info", expanded=False):
         st.rerun()
     if st.button("Test → Kategorije"):
         st.session_state.korak = "kategorije"
-        st.rerun()
-    # ⚠️ NEMA ELSE OVDE ⚠️
-
-# --- GLAVNI ROUTER ---
+ # --- GLAVNI ROUTER ---
+if st.session_state.korak == "jezik":
+    stranica_jezik()
 elif st.session_state.korak == "kategorije":
     stranica_kategorije()
 elif st.session_state.korak == "podkategorije":
@@ -2336,6 +2335,6 @@ elif st.session_state.korak == "email":
         st.session_state.korak = "spisak"
         st.rerun()
 else:
-    # ✅ OVO ELSE JE OK - deo je if/elif chaina
+    # Fallback ako korak nije prepoznat
     st.session_state.korak = "jezik"
     st.rerun()
