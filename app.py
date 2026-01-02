@@ -5,60 +5,72 @@ from datetime import datetime, timedelta
 # --- KONFIGURACIJA ---
 st.set_page_config(page_title="Zalihe", layout="centered")
 
-# --- CSS ZA STROGO ZBIJANJE (PORTRET MOBILNI) ---
+# --- CSS ZA RUČNO POZICIONIRANJE DUGMADI ---
 st.markdown("""
     <style>
-    /* 1. Podizanje svega nagore i maksimalno sužavanje aplikacije */
+    /* Maksimalno podizanje i sužavanje */
     .block-container {
-        padding-top: 10px !important;
-        max-width: 320px !important; 
+        padding-top: 0px !important;
+        margin-top: -20px !important;
+        max-width: 350px !important; 
         margin: auto;
     }
 
-    /* 2. Horizontalni redovi (Heder i Grid) */
+    /* Forsiranje horizontala */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        justify-content: center !important;
         gap: 0px !important;
     }
 
-    /* 3. Kolone hedera (Home, Kategorija...) */
-    .header-col {
-        width: 60px !important;
-        flex: none !important;
-    }
-
-    /* 4. Stil dugmadi (Tekstualni) */
+    /* Stil svih dugmadi u hederu */
     div.stButton > button {
         border: none !important;
         background: none !important;
-        padding: 2px !important;
+        padding: 0px !important;
         font-weight: bold !important;
         font-size: 11px !important;
         color: black !important;
         white-space: nowrap !important;
     }
+
+    /* PRECIZNO POMERANJE SVAKOG DUGMETA POJEDINAČNO */
     
-    /* Pomeranje Kategorije ulevo (specifično dugme) */
-    div.stButton > button[key="h_kat"] {
-        margin-left: -15px !important;
+    /* Home ostaje levo */
+    div.stButton > button[key="h_home"] {
+        text-align: left !important;
     }
 
-    div.stButton > button:contains("Izlaz") { color: red !important; }
+    /* KATEGORIJA - Pomeranje ulevo (negativna margina) */
+    div.stButton > button[key="h_kat"] {
+        margin-left: -40px !important; 
+    }
 
-    /* 5. Zastava i tekst u istom redu */
-    .flag-row {
+    /* ZALIHE - Pomeranje udesno (pozitivna margina) da se odlepi od Kategorije */
+    div.stButton > button[key="h_zal"] {
+        margin-left: 20px !important;
+    }
+
+    /* SPISAK - Malo udesno */
+    div.stButton > button[key="h_spis"] {
+        margin-left: 15px !important;
+    }
+
+    /* IZLAZ - Skroz desno */
+    div.stButton > button[key="h_izl"] {
+        color: red !important;
+        text-align: right !important;
+    }
+
+    /* Red za zastavu i tekst */
+    .flag-container-row {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 5px;
-        margin-bottom: 5px;
+        justify-content: flex-start;
+        gap: 8px;
+        margin: 0px 0px 5px 5px;
     }
-    .flag-row img { width: 30px; height: auto; }
-    .flag-row span { font-weight: bold; font-size: 14px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -66,27 +78,11 @@ st.markdown("""
 if 'korak' not in st.session_state: st.session_state.korak = "jezik"
 if 'izbor' not in st.session_state: st.session_state.izbor = {}
 
-# --- PODACI ---
-jezici_lista = [
-    ("Srpski", "Srpski"), ("Engleski", "English"), ("Nemacki", "Deutsch"),
-    ("Ruski", "Русский"), ("Ukrajinski", "Українська"), ("Madjarski", "Magyar"),
-    ("Spanski", "Español"), ("Portugalski", "Português"), ("Mandarinski", "中文"),
-    ("Francuski", "Français")
-]
-
-podaci = {
-    "Belo meso": {
-        "Piletina": ["Gril pile", "Batak", "Karabatak", "Krila", "Belo meso"],
-        "Guščije": ["Guščiji batak", "Guščije grudi"],
-        "Pačije": ["Pačiji file", "Bataci"]
-    }
-}
-
 # --- FUNKCIJA ZA HEDER ---
 def prikazi_heder():
-    # Home | Kategorija | Zalihe | Spisak | Izlaz
-    # Koristimo 5 kolona fiksne širine
-    c1, c2, c3, c4, c5 = st.columns([1, 1.2, 1, 1, 0.8])
+    # Definišemo kolone
+    c1, c2, c3, c4, c5 = st.columns([0.7, 1.5, 1, 1, 0.7])
+    
     with c1: st.button("Home", key="h_home")
     with c2: st.button("Kategorija", key="h_kat")
     with c3: st.button("Zalihe", key="h_zal")
@@ -96,54 +92,40 @@ def prikazi_heder():
             st.session_state.korak = "jezik"
             st.rerun()
     
-    # Zastava i tekst u istom redu
+    # Zastava i tekst (Zbijeno u jedan red bez kolona)
     if 'izabrani_jezik_kod' in st.session_state:
         kod = st.session_state.izabrani_jezik_kod
         naziv = st.session_state.izabrani_jezik_naziv
         path = f"icons/{kod}.png"
         if os.path.exists(path):
+            # Koristimo HTML za fiksni red zastave i teksta
             st.markdown(f"""
-                <div class="flag-row">
-                    <img src="data:image/png;base64,{st.image_to_base64(path) if hasattr(st, 'image_to_base64') else ''}" /> 
-                    <span>{naziv}</span>
+                <div class="flag-container-row">
+                    <img src="https://raw.githubusercontent.com/tvoj-user/tvoj-repo/main/icons/{kod}.png" width="25" style="vertical-align: middle;">
+                    <span style="font-weight:bold; font-size:14px; vertical-align: middle;">{naziv}</span>
                 </div>
             """, unsafe_allow_html=True)
-            # Alternativa ako gornje ne radi u Streamlitu:
-            col_f1, col_f2 = st.columns([1, 2])
-            with col_f1: st.image(path, width=30)
-            with col_f2: st.markdown(f"**{naziv}**")
+            # Ako gornji link ne radi (jer je lokalan), koristi običan Streamlit red:
+            # col_a, col_b = st.columns([1, 8])
+            # with col_a: st.image(path, width=25)
+            # with col_b: st.markdown(f"**{naziv}**")
             
     st.markdown("<hr style='margin:2px 0'>", unsafe_allow_html=True)
 
-# --- EKRANI ---
+# --- LOGIKA EKRANA ---
 prikazi_heder()
 
+# (Ovde ide ostatak tvog koda za izbor jezika, kategorija itd.)
 if st.session_state.korak == "jezik":
+    jezici_lista = [("Srpski", "Srpski"), ("Engleski", "English"), ("Nemacki", "Deutsch"), ("Francuski", "Français")] # primer
     for i in range(0, len(jezici_lista), 3):
         cols = st.columns(3)
         for j in range(3):
             if i + j < len(jezici_lista):
                 fajl, ime = jezici_lista[i + j]
                 with cols[j]:
-                    if os.path.exists(f"icons/{fajl}.png"): 
-                        st.image(f"icons/{fajl}.png", width=40)
                     if st.button(ime, key=f"L_{fajl}"):
                         st.session_state.izabrani_jezik_kod = fajl
                         st.session_state.izabrani_jezik_naziv = ime
                         st.session_state.korak = "kategorije"
                         st.rerun()
-
-elif st.session_state.korak == "kategorije":
-    kats = list(podaci.keys())
-    for i in range(0, len(kats), 3):
-        cols = st.columns(3)
-        for j in range(3):
-            if i+j < len(kats):
-                k = kats[i+j]
-                with cols[j]:
-                    if st.button(k, key=f"K_{k}"):
-                        st.session_state.izbor['kat'] = k
-                        st.session_state.korak = "podkategorije"
-                        st.rerun()
-
-# ... Ostatak koda za podkategorije i delove ostaje isti ...
