@@ -1474,6 +1474,50 @@ product_parts_translations = {
         "Autre": ["Note : Saisir le nom du produit"]
     },
 }
+# ---------------- ISPRAVLJENE POMOĆNE FUNKCIJE ZA PREVOD ----------------
+
+def get_main_categories():
+    """Vraća glavne kategorije na trenutnom jeziku"""
+    return main_categories_translations.get(current_language, main_categories_translations["srpski"])
+
+def get_subcategories(main_category):
+    """Vraća podkategorije na trenutnom jeziku - ISPRAVLJENA VERZIJA"""
+    # Direktno uzimamo podkategorije za trenutni jezik
+    subcats_dict = subcategories_translations.get(current_language, subcategories_translations["srpski"])
+    
+    # Proveravamo da li kategorija postoji u rečniku
+    if main_category in subcats_dict:
+        return subcats_dict[main_category]
+    else:
+        # Ako ne postoji, pokušavamo da pronađemo odgovarajuću kategoriju
+        for lang_categories in subcategories_translations.values():
+            if main_category in lang_categories:
+                return lang_categories[main_category]
+        return ["Ostalo"]
+
+def get_product_parts(subcategory, main_category):
+    """Vraća delove proizvoda na trenutnom jeziku"""
+    # Fallback: Ako ne postoje delovi proizvoda za ovu podkategoriju, vrati ["Ostalo"]
+    parts_dict = product_parts_translations.get(current_language, product_parts_translations["srpski"])
+    
+    if subcategory not in parts_dict:
+        # Pokušaj da pronađeš srpski ekvivalent
+        srpski_parts = product_parts_translations["srpski"]
+        
+        # Pronađi podkategoriju u srpskom rečniku podkategorija
+        for srpski_main_cat, srpski_subcats in subcategories_translations["srpski"].items():
+            if subcategory in srpski_subcats:
+                # Pronađi indeks i vrati odgovarajuće delove
+                index = srpski_subcats.index(subcategory)
+                if index < len(srpski_subcats):
+                    srpski_subcat = srpski_subcats[index]
+                    if srpski_subcat in srpski_parts:
+                        return srpski_parts[srpski_subcat]
+        
+        # Ako ništa ne pronađeš, vrati ["Ostalo"]
+        return ["Napomena: Unesite naziv proizvoda"]  # ili odgovarajući prevod
+    
+    return parts_dict[subcategory]
 
 # --- POMOĆNE FUNKCIJE ZA JEZIKE ---
 def jezik_mapa(ime_fajla):
@@ -1685,6 +1729,8 @@ def stranica_jezik():
 
 def stranica_kategorije():
     """Stranica glavnih kategorija"""
+	# PRIKAZI HEDER
+    prikazi_heder()
     st.title(f"📂 {t('glavne_kategorije')}")
     
     # Preuzmi kategorije za trenutni jezik
@@ -2239,6 +2285,8 @@ elif st.session_state.korak == "delovi_proizvoda":
     stranica_delovi_proizvoda()
 elif st.session_state.korak == "unos":
     stranica_unos()
+elif st.session_state.korak == "delovi_proizvoda":
+    stranica_delovi_proizvoda()	
 elif st.session_state.korak == "zalihe":
     stranica_zalihe()
 elif st.session_state.korak == "spisak":
@@ -2249,6 +2297,23 @@ elif st.session_state.korak == "email":
     if st.button("⬅️ Nazad"):
         st.session_state.korak = "spisak"
         st.rerun()
+# DEBUG PANEL (možeš da obrišeš kasnije)
+with st.sidebar.expander("🔧 Debug Info", expanded=False):
+    st.write(f"Trenutni korak: {st.session_state.korak}")
+    st.write(f"Trenutni jezik: {st.session_state.jezik_kljuc}")
+    st.write(f"Kategorija: {st.session_state.get('trenutna_kategorija', 'N/A')}")
+    st.write(f"Podkategorija: {st.session_state.get('trenutna_podkategorija', 'N/A')}")
+    st.write(f"Deo proizvoda: {st.session_state.get('trenutni_deo_proizvoda', 'N/A')}")
+    
+    # Direktni linkovi za test
+    st.markdown("---")
+    st.write("**Direktni linkovi:**")
+    if st.button("Test → Unos stranica"):
+        st.session_state.korak = "unos"
+        st.rerun()
+    if st.button("Test → Kategorije"):
+        st.session_state.korak = "kategorije"
+        st.rerun()		
 else:
     # Fallback ako je nepoznat korak
     st.session_state.korak = "jezik"
