@@ -985,7 +985,7 @@ def stranica_jezik():
     with col1:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Srpski.png", width=45, use_column_width='auto')
+        st.image("icons/Srpski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Srpski", key="jezik_srpski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Srpski"
@@ -998,7 +998,7 @@ def stranica_jezik():
     with col2:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Engleski.png", width=45, use_column_width='auto')
+        st.image("icons/Engleski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("English", key="jezik_english", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Engleski"
@@ -1011,7 +1011,7 @@ def stranica_jezik():
     with col3:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Nemacki.png", width=45, use_column_width='auto')
+        st.image("icons/Nemacki.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Deutsch", key="jezik_deutsch", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Nemacki"
@@ -1027,7 +1027,7 @@ def stranica_jezik():
     with col4:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Ruski.png", width=45, use_column_width='auto')
+        st.image("icons/Ruski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Русский", key="jezik_ruski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ruski"
@@ -1040,7 +1040,7 @@ def stranica_jezik():
     with col5:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Ukrajinski.png", width=45, use_column_width='auto')
+        st.image("icons/Ukrajinski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Українська", key="jezik_ukrajinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ukrajinski"
@@ -1053,7 +1053,7 @@ def stranica_jezik():
     with col6:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Madjarski.png", width=45, use_column_width='auto')
+        st.image("icons/Madjarski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Magyar", key="jezik_magyar", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Madjarski"
@@ -1069,7 +1069,7 @@ def stranica_jezik():
     with col7:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Spanski.png", width=45, use_column_width='auto')
+        st.image("icons/Spanski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Español", key="jezik_espanol", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Spanski"
@@ -1082,7 +1082,7 @@ def stranica_jezik():
     with col8:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Portugalski.png", width=45, use_column_width='auto')
+        st.image("icons/Portugalski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Português", key="jezik_portugalski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Portugalski"
@@ -1095,7 +1095,7 @@ def stranica_jezik():
     with col9:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Mandarinski.png", width=45, use_column_width='auto')
+        st.image("icons/Mandarinski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("中文", key="jezik_mandarinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Mandarinski"
@@ -1111,7 +1111,7 @@ def stranica_jezik():
     with col11:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
         st.markdown('<div class="language-image-container">', unsafe_allow_html=True)
-        st.image("icons/Francuski.png", width=45, use_column_width='auto')
+        st.image("icons/Francuski.png", width=25, use_column_width='auto')
         st.markdown('</div>', unsafe_allow_html=True)
         if st.button("Français", key="jezik_francais", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Francuski"
@@ -1126,7 +1126,7 @@ def stranica_jezik():
     
     with col4:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Ruski.png", width=60, use_column_width='always')
+        st.image("icons/Ruski.png", width=25, use_column_width='always')
         if st.button("Русский", key="jezik_ruski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ruski"
             st.session_state.izabrani_jezik_naziv = "Русский"
@@ -1137,7 +1137,7 @@ def stranica_jezik():
     
     with col5:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Ukrajinski.png", width=60, use_column_width='always')
+        st.image("icons/Ukrajinski.png", width=25, use_column_width='always')
         if st.button("Українська", key="jezik_ukrajinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ukrajinski"
             st.session_state.izabrani_jezik_naziv = "Українська"
@@ -1148,7 +1148,7 @@ def stranica_jezik():
     
     with col6:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Madjarski.png", width=60, use_column_width='always')
+        st.image("icons/Madjarski.png", width=25, use_column_width='always')
         if st.button("Magyar", key="jezik_magyar", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Madjarski"
             st.session_state.izabrani_jezik_naziv = "Magyar"
@@ -1162,7 +1162,7 @@ def stranica_jezik():
     
     with col7:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Spanski.png", width=60, use_column_width='always')
+        st.image("icons/Spanski.png", width=25, use_column_width='always')
         if st.button("Español", key="jezik_espanol", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Spanski"
             st.session_state.izabrani_jezik_naziv = "Español"
@@ -1173,7 +1173,7 @@ def stranica_jezik():
     
     with col8:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Portugalski.png", width=60, use_column_width='always')
+        st.image("icons/Portugalski.png", width=25, use_column_width='always')
         if st.button("Português", key="jezik_portugalski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Portugalski"
             st.session_state.izabrani_jezik_naziv = "Português"
@@ -1184,7 +1184,7 @@ def stranica_jezik():
     
     with col9:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Mandarinski.png", width=60, use_column_width='always')
+        st.image("icons/Mandarinski.png", width=25, use_column_width='always')
         if st.button("中文", key="jezik_mandarinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Mandarinski"
             st.session_state.izabrani_jezik_naziv = "中文"
@@ -1198,7 +1198,7 @@ def stranica_jezik():
     
     with col11:
         st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Francuski.png", width=60, use_column_width='always')
+        st.image("icons/Francuski.png", width=25, use_column_width='always')
         if st.button("Français", key="jezik_francais", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Francuski"
             st.session_state.izabrani_jezik_naziv = "Français"
