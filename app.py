@@ -34,8 +34,6 @@ if 'trenutni_deo_proizvoda' not in st.session_state:
     st.session_state.trenutni_deo_proizvoda = ""
 
 # --- MASTER STRINGS - DODAJ OVDE SVE TVOJE PREVODE ---
-# Početak (primer strukture):
-
 master_strings = {
     "srpski": {
         "nazad": "Nazad", "stanje": "Zalihe", "izlaz": "Izlaz", "spisak": "Spisak", 
@@ -855,26 +853,6 @@ st.markdown("""
         margin: 5px !important;
         border: 1px solid #ddd !important;
     }
-    
-    /* Stil za jezik dugmad - vertikalno poravnanje */
-    .language-button-container {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        margin: 10px 0 !important;
-        padding: 5px !important;
-    }
-    
-    .language-button-image {
-        margin-bottom: 5px !important;
-    }
-    
-    .language-button-text {
-        text-align: center !important;
-        font-weight: bold !important;
-        font-size: 14px !important;
-    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -924,7 +902,7 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika - vertikalno poravnano slike iznad teksta"""
+    """Stranica za odabir jezika - popravljene veličine zastava"""
     
     jezici_lista = [
         ("Srpski", "Srpski", "icons/Srpski.png"), 
@@ -939,39 +917,48 @@ def stranica_jezik():
         ("Francuski", "Français", "icons/Francuski.png")
     ]
     
-    # CSS za vertikalno poravnanje
+    # CSS za manje zastave i bolje poravnanje
     st.markdown("""
         <style>
-        /* CUSTOM CONTAINER ZA JEZIK DUGMAD */
-        .language-column {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-            margin: 0 5px !important;
+        /* CSS ZA STRANICU JEZIKA - MANJE ZASTAVE */
+        .jezik-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px 0;
         }
         
-        .language-image {
-            margin-bottom: 8px !important;
-            display: block !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
+        .jezik-slika {
+            width: 40px !important;
+            height: 25px !important;
+            object-fit: contain;
+            margin-bottom: 5px;
         }
         
-        .language-button {
-            width: 100% !important;
-            text-align: center !important;
-            margin-top: 5px !important;
+        .jezik-dugme {
+            width: 100%;
+            font-size: 12px !important;
+            padding: 3px !important;
+            margin: 0 !important;
+        }
+        
+        /* Smanji padding između kolona */
+        div[data-testid="column"] {
+            padding: 0 3px !important;
         }
         </style>
     """, unsafe_allow_html=True)
+    
+    # Naslov
+    st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>🌍 Izaberite jezik</h3>", unsafe_allow_html=True)
     
     # PRVI RED (3 jezika)
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Srpski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Srpski.png", width=35)
         if st.button("Srpski", key="jezik_srpski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Srpski"
             st.session_state.izabrani_jezik_naziv = "Srpski"
@@ -981,8 +968,9 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Engleski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Engleski.png", width=35)
         if st.button("English", key="jezik_english", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Engleski"
             st.session_state.izabrani_jezik_naziv = "English"
@@ -992,8 +980,9 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col3:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Nemacki.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Nemacki.png", width=35)
         if st.button("Deutsch", key="jezik_deutsch", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Nemacki"
             st.session_state.izabrani_jezik_naziv = "Deutsch"
@@ -1006,8 +995,9 @@ def stranica_jezik():
     col4, col5, col6 = st.columns(3)
     
     with col4:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Ruski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Ruski.png", width=35)
         if st.button("Русский", key="jezik_ruski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ruski"
             st.session_state.izabrani_jezik_naziv = "Русский"
@@ -1017,8 +1007,9 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col5:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Ukrajinski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Ukrajinski.png", width=35)
         if st.button("Українська", key="jezik_ukrajinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ukrajinski"
             st.session_state.izabrani_jezik_naziv = "Українська"
@@ -1028,8 +1019,9 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col6:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Madjarski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Madjarski.png", width=35)
         if st.button("Magyar", key="jezik_magyar", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Madjarski"
             st.session_state.izabrani_jezik_naziv = "Magyar"
@@ -1042,8 +1034,9 @@ def stranica_jezik():
     col7, col8, col9 = st.columns(3)
     
     with col7:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Spanski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Spanski.png", width=35)
         if st.button("Español", key="jezik_espanol", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Spanski"
             st.session_state.izabrani_jezik_naziv = "Español"
@@ -1053,8 +1046,9 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col8:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Portugalski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Portugalski.png", width=35)
         if st.button("Português", key="jezik_portugalski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Portugalski"
             st.session_state.izabrani_jezik_naziv = "Português"
@@ -1064,8 +1058,9 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col9:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Mandarinski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Mandarinski.png", width=35)
         if st.button("中文", key="jezik_mandarinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Mandarinski"
             st.session_state.izabrani_jezik_naziv = "中文"
@@ -1078,8 +1073,9 @@ def stranica_jezik():
     col10, col11, col12 = st.columns([1, 1, 1])
     
     with col11:
-        st.markdown('<div class="language-column">', unsafe_allow_html=True)
-        st.image("icons/Francuski.png", width=60, use_column_width='always')
+        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
+        # SMANJENA ZASTAVA
+        st.image("icons/Francuski.png", width=35)
         if st.button("Français", key="jezik_francais", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Francuski"
             st.session_state.izabrani_jezik_naziv = "Français"
@@ -1098,10 +1094,9 @@ def stranica_kategorije():
     st.markdown(f"<h3 style='text-align: center;'>📂 {t('glavne_kategorije')}</h3>", unsafe_allow_html=True)
     
     # Preuzmi kategorije za trenutni jezik
-    kategorije = main_categories_translations.get(
-        st.session_state.jezik_kljuc, 
-        main_categories_translations["srpski"]
-    )
+    # OVDE DODAJ SVOJE main_categories_translations
+    
+    kategorije = []  # OVDE STAVI TVOJ KOD
     
     # Proveri da li imamo kategorije
     if not kategorije:
@@ -1142,491 +1137,6 @@ def stranica_kategorije():
     # Dugme za nazad
     if st.button(f"⬅️ {t('nazad')} na jezike"):
         st.session_state.korak = "jezik"
-        st.rerun()
-
-def stranica_podkategorije():
-    """Stranica podkategorija"""
-    
-    # Prikazi heder
-    prikazi_heder()
-    
-    # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>📁 {t('podkategorije')} {st.session_state.trenutna_kategorija}</h3>", unsafe_allow_html=True)
-    
-    # Preuzmi podkategorije za trenutni jezik i kategoriju
-    jezik_kljuc = st.session_state.jezik_kljuc
-    
-    # Koristi srpski kao fallback ako trenutni jezik nema podkategorije
-    if jezik_kljuc not in subcategories_translations:
-        jezik_kljuc = "srpski"
-    
-    if st.session_state.trenutna_kategorija not in subcategories_translations.get(jezik_kljuc, {}):
-        st.error(f"Nema podkategorija za '{st.session_state.trenutna_kategorija}' na ovom jeziku")
-        st.button(f"⬅️ {t('nazad')} na kategorije")
-        return
-    
-    podkategorije = subcategories_translations[jezik_kljuc][st.session_state.trenutna_kategorija]
-    
-    # Prikaz podkategorija u gridu
-    for i in range(0, len(podkategorije), 2):
-        col1, col2 = st.columns(2)
-        
-        # Prva kolona u redu
-        podkat1 = podkategorije[i]
-        
-        with col1:
-            if st.button(
-                podkat1,
-                key=f"podkat_{i}",
-                use_container_width=True
-            ):
-                st.session_state.trenutna_podkategorija = podkat1
-                st.session_state.korak = "delovi_proizvoda"
-                st.rerun()
-        
-        # Druga kolona u redu (ako postoji)
-        if i + 1 < len(podkategorije):
-            podkat2 = podkategorije[i + 1]
-            
-            with col2:
-                if st.button(
-                    podkat2,
-                    key=f"podkat_{i+1}",
-                    use_container_width=True
-                ):
-                    st.session_state.trenutna_podkategorija = podkat2
-                    st.session_state.korak = "delovi_proizvoda"
-                    st.rerun()
-    
-    # Dugme za nazad
-    col_nazad, col_dodaj_spisak = st.columns(2)
-    
-    with col_nazad:
-        if st.button(f"⬅️ {t('nazad')} na kategorije", use_container_width=True):
-            st.session_state.korak = "kategorije"
-            st.rerun()
-    
-    with col_dodaj_spisak:
-        # Dodaj dugme za dodavanje cele kategorije u spisak
-        if st.button(f"🛒 Dodaj celu kategoriju u spisak", use_container_width=True, type="secondary"):
-            # Ovo ćeš implementirati kasnije
-            st.info("Funkcija za dodavanje cele kategorije u spisak će biti implementirana uskoro.")
-
-def stranica_delovi_proizvoda():
-    """Stranica delova proizvoda"""
-    
-    # Prikazi heder
-    prikazi_heder()
-    
-    # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>🔪 {t('delovi_proizvoda')} {st.session_state.trenutna_podkategorija}</h3>", unsafe_allow_html=True)
-    
-    # Preuzmi delove proizvoda za trenutni jezik i podkategoriju
-    jezik_kljuc = st.session_state.jezik_kljuc
-    
-    # Koristi srpski kao fallback ako trenutni jezik nema delove proizvoda
-    if jezik_kljuc not in product_parts_translations:
-        jezik_kljuc = "srpski"
-    
-    if st.session_state.trenutna_podkategorija not in product_parts_translations.get(jezik_kljuc, {}):
-        st.error(f"Nema delova proizvoda za '{st.session_state.trenutna_podkategorija}' na ovom jeziku")
-        st.button(f"⬅️ {t('nazad')} na podkategorije")
-        return
-    
-    delovi = product_parts_translations[jezik_kljuc][st.session_state.trenutna_podkategorija]
-    
-    # Prikaz delova proizvoda u gridu
-    for i in range(0, len(delovi), 2):
-        col1, col2 = st.columns(2)
-        
-        # Prva kolona u redu
-        deo1 = delovi[i]
-        
-        with col1:
-            if st.button(
-                deo1,
-                key=f"deo_{i}",
-                use_container_width=True
-            ):
-                st.session_state.trenutni_deo_proizvoda = deo1
-                st.session_state.korak = "unos"
-                st.rerun()
-        
-        # Druga kolona u redu (ako postoji)
-        if i + 1 < len(delovi):
-            deo2 = delovi[i + 1]
-            
-            with col2:
-                if st.button(
-                    deo2,
-                    key=f"deo_{i+1}",
-                    use_container_width=True
-                ):
-                    st.session_state.trenutni_deo_proizvoda = deo2
-                    st.session_state.korak = "unos"
-                    st.rerun()
-    
-    # Poseban slučaj za "Ostalo"
-    if "Ostalo" in delovi or "Other" in delovi or "Другое" in delovi:
-        st.markdown("---")
-        if st.button(f"📝 {t('Ostalo')} - Unesi ručno", use_container_width=True, type="primary"):
-            st.session_state.trenutni_deo_proizvoda = ""
-            st.session_state.korak = "unos"
-            st.rerun()
-    
-    # Dugme za nazad
-    col_nazad, col_dodaj_spisak = st.columns(2)
-    
-    with col_nazad:
-        if st.button(f"⬅️ {t('nazad')} na podkategorije", use_container_width=True):
-            st.session_state.korak = "podkategorije"
-            st.rerun()
-    
-    with col_dodaj_spisak:
-        # Dodaj dugme za dodavanje cele podkategorije u spisak
-        if st.button(f"🛒 Dodaj celu podkategoriju u spisak", use_container_width=True, type="secondary"):
-            # Ovo ćeš implementirati kasnije
-            st.info("Funkcija za dodavanje cele podkategorije u spisak će biti implementirana uskoro.")
-
-def stranica_unos():
-    """Stranica za unos podataka o proizvodu"""
-    
-    # Prikazi heder
-    prikazi_heder()
-    
-    # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>📝 {t('unos_podataka')}</h3>", unsafe_allow_html=True)
-    
-    # Prikaz putanje
-    st.caption(f"📍 {st.session_state.trenutna_kategorija} > {st.session_state.trenutna_podkategorija} > {st.session_state.trenutni_deo_proizvoda if st.session_state.trenutni_deo_proizvoda else t('Ostalo')}")
-    
-    # Forma za unos
-    with st.form(key="unos_forma", border=True):
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            # Naziv proizvoda (automatski popunjen ako nije "Ostalo")
-            if st.session_state.trenutni_deo_proizvoda:
-                naziv_proizvoda = st.text_input(
-                    t("naziv_proizvoda"),
-                    value=st.session_state.trenutni_deo_proizvoda,
-                    disabled=True
-                )
-            else:
-                naziv_proizvoda = st.text_input(
-                    t("naziv_proizvoda"),
-                    placeholder=t("Ostalo") + " - unesite naziv proizvoda"
-                )
-            
-            # Opis
-            opis = st.text_input(
-                t("opis"),
-                placeholder="Dodatni opis proizvoda (opciono)"
-            )
-            
-            # Komad (automatski popunjen)
-            komad = st.text_input(
-                t("komad"),
-                value=st.session_state.trenutna_podkategorija,
-                disabled=True
-            )
-        
-        with col2:
-            # Količina
-            kolicina = st.number_input(
-                t("kolicina"),
-                min_value=0.0,
-                value=1.0,
-                step=0.1
-            )
-            
-            # Jedinica mere
-            jedinica = st.selectbox(
-                t("jedinica_mere"),
-                ["kg", "g", "kom", "l", "ml", "pak", "flaša", "kutija"]
-            )
-            
-            # Datum unosa (automatski)
-            datum_unosa = st.date_input(
-                t("datum_unosa"),
-                value=datetime.now().date()
-            )
-        
-        # Druga vrsta kolona
-        col3, col4 = st.columns(2)
-        
-        with col3:
-            # Rok trajanja
-            rok_meseci = st.number_input(
-                t("rok_trajanja"),
-                min_value=0,
-                value=12,
-                step=1
-            )
-            
-            # Automatski rok
-            automatski_rok = st.checkbox(
-                t("automatski_rok"),
-                value=True
-            )
-        
-        with col4:
-            # Mesto skladištenja
-            mesto_skladistenja = st.selectbox(
-                t("mesto_skladistenja"),
-                [t("zamrzivac_1"), t("zamrzivac_2"), t("zamrzivac_3"), t("frizider"), t("ostava")]
-            )
-        
-        # Dugmad za akcije
-        col_submit, col_spisak, col_nazad = st.columns([2, 1, 1])
-        
-        with col_submit:
-            submit_button = st.form_submit_button(
-                f"✅ {t('unesi')}",
-                use_container_width=True,
-                type="primary"
-            )
-        
-        with col_spisak:
-            spisak_button = st.form_submit_button(
-                f"🛒 {t('dodaj_u_spisak')}",
-                use_container_width=True,
-                type="secondary"
-            )
-        
-        with col_nazad:
-            nazad_button = st.form_submit_button(
-                f"⬅️ {t('nazad')}",
-                use_container_width=True
-            )
-        
-        # Obrada dugmadi
-        if submit_button:
-            if not naziv_proizvoda:
-                st.error(t("popunite_polja"))
-            else:
-                # Izračunaj datum isteka
-                if automatski_rok and rok_meseci > 0:
-                    datum_isteka = datetime.now() + timedelta(days=30*rok_meseci)
-                    datum_isteka_str = datum_isteka.strftime("%Y-%m-%d")
-                else:
-                    datum_isteka_str = None
-                
-                # Sačuvaj u bazu
-                sacuvaj_u_bazu(
-                    naziv_proizvoda, opis, komad, kolicina, jedinica,
-                    datum_unosa.strftime("%Y-%m-%d"), rok_meseci,
-                    datum_isteka_str, mesto_skladistenja
-                )
-                
-                st.success(f"✅ {t('proizvod_unesen')}: {naziv_proizvoda}")
-        
-        if spisak_button:
-            if not naziv_proizvoda:
-                st.error(t("popunite_polja"))
-            else:
-                # Dodaj u spisak potreba
-                add_to_shopping_list(naziv_proizvoda, opis)
-                st.success(f"✅ {t('dodato_u_spisak')}: {naziv_proizvoda}")
-        
-        if nazad_button:
-            st.session_state.korak = "delovi_proizvoda"
-            st.rerun()
-
-def stranica_zalihe():
-    """Stranica za pregled zaliha"""
-    
-    # Prikazi heder
-    prikazi_heder()
-    
-    st.title(f"📊 {t('stanje_zaliha')}")
-    
-    # Pretraga
-    search_term = st.text_input(f"🔍 {t('pretrazi')}")
-    
-    # Učitaj podatke iz baze
-    conn = sqlite3.connect('inventory.db')
-    
-    if search_term:
-        query = '''SELECT * FROM products 
-                   WHERE product_name LIKE ? OR 
-                         description LIKE ? OR
-                         piece LIKE ? OR
-                         storage_location LIKE ?
-                   ORDER BY storage_location, expiry_date'''
-        params = (f'%{search_term}%', f'%{search_term}%', 
-                  f'%{search_term}%', f'%{search_term}%')
-        df = pd.read_sql_query(query, conn, params=params)
-    else:
-        df = pd.read_sql_query('''SELECT * FROM products 
-                                  ORDER BY storage_location, expiry_date''', conn)
-    
-    conn.close()
-    
-    if not df.empty:
-        # Formatiranje prikaza
-        if 'expiry_date' in df.columns:
-            df['expiry_date'] = pd.to_datetime(df['expiry_date'], errors='coerce')
-            df['rok_prikaz'] = df['expiry_date'].dt.strftime('%m.%y')
-        else:
-            df['rok_prikaz'] = ''
-        
-        # Skraćivanje naziva za prikaz
-        df['product_name_short'] = df['product_name'].apply(
-            lambda x: str(x)[:20] + "..." if len(str(x)) > 20 else str(x)
-        )
-        df['description_short'] = df['description'].apply(
-            lambda x: str(x)[:25] + "..." if len(str(x)) > 25 else str(x) if x else ""
-        )
-        
-        # Prikaz tabele
-        st.dataframe(
-            df[['product_name_short', 'description_short', 'piece', 
-                'quantity', 'unit', 'rok_prikaz', 'storage_location']],
-            column_config={
-                'product_name_short': t('zaglavlja_zaliha')['naziv'],
-                'description_short': t('zaglavlja_zaliha')['opis'],
-                'piece': t('zaglavlja_zaliha')['komada'],
-                'quantity': t('zaglavlja_zaliha')['kolicina'],
-                'unit': t('zaglavlja_zaliha')['jedinica'],
-                'rok_prikaz': t('zaglavlja_zaliha')['rok_trajanja'],
-                'storage_location': t('zaglavlja_zaliha')['mesto_skladistenja']
-            },
-            use_container_width=True,
-            height=400
-        )
-        
-        # Ažuriranje proizvoda
-        st.subheader(f"✏️ {t('azuriranje_proizvoda')}")
-        
-        if len(df) > 0:
-            product_options = [f"{row['product_name']} (ID: {row['id']})" for _, row in df.iterrows()]
-            selected_product = st.selectbox(
-                t("selektuj_proizvod"),
-                product_options
-            )
-            
-            if selected_product:
-                # Ekstraktuj ID iz selekcije
-                product_id = int(selected_product.split("ID: ")[1].strip(")"))
-                product_data = df[df['id'] == product_id].iloc[0]
-                
-                with st.expander(t("azuriraj_proizvod"), expanded=False):
-                    col1, col2 = st.columns(2)
-                    
-                    with col1:
-                        new_name = st.text_input(t("naziv_proizvoda"), value=product_data['product_name'])
-                        new_desc = st.text_input(t("opis"), value=product_data['description'])
-                        new_piece = st.text_input(t("komad"), value=product_data['piece'])
-                    
-                    with col2:
-                        new_quantity = st.number_input(
-                            t("kolicina"),
-                            min_value=0.0,
-                            value=float(product_data['quantity']),
-                            step=0.1
-                        )
-                        new_unit = st.selectbox(
-                            t("jedinica_mere"),
-                            ["kg", "g", "kom", "l", "ml", "pak", "flaša", "kutija"],
-                            index=["kg", "g", "kom", "l", "ml", "pak", "flaša", "kutija"].index(
-                                product_data['unit'] if product_data['unit'] in ["kg", "g", "kom", "l", "ml", "pak", "flaša", "kutija"] else "kg"
-                            )
-                        )
-                    
-                    col_save, col_delete = st.columns(2)
-                    with col_save:
-                        if st.button(f"💾 {t('snimi_izmene')}", use_container_width=True):
-                            update_product_in_db(
-                                product_id, new_name, new_desc, new_piece, 
-                                new_quantity, new_unit
-                            )
-                            st.success(f"✅ {t('proizvod_azuriran')}")
-                            st.rerun()
-                    
-                    with col_delete:
-                        if st.button(f"🗑️ {t('obrisi')}", use_container_width=True, type="secondary"):
-                            if st.checkbox(t("potvrdi_izmenu")):
-                                delete_product_from_db(product_id)
-                                st.success(f"✅ {t('proizvod_obrisan')}")
-                                st.rerun()
-        else:
-            st.info(t("nema_proizvoda"))
-    else:
-        st.info(f"ℹ️ {t('nema_proizvoda')}")
-        
-    # Dugme za nazad
-    if st.button(f"⬅️ {t('nazad')} na glavni meni"):
-        st.session_state.korak = "kategorije"
-        st.rerun()
-
-def stranica_spisak():
-    """Stranica spiska potreba"""
-    
-    # Prikazi heder
-    prikazi_heder()
-    
-    st.title(f"🛒 {t('spisak_potreba')}")
-    
-    # Učitaj spisak iz baze
-    conn = sqlite3.connect('inventory.db')
-    df = pd.read_sql_query("SELECT * FROM shopping_list", conn)
-    conn.close()
-    
-    # Akcije
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        if st.button(f"📧 {t('posalji_email')}", use_container_width=True):
-            st.session_state.korak = "email"
-            st.rerun()
-    
-    with col2:
-        if st.button(f"💬 {t('posalji_messenger')}", use_container_width=True):
-            send_to_messenger(df)
-    
-    with col3:
-        if st.button(f"📋 {t('kopiraj')}", use_container_width=True):
-            copy_to_clipboard(df)
-            st.success(f"✅ {t('spisak_kopiran')}")
-    
-    with col4:
-        if st.button(f"🗑️ {t('obrisi_sve')}", use_container_width=True, type="secondary"):
-            if st.checkbox(t("potvrdi_izmenu")):
-                clear_shopping_list()
-                st.success(f"✅ {t('spisak_obrisan')}")
-                st.rerun()
-    
-    # Prikaz spiska
-    if not df.empty:
-        st.dataframe(
-            df[['product_name', 'description', 'date_added']],
-            column_config={
-                'product_name': t('zaglavlja_spisak')['proizvod'],
-                'description': t('zaglavlja_spisak')['opis'],
-                'date_added': t('zaglavlja_spisak')['datum_unosa']
-            },
-            use_container_width=True,
-            height=300
-        )
-        
-        # Brisanje pojedinačnih stavki
-        st.subheader(f"{t('brisanje_stavki')}")
-        items_to_delete = st.multiselect(
-            t("izaberi_stavke_za_brisanje"),
-            df['product_name'].tolist()
-        )
-        
-        if items_to_delete and st.button(f"{t('obrisi_oznacene')}", type="primary"):
-            delete_items_from_list(items_to_delete)
-            st.success(f"✅ {t('obrisano_stavki')}: {len(items_to_delete)}")
-            st.rerun()
-    else:
-        st.info(f"ℹ️ {t('spisak_prazan')}")
-        
-    # Dugme za nazad
-    if st.button(f"⬅️ {t('nazad')} na glavni meni"):
-        st.session_state.korak = "kategorije"
         st.rerun()
 
 # --- POMOĆNE FUNKCIJE ZA BAZU ---
@@ -1679,66 +1189,6 @@ def add_to_shopping_list(product_name, description=""):
     conn.commit()
     conn.close()
 
-def send_to_messenger(df):
-    """Šalje spisak preko Messenger-a"""
-    if df.empty:
-        st.warning(t("spisak_prazan"))
-        return
-    
-    message = f"📋 {t('spisak_potreba')} 📋\n\n"
-    for i, row in df.iterrows():
-        message += f"#{i+1} {row['product_name']}"
-        if row['description']:
-            message += f" - {row['description']}"
-        message += "\n"
-    
-    message += f"\n📅 {t('datum')}: {datetime.now().strftime('%d.%m.%Y.')}"
-    
-    # Prikaži poruku za kopiranje
-    st.code(message, language=None)
-    st.success(f"✅ {t('spisak_pripremljen')}")
-
-def copy_to_clipboard(df):
-    """Kopira spisak u clipboard (samo prikaz)"""
-    if df.empty:
-        st.warning(t("spisak_prazan"))
-        return
-    
-    message = f"{t('spisak_potreba')}:\n\n"
-    for i, row in df.iterrows():
-        message += f"{i+1}. {row['product_name']}"
-        if row['description']:
-            message += f" - {row['description']}"
-        message += "\n"
-    
-    message += f"\n{t('datum')}: {datetime.now().strftime('%d.%m.%Y.')}"
-    
-    # Prikaži poruku za kopiranje
-    st.code(message, language=None)
-    st.success(f"✅ {t('spisak_pripremljen_kopiranje')}")
-
-def clear_shopping_list():
-    """Briše ceo spisak"""
-    conn = sqlite3.connect('inventory.db')
-    c = conn.cursor()
-    c.execute("DELETE FROM shopping_list")
-    conn.commit()
-    conn.close()
-
-def delete_items_from_list(items):
-    """Briše odabrane stavke iz spiska"""
-    if not items:
-        return
-    
-    conn = sqlite3.connect('inventory.db')
-    c = conn.cursor()
-    
-    for item in items:
-        c.execute("DELETE FROM shopping_list WHERE product_name = ?", (item,))
-    
-    conn.commit()
-    conn.close()
-
 # --- GLAVNI TOK APLIKACIJE ---
 
 # Inicijalizacija baze
@@ -1750,15 +1200,20 @@ if st.session_state.korak == "jezik":
 elif st.session_state.korak == "kategorije":
     stranica_kategorije()
 elif st.session_state.korak == "podkategorije":
-    stranica_podkategorije()
+    # OVDE DODAJ SVOJU FUNKCIJU stranica_podkategorije()
+    pass
 elif st.session_state.korak == "delovi_proizvoda":
-    stranica_delovi_proizvoda()
+    # OVDE DODAJ SVOJU FUNKCIJU stranica_delovi_proizvoda()
+    pass
 elif st.session_state.korak == "unos":
-    stranica_unos()
+    # OVDE DODAJ SVOJU FUNKCIJU stranica_unos()
+    pass
 elif st.session_state.korak == "zalihe":
-    stranica_zalihe()
+    # OVDE DODAJ SVOJU FUNKCIJU stranica_zalihe()
+    pass
 elif st.session_state.korak == "spisak":
-    stranica_spisak()
+    # OVDE DODAJ SVOJU FUNKCIJU stranica_spisak()
+    pass
 elif st.session_state.korak == "email":
     st.title(f"📧 {t('posalji_email')}")
     st.info(f"{t('email_funkcionalnost')}")
