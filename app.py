@@ -902,63 +902,55 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika - popravljene veličine zastava"""
+    """Stranica za odabir jezika - poravnato slike iznad teksta"""
     
-    jezici_lista = [
-        ("Srpski", "Srpski", "icons/Srpski.png"), 
-        ("Engleski", "English", "icons/Engleski.png"),
-        ("Nemacki", "Deutsch", "icons/Nemacki.png"),
-        ("Ruski", "Русский", "icons/Ruski.png"),
-        ("Ukrajinski", "Українська", "icons/Ukrajinski.png"),
-        ("Madjarski", "Magyar", "icons/Madjarski.png"),
-        ("Spanski", "Español", "icons/Spanski.png"),
-        ("Portugalski", "Português", "icons/Portugalski.png"),
-        ("Mandarinski", "中文", "icons/Mandarinski.png"),
-        ("Francuski", "Français", "icons/Francuski.png")
-    ]
+    # Naslov BEZ IKONE
+    st.markdown("<h2 style='text-align: center; margin-bottom: 20px;'>Izaberite jezik</h2>", unsafe_allow_html=True)
     
-    # CSS za manje zastave i bolje poravnanje
+    # CSS za vertikalno poravnanje
     st.markdown("""
         <style>
-        /* CSS ZA STRANICU JEZIKA - MANJE ZASTAVE */
-        .jezik-container {
+        /* CSS ZA JEZIK DUGMAD */
+        .jezik-item {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             margin: 5px 0;
+            text-align: center;
         }
         
         .jezik-slika {
-            width: 40px !important;
-            height: 25px !important;
+            width: 45px;
+            height: 30px;
             object-fit: contain;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         
-        .jezik-dugme {
-            width: 100%;
-            font-size: 12px !important;
-            padding: 3px !important;
-            margin: 0 !important;
-        }
-        
-        /* Smanji padding između kolona */
+        /* Poravnaj dugmad u kolonama */
         div[data-testid="column"] {
-            padding: 0 3px !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Centriraj sve u kolonama */
+        .stButton button {
+            width: 100%;
+            font-size: 14px;
+            padding: 8px 5px;
+            margin: 2px 0;
         }
         </style>
     """, unsafe_allow_html=True)
-    
-    # Naslov
-    st.markdown("<h3 style='text-align: center; margin-bottom: 20px;'>🌍 Izaberite jezik</h3>", unsafe_allow_html=True)
     
     # PRVI RED (3 jezika)
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Srpski.png", width=35)
+        # Kontejner za zastavu i dugme
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Srpski.png", width=40)
         if st.button("Srpski", key="jezik_srpski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Srpski"
             st.session_state.izabrani_jezik_naziv = "Srpski"
@@ -968,9 +960,8 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Engleski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Engleski.png", width=40)
         if st.button("English", key="jezik_english", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Engleski"
             st.session_state.izabrani_jezik_naziv = "English"
@@ -980,9 +971,8 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col3:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Nemacki.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Nemacki.png", width=40)
         if st.button("Deutsch", key="jezik_deutsch", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Nemacki"
             st.session_state.izabrani_jezik_naziv = "Deutsch"
@@ -995,9 +985,8 @@ def stranica_jezik():
     col4, col5, col6 = st.columns(3)
     
     with col4:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Ruski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Ruski.png", width=40)
         if st.button("Русский", key="jezik_ruski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ruski"
             st.session_state.izabrani_jezik_naziv = "Русский"
@@ -1007,9 +996,8 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col5:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Ukrajinski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Ukrajinski.png", width=40)
         if st.button("Українська", key="jezik_ukrajinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ukrajinski"
             st.session_state.izabrani_jezik_naziv = "Українська"
@@ -1019,9 +1007,8 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col6:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Madjarski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Madjarski.png", width=40)
         if st.button("Magyar", key="jezik_magyar", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Madjarski"
             st.session_state.izabrani_jezik_naziv = "Magyar"
@@ -1034,9 +1021,8 @@ def stranica_jezik():
     col7, col8, col9 = st.columns(3)
     
     with col7:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Spanski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Spanski.png", width=40)
         if st.button("Español", key="jezik_espanol", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Spanski"
             st.session_state.izabrani_jezik_naziv = "Español"
@@ -1046,9 +1032,8 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col8:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Portugalski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Portugalski.png", width=40)
         if st.button("Português", key="jezik_portugalski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Portugalski"
             st.session_state.izabrani_jezik_naziv = "Português"
@@ -1058,9 +1043,8 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col9:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Mandarinski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Mandarinski.png", width=40)
         if st.button("中文", key="jezik_mandarinski", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Mandarinski"
             st.session_state.izabrani_jezik_naziv = "中文"
@@ -1073,9 +1057,8 @@ def stranica_jezik():
     col10, col11, col12 = st.columns([1, 1, 1])
     
     with col11:
-        st.markdown('<div class="jezik-container">', unsafe_allow_html=True)
-        # SMANJENA ZASTAVA
-        st.image("icons/Francuski.png", width=35)
+        st.markdown('<div class="jezik-item">', unsafe_allow_html=True)
+        st.image("icons/Francuski.png", width=40)
         if st.button("Français", key="jezik_francais", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Francuski"
             st.session_state.izabrani_jezik_naziv = "Français"
