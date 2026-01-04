@@ -179,39 +179,41 @@ jezik_mapa = {
 # --- CSS ZA RESPONZIVNI DIZAJN ---
 st.markdown("""
     <style>
-    .block-container { padding-top: 5px !important; }
-    
-    @media (min-width: 768px) {
-        .block-container { max-width: 850px !important; margin: auto; }
-        div.stButton > button { font-size: 16px !important; }
-    }
-    
-    @media (max-width: 767px) {
-        .block-container { max-width: 100% !important; padding: 0 5px !important; }
-        div.stButton > button { font-size: 11px !important; }
+    /* 1. Prisiljavamo aplikaciju da uvek ima desktop širinu */
+    .block-container {
+        min-width: 1000px !important; /* Ovo sprečava skupljanje na mobilnom */
+        max-width: 1200px !important;
+        padding-top: 20px !important;
+        margin: auto;
     }
 
+    /* 2. Onemogućavamo Streamlit-u da slaže kolone jednu ispod druge na mobilnom */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        justify-content: space-between !important;
-        gap: 2px !important;
+        width: 1000px !important;
     }
 
+    /* 3. Povećavamo fontove da bi bili čitljivi kad se ekran zumira unazad */
     div.stButton > button {
-        border: none !important; background: none !important; padding: 5px 2px !important;
-        font-weight: bold !important; color: black !important; white-space: nowrap !important;
+        font-size: 18px !important;
+        padding: 10px 20px !important;
     }
 
-    /* KATEGORIJA POMERENA UDESNO */
-    div.stButton > button[key="h_kat"] {
-        margin-left: 10px !important;
+    /* 4. Sređujemo zastavu i tekst da ostanu u liniji */
+    .flag-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
     }
-
-    div.stButton > button:contains("Izlaz") { color: red !important; }
-    hr { margin: 5px 0 !important; border: 0.5px solid #ddd !important; }
     </style>
+    
+    <script>
+    // Skripta koja prisiljava mobilni browser da učita desktop verziju
+    var viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute('content', 'width=1200, initial-scale=0.3');
+    </script>
     """, unsafe_allow_html=True)
 
 # --- INICIJALIZACIJA ---
