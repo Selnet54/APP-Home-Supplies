@@ -140,8 +140,7 @@ master_strings = {
             "proizvod": "Termék",
             "opis": "Leírás",
             "datum_unosa": "Beviteli dátum"
-        }
-    },
+        },
 
     "ukrajinski": {
         "nazad": "Назад", "stanje": "Запаси", "izlaz": "Вихід", "spisak": "Список", 
@@ -629,7 +628,7 @@ main_categories_translations = {
         "Poisson", "Produits laitiers", "Légumes", "Conserves et compotes",
         "Pâte et Sucreries", "Boissons", "Chimie et hygiène", "Autre"
     ]
-}
+},
 
 subcategories_translations = {
     "srpski": {
