@@ -1822,7 +1822,7 @@ def stranica_jezik():
     
 	with col9:
        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-       st.image("icons/Chinese.png", width=70)  # OVA LINIJA MORA BITI NA ISTOM NIVOU UVLAČENJA
+       st.image("icons/Chinese.png", width=70)
        st.markdown('<div class="language-text">中文</div>', unsafe_allow_html=True)
        if st.button("✓", key="lang_zh_9", use_container_width=True, type="primary"):
            st.session_state.izabrani_jezik_kod = "Mandarinski"
@@ -1830,7 +1830,7 @@ def stranica_jezik():
            st.session_state.jezik_kljuc = "mandarinski"
            st.session_state.korak = "kategorije"
            st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+       st.markdown('</div>', unsafe_allow_html=True)
     
     # ČETVRTI RED (samo francuski centriran)
     col10, col11, col12 = st.columns([1, 2, 1])
