@@ -207,7 +207,7 @@ master_strings = {
         "izbor_jezika": "Выберите язык", "pocetak": "Начало", "jezik": "Язык",
         "glavne_kategorije": "Основные категории:", "podkategorije": "Подкатегории -",
         "delovi_proizvoda": "Части продукта -", "unos_podataka": "Ввод данных",
-        "azuriranje_proizvoda": "Обновление продукта", "stanje_zaliha": "Состояние запасов",
+        "azuriranje_proизvoda": "Обновление продукта", "stanje_zaliha": "Состояние запасов",
         "spisak_potreba": "Список потребностей", "posalji_spisak": "Отправить список",
         "oznaci_sve": "Выбрать все", "kopiraj": "Копировать", "posalji_email": "Отправить Email",
         "posalji_messenger": "Отправить Messenger", "pomoc_app_password": "Помощь - App Пароль",
@@ -361,7 +361,7 @@ master_strings = {
 
     "mandarinski": {
         "nazad": "返回", "stanje": "库存", "izlaz": "退出", "spisak": "购物清单", 
-        "naziv_proizvoda": "产品:", "opis": "描述:", "komad": "件:", 
+        "naziv_proизvoda": "产品:", "opis": "描述:", "komad": "件:", 
         "kolicina": "数量:", "jedinica_mere": "单位:", "datum_unosa": "录入日期:", 
         "rok_trajanja": "保质期(月):", "automatski_rok": "自动到期:", 
         "mesto_skladistenja": "存储:", "unesi": "输入", "pretrazi": "搜索:",
@@ -646,7 +646,132 @@ subcategories_translations = {
         "Hemija i higijena": ["Sanitar", "Lična higijena", "Pribor", "Ostalo"],
         "Ostalo": ["Ostalo"]
     },
-    # ... (ostali jezici)
+    "hungary": {
+        "Fehér hús": ["Csirke", "Pulyka", "Libacomb", "Kacsa", "Egyéb"],
+        "Vörös hús": ["Sertéshús", "Bárányhús", "Juhhús", "Borjúhús", "Marhahús", "Bikahús", "Lóhús", "Nyúlhús", "Egyéb"],
+        "Apróvad": ["Fürj", "Fácán", "Fogoly", "Vadkacsa", "Vadliba", "Vadnyúl", "Galamb", "Egyéb"],
+        "Nagyvad": ["Szarvac", "Őz", "Vadkecske", "Jávorszarvas", "Rénszarvas", "Vadkan", "Bölény", "Teve", "Láma", "Alpaka", "Kenguru", "Krokodil/Alligátor", "Gyík", "Kígyó", "Egyéb"],
+        "Hal": ["Tengeri", "Édesvízi", "Tenger gyümölcsei", "Egyéb"],
+        "Tejtermékek": ["Tej", "Tejfeldolgozások", "Egyéb"],
+        "Zöldség": ["Friss", "Hőkezelt", "Fagyasztott", "Egyéb"],
+        "Befőttek és kompótok": ["Gyümölcs", "Zöldség", "Egyéb"],
+        "Tészta és Édességek": ["Tészta", "Édességek", "Egyéb"],
+        "Italok": ["Víz", "Bor", "Lé", "Tömény italok", "Sör", "Egyéb"],
+        "Kémia és higiénia": ["WC", "Személyes higiénia", "Felszerelés", "Egyéb"],
+        "Egyéb": ["Egyéb"]
+    },
+    "ukrajinski": {
+        "Біле м'ясо": ["Курятина", "Індичка", "Гуска", "Качка", "Інше"],
+        "Червоне м'ясо": ["Свинина", "Ягнятина", "Баранина", "Телятина", "Яловичина", "Бичатина", "Конина", "Кролик", "Інше"],
+        "Дрібна дичина": ["Перепілка", "Фазан", "Куріпка", "Дика качка", "Дика гуска", "Заєць", "Голуб", "Інше"],
+        "Велика дичина": ["Олень", "Косуля", "Козуль", "Лось", "Північний олень", "Дикий кабан", "Бізон", "Верблюд", "Лама", "Альпака", "Кенгуру", "Крокодил/Алігатор", "Ящірка", "Змія", "Інше"],
+        "Риба": ["Морська", "Прісноводна", "Морепродукти", "Інше"],
+        "Молочні продукти": ["Молоко", "Молочні переробки", "Інше"],
+        "Овочі": ["Свіжі", "Термічно оброблені", "Заморожені", "Інше"],
+        "Консервація та компоти": ["Фрукти", "Овочі", "Інше"],
+        "Тісто та Солодощі": ["Тісто", "Солодощі", "Інше"],
+        "Напої": ["Вода", "Вино", "Сік", "Міцні напої", "Пиво", "Інше"],
+        "Хімія та гігієна": ["Санітарія", "Особиста гігієна", "Приладдя", "Інше"],
+        "Інше": ["Інше"]
+    },
+    "ruski": {
+        "Белое мясо": ["Курица", "Индейка", "Гусь", "Утка", "Другое"],
+        "Красное мясо": ["Свинина", "Баранина", "Овца", "Телятина", "Говядина", "Бык", "Конина", "Кролик", "Другое"],
+        "Мелкая дичь": ["Перепел", "Фазан", "Куропатка", "Дикая утка", "Дикий гусь", "Заяц", "Голубь", "Другое"],
+        "Крупная дичь": ["Олень", "Косуля", "Дикая коза", "Лось", "Северный олень", "Кабан", "Бизон", "Верблюд", "Лама", "Альпака", "Кенгуру", "Крокодил/Аллигатор", "Ящерица", "Змея", "Другое"],
+        "Рыба": ["Морская", "Пресноводная", "Морепродукты", "Другое"],
+        "Молочные продукты": ["Молоко", "Молочные переработки", "Другое"],
+        "Овощи": ["Свежие", "Термически обработанные", "Замороженные", "Другое"],
+        "Консервация и компоты": ["Фрукты", "Овощи", "Другое"],
+        "Тесто и Сладости": ["Тесто", "Сладости", "Другое"],
+        "Напитки": ["Вода", "Вино", "Сок", "Крепкие напитки", "Пиво", "Другое"],
+        "Химия и гигиена": ["Сантехника", "Личная гигиена", "Оборудование", "Другое"],
+        "Другое": ["Другое"]
+    },
+    "english": {
+        "White meat": ["Chicken", "Turkey", "Goose", "Duck", "Other"],
+        "Red meat": ["Pork", "Lamb", "Sheep", "Veal", "Beef", "Bull", "Horse", "Rabbit", "Other"],
+        "Small game": ["Quail", "Pheasant", "Partridge", "Wild duck", "Wild goose", "Hare", "Pigeon", "Other"],
+        "Big game": ["Deer", "Roe deer", "Wild goat", "Moose", "Reindeer", "Wild boar", "Bison", "Camel", "Llama", "Alpaca", "Kangaroo", "Crocodile/Alligator", "Lizard", "Snake", "Other"],
+        "Fish": ["Sea", "Freshwater", "Seafood", "Other"],
+        "Dairy products": ["Milk", "Dairy processing", "Other"],
+        "Vegetables": ["Fresh", "Heat treated", "Frozen", "Other"],
+        "Preserves and compotes": ["Fruits", "Vegetables", "Other"],
+        "Dough and Sweets": ["Dough", "Sweets", "Other"],
+        "Beverages": ["Water", "Wine", "Juice", "Spirits", "Beer", "Other"],
+        "Chemicals and hygiene": ["Sanitary", "Personal hygiene", "Equipment", "Other"],
+        "Other": ["Other"]
+    },
+    "deutsch": {
+        "Weißes Fleisch": ["Huhn", "Truthahn", "Gans", "Ente", "Andere"],
+        "Rotes Fleisch": ["Schwein", "Lamm", "Schaf", "Kalb", "Rind", "Bulle", "Pferd", "Kaninchen", "Andere"],
+        "Kleinwild": ["Wachtel", "Fasan", "Rebhuhn", "Wildente", "Wildgans", "Hase", "Taube", "Andere"],
+        "Großwild": ["Hirsch", "Reh", "Wildziege", "Elch", "Rentier", "Wildschwein", "Bison", "Kamel", "Lama", "Alpaka", "Känguru", "Krokodil/Alligator", "Eidechse", "Schlange", "Andere"],
+        "Fisch": ["Meer", "Süßwasser", "Meeresfrüchte", "Andere"],
+        "Milchprodukte": ["Milch", "Milchverarbeitung", "Andere"],
+        "Gemüse": ["Frisch", "Wärmebehandelt", "Gefroren", "Andere"],
+        "Konserven und Kompotte": ["Früchte", "Gemüse", "Andere"],
+        "Teig und Süßigkeiten": ["Teig", "Süßigkeiten", "Andere"],
+        "Getränke": ["Wasser", "Wein", "Saft", "Spirituosen", "Bier", "Andere"],
+        "Chemie und Hygiene": ["Sanitär", "Persönliche Hygiene", "Ausrüstung", "Andere"],
+        "Andere": ["Andere"]
+    },
+    "mandarinski": {
+        "白肉": ["鸡", "火鸡", "鹅", "鸭", "其他"],
+        "红肉": ["猪肉", "羊肉", "羊", "小牛肉", "牛肉", "公牛", "马肉", "兔肉", "其他"],
+        "小型野味": ["鹌鹑", "野鸡", "鹧鸪", "野鸭", "野鹅", "野兔", "鸽子", "其他"],
+        "大型野味": ["鹿", "狍子", "野山羊", "驼鹿", "驯鹿", "野猪", "野牛", "骆驼", "羊驼", "袋鼠", "鳄鱼", "蜥蜴", "蛇", "其他"],
+        "鱼": ["海鱼", "淡水鱼", "海鲜", "其他"],
+        "乳制品": ["牛奶", "乳制品加工", "其他"],
+        "蔬菜": ["新鲜", "热处理", "冷冻", "其他"],
+        "蜜饯和蜜饯": ["水果", "蔬菜", "其他"],
+        "面团和糖果": ["面团", "糖果", "其他"],
+        "饮料": ["水", "葡萄酒", "果汁", "烈酒", "啤酒", "其他"],
+        "化学品和卫生": ["卫生", "个人卫生", "设备", "其他"],
+        "其他": ["其他"]
+    },
+    "espanol": {
+        "Carne blanca": ["Pollo", "Pavo", "Ganso", "Pato", "Otro"],
+        "Carne roja": ["Cerdo", "Cordero", "Oveja", "Ternera", "Res", "Toro", "Caballo", "Conejo", "Otro"],
+        "Caza menor": ["Codorniz", "Faisán", "Perdiz", "Pato salvaje", "Ganso salvaje", "Liebre", "Paloma", "Otro"],
+        "Caza mayor": ["Ciervo", "Corzo", "Cabra salvaje", "Alce", "Reno", "Jabalí", "Bisonte", "Camello", "Llama", "Alpaca", "Canguro", "Cocodrilo/Caimán", "Lagarto", "Serpiente", "Otro"],
+        "Pescado": ["Mar", "Agua dulce", "Mariscos", "Otro"],
+        "Productos lácteos": ["Leche", "Procesamiento lácteo", "Otro"],
+        "Verduras": ["Frescas", "Tratadas térmicamente", "Congeladas", "Otro"],
+        "Conservas y compotas": ["Frutas", "Verduras", "Otro"],
+        "Masa y Dulces": ["Masa", "Dulces", "Otro"],
+        "Bebidas": ["Agua", "Vino", "Jugo", "Licores", "Cerveza", "Otro"],
+        "Química e higiene": ["Sanitario", "Higiene personal", "Equipo", "Otro"],
+        "Otro": ["Otro"]
+	},
+	"portugalski": {
+		"Carne branca": ["Frango", "Peru", "Ganso", "Pato", "Outro"],
+		"Carne vermelha": ["Porco", "Cordeiro", "Ovelha", "Vitela", "Boi", "Touro", "Cavalo", "Coelho", "Outro"],
+		"Caça pequena": ["Codorna", "Faisão", "Perdiz", "Pato selvagem", "Ganso selvagem", "Lebre", "Pombo", "Outro"],
+		"Caça grossa": ["Cervo", "Corça", "Cabra selvagem", "Alce", "Rena", "Javali", "Bisão", "Camelo", "Lhama", "Alpaca", "Canguru", "Crocodilo/Jacaré", "Lagarto", "Cobra", "Outro"],
+		"Peixe": ["Mar", "Água doce", "Frutos do mar", "Outro"],
+		"Laticínios": ["Leite", "Processamento de leite", "Outro"],
+		"Vegetais": ["Fresco", "Tratado termicamente", "Congelado", "Outro"],
+		"Conservas e compotas": ["Frutas", "Vegetais", "Outro"],
+		"Massa e Doces": ["Massa", "Doces", "Outro"],
+		"Bebidas": ["Água", "Vinho", "Suco", "Bebidas destiladas", "Cerveja", "Outro"],
+		"Química e higiene": ["Sanitário", "Higiene pessoal", "Equipamento", "Outro"],
+		"Outro": ["Outro"]
+	},
+    "francais": {
+        "Viande blanche": ["Poulet", "Dinde", "Oie", "Canard", "Autre"],
+        "Viande rouge": ["Porc", "Agneau", "Mouton", "Veau", "Bœuf", "Taureau", "Cheval", "Lapin", "Autre"],
+        "Petit gibier": ["Caille", "Faisan", "Perdrix", "Canard sauvage", "Oie sauvage", "Lièvre", "Pigeon", "Autre"],
+        "Gros gibier": ["Cerf", "Chevreuil", "Chèvre sauvage", "Élan", "Renne", "Sanglier", "Bison", "Chameau", "Lama", "Alpaga", "Kangourou", "Crocodile/Alligator", "Lézard", "Serpent", "Autre"],
+        "Poisson": ["Mer", "Eau douce", "Fruits de mer", "Autre"],
+        "Produits laitiers": ["Lait", "Transformation laitière", "Autre"],
+        "Légumes": ["Frais", "Traité thermiquement", "Congelé", "Autre"],
+        "Conserves et compotes": ["Fruits", "Légumes", "Autre"],
+        "Pâte et Sucreries": ["Pâte", "Sucreries", "Autre"],
+        "Boissons": ["Eau", "Vin", "Jus", "Spiritueux", "Bière", "Autre"],
+        "Chimie et hygiène": ["Sanitaire", "Hygiène personnelle", "Équipement", "Autre"],
+        "Autre": ["Autre"]
+    }
 }
 
 product_parts_translations = {
@@ -729,7 +854,620 @@ product_parts_translations = {
         # --- Ostalo ---
         "Ostalo": ["Napomena: Unesite naziv proizvoda"]
     },
-    # ... (ostali jezici)
+    "hungary": {
+        # --- Fehér hús ---
+        "Csirke": ["Grillcsirke", "Egész csirke", "Egész comb", "Comb filé", "Alsó comb", "Fehér hús (mell)", "Filé", "Hát", "Szárny", "Medál", "Nugget", "Rántott szelet", "Darált", "Leveshez", "Egyéb"],
+        "Pulyka": ["Egész comb", "Comb filé", "Alsó comb", "Tekercs comb", "Comb szeletek", "Fehér hús (mell)", "Szárny", "Hát", "Szárnyak", "Leveshez", "Darált", "Egyéb"],
+        "Libacomb": ["Fehér hús (mell)", "Egész comb", "Comb filé", "Alsó comb", "Szárny", "Hát", "Nyak", "Májas pástétom", "Libazsír", "Darált", "Leveshez", "Egyéb"],
+        "Kacsa": ["Fehér hús (mell)", "Egész comb", "Comb filé", "Alsó comb", "Szárny", "Hát", "Nyak", "Kacsazsír", "Darált", "Máj", "Leveshez", "Egyéb"],
+
+        # --- Vörös hús ---
+        "Sertéshús": ["Szelet", "Karfiol", "Nyak", "Comb", "Szűzérme", "Borda", "Mell", "Lapocka", "Karakas", "Csülök", "Darált", "Apróra vágott", "Leveshez", "Egyéb"],
+        "Bárányhús": ["Fej", "Nyak", "Lapocka", "Gerinc", "Mell", "Vese", "Comb", "Csülök", "Egyéb"],
+        "Juhhús": ["Fej", "Nyak", "Lapocka", "Gerinc", "Mell", "Vese", "Comb", "Csülök", "Egyéb"],
+        "Borjúhús": ["Bifsztek", "Nyak - tarja", "Mell", "Lapocka", "Csülök", "Borda", "Has", "T-bone steak", "Rump steak", "Rib-Eye", "Farok", "Egyéb"],
+        "Marhahús": ["Roston sült", "Bifsztek", "Nyak", "Karakas", "Mell", "Csülök", "Borda", "Gerinc", "Hát", "Has", "Comb", "Egyéb"],
+        "Bikahús": ["Comb", "Lapocka", "Szűzérme (hát)", "Mell és borda", "Lapocka", "Nyak", "Ágyék", "Farok", "Egyéb"],
+        "Lóhús": ["Comb", "Lapocka", "Szűzérme (hát)", "Nyak", "Mell és borda", "Bifsztek", "Rump steak", "Darált hús", "Egyéb"],
+        "Nyúlhús": ["Hátsó comb", "Elülső comb", "Filé (hát)", "Borda", "Egyéb"],
+
+        # --- Apróvad ---
+        "Fürj": ["Egész hús", "Mell (filék)", "Combok", "Máj", "Egyéb"],
+        "Fácán": ["Egész hús", "Mell (filék)", "Combok", "Máj", "Egyéb"],
+        "Fogoly": ["Egész hús", "Mell (filék)", "Combok", "Máj", "Egyéb"],
+        "Galamb": ["Egész hús", "Mell (filék)", "Combok", "Máj", "Egyéb"],
+        "Vadnyúl": ["Hátsó comb", "Elülső comb", "Filé (hát)", "Borda", "Egyéb"],
+        "Vadkacsa": ["Egész hús", "Mell (filék)", "Combok", "Máj", "Egyéb"],
+        "Vadliba": ["Egész hús", "Mell (filék)", "Combok", "Máj", "Egyéb"],
+
+        # --- Nagy vad ---
+        "Szarvac": ["Comb", "Filé (hát)", "Bifsztek", "Borda", "Mell", "Lapocka", "Csülök", "Apróra vágott", "Egyéb"],
+        "Őz": ["Comb", "Filé (hát)", "Bifsztek", "Borda", "Mell", "Lapocka", "Csülök", "Apróra vágott", "Egyéb"],
+        "Vadkecske": ["Comb", "Filé (hát)", "Bifsztek", "Borda", "Mell", "Lapocka", "Csülök", "Apróra vágott", "Egyéb"],
+        "Jávorszarvas": ["Comb", "Filé (hát)", "Bifsztek", "Borda", "Mell", "Lapocka", "Csülök", "Apróra vágott", "Egyéb"],
+        "Rénszarvas": ["Comb", "Filé (hát)", "Bifsztek", "Borda", "Mell", "Lapocka", "Csülök", "Apróra vágott", "Egyéb"],
+        "Vadkan": ["Comb", "Lapocka", "Borda", "Szalonna", "Csülök", "Nyak", "Fej", "Egyéb"],
+        "Bölény": ["Comb", "Lapocka", "Bifsztek", "Rump steak", "Borda", "Ágyék", "Nyak", "Csülök", "Egyéb"],
+        "Teve": ["Comb", "Lapocka", "Filé (ágyék)", "Filé (hát)", "Borda", "Mell", "Nyak", "Púp", "Egyéb"],
+        "Láma": ["Comb", "Lapocka", "Filé (hát és ágyék)", "Borda", "Nyak", "Egyéb"],
+        "Alpaka": ["Comb", "Lapocka", "Filé (hát és ágyék)", "Borda", "Nyak", "Egyéb"],
+        "Kenguru": ["Comb", "Lapocka", "Filé (hát és ágyék)", "Borda", "Farok", "Egyéb"],
+        "Krokodil/Alligátor": ["Farok", "Filé (hát)", "Combok", "Egyéb"],
+        "Gyík": ["Farok", "Hát", "Combok", "Egyéb"],
+        "Kígyó": ["Törzs (gyűrűk)", "Egyéb"],
+
+        # --- Hal ---
+        "Tengeri": ["Lazac", "Tonhal", "Szardínia", "Tőkehal", "Tőkehal", "Makréla", "Fogas", "Aranysügér", "Laposhal", "Herring", "Szardella", "Tőkehal", "Egyéb"],
+        "Édesvízi": ["Ponty", "Pisztráng", "Harcsa", "Kárász", "Sügér", "Tilápia", "Pangász", "Tok", "Csuka", "Fehér amur", "Arapaima", "Egyéb"],
+        "Tenger gyümölcsei": ["Garnéla", "Tintahal", "Kagyló", "Kagyló", "Kagyló", "Kagyló", "Kagyló", "Rák", "Polip", "Lília", "Tengeri sün", "Tengeri uborka", "Abalone", "Egyéb"],
+
+        # --- Tejtermékek ---
+        "Tej": ["Tej", "Kefir", "Tejföl", "Tejszín", "Főzőtejszín", "Egyéb"],
+        "Tejfeldolgozások": ["Túró", "Friss sajt", "Krémsajt", "Gouda", "Edami", "Trappista", "Kaskavál", "Parmezán", "Gorgonzola", "Roquefort", "Halloumi", "Egyéb"],
+
+        # --- Zöldség ---
+        "Friss": ["Borsó", "Zöldbab", "Karfiol", "Brokkoli", "Tök", "Paradicsom", "Uborka", "Paprika", "Egyéb"],
+        "Hőkezelt": ["Borsó", "Zöldbab", "Kukorica", "Karfiol", "Brokkoli", "Paprika", "Cukkini", "Spenót", "Egyéb"],
+        "Fagyasztott": ["Borsó", "Zöldbab", "Kukorica", "Karfiol", "Brokkoli", "Paprika", "Cukkini", "Spenót", "Egyéb"],
+
+        # --- Befőttek és kompótok ---
+        "Gyümölcs": ["Sárgabarack", "Körte", "Cseresznye", "Epres lekvár", "Szilvalekvár", "Cseresznye", "Málnalekvár", "Birsalma", "Ananász", "Mangó lekvár", "Egyéb"],
+        "Zöldség": ["Savanyú uborka", "Savanyú paprika", "Paradicsompüré", "Cékla", "Ajvár", "Savanyúság", "Savanyú káposzta", "Egyéb"],
+
+        # --- Tészta és Édességek ---
+        "Tészta": ["Kenyér", "Rozskenyér", "Ciabatta", "Kukoricalepény", "Baguette", "Búzaliszt", "Teljes kiőrlésű liszt", "Hajdinaliszt", "Rizsliszt", "Fűszerek", "Egyéb"],
+        "Édességek": ["Sütemények", "Torták", "Pékáru", "Fagylalt", "Csokoládé", "Cukorkák", "Egyéb"],
+
+        # --- Italok ---
+        "Víz": ["Ásványvíz", "Szénsavmentes", "Szénsavas", "Egyéb"],
+        "Bor": ["Vörös", "Fehér", "Rozé", "Egyéb"],
+        "Lé": ["Gyümölcslé", "Zöldséglé", "Egyéb"],
+        "Tömény italok": ["Pálinka", "Vodka", "Whisky", "Egyéb"],
+        "Sör": ["Barna", "Világos", "Egyéb"],
+
+        # --- Kémia és higiénia ---
+        "WC": ["Ablaktisztító", "Mosogatószer", "Padlótisztító", "Fürdőszobai tisztítószer", "Egyéb"],
+        "Személyes higiénia": ["Dezodor", "Borotva", "Smink", "Szappan", "Sampon", "Krém", "Egyéb"],
+        "Felszerelés": ["Vödör", "Vödör", "Poroló", "Seprű", "Egyéb"],
+
+        # --- Egyéb ---
+        "Egyéb": ["Megjegyzés: Írja be a termék nevét"]
+    },
+    "ukrajinski": {
+        # --- Біле м'ясо ---
+        "Курятина": ["Ціла курка", "Грудка", "Стегно", "Гомілка", "Крило", "Філе", "Спина", "Медальйони", "Нагетси", "Панірований шніцель", "Фарш", "Для супу", "Інше"],
+        "Індичка": ["Ціла індичка", "Грудка", "Стегно", "Крило", "Філе", "Спина", "Медальйони", "Для супу", "Фарш", "Інше"],
+        "Гуска": ["Ціла гуска", "Грудка", "Стегно", "Крило", "Спина", "Шия", "Печінка", "Гусячий жир", "Фарш", "Для супу", "Інше"],
+        "Качка": ["Ціла качка", "Грудка", "Стегно", "Крило", "Спина", "Шия", "Качиний жир", "Печінка", "Фарш", "Для супу", "Інше"],
+        
+        # --- Червоне м'ясо ---
+        "Свинина": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Шинка", "Фарш", "Для супу", "Інше"],
+        "Ягнятина": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Яловичина": ["Філей", "Стейк", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Телятина": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Кролик": ["Задні лапи", "Передні лапи", "Спинка", "Ребра", "Для супу", "Інше"],
+        
+        # --- Дрібна дичина ---
+        "Перепілка": ["Ціла", "Грудка", "Гомілки", "Крила", "Печінка", "Інше"],
+        "Фазан": ["Цілий", "Грудка", "Гомілки", "Крила", "Печінка", "Інше"],
+        "Куріпка": ["Ціла", "Грудка", "Гомілки", "Крила", "Печінка", "Інше"],
+        "Голуб": ["Цілий", "Грудка", "Гомілки", "Крила", "Печінка", "Інше"],
+        "Заєць": ["Задні лапи", "Передні лапи", "Спинка", "Ребра", "Інше"],
+        "Дика качка": ["Ціла", "Грудка", "Гомілки", "Крила", "Печінка", "Інше"],
+        "Дика гуска": ["Ціла", "Грудка", "Гомілки", "Крила", "Печінка", "Інше"],
+        
+        # --- Велика дичина ---
+        "Олень": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Косуля": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Дикий кабан": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Лось": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Північний олень": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Бізон": ["Філе", "Стейк", "Окост", "Шия", "Лопатка", "Грудинка", "Ребра", "Голяшка", "Фарш", "Для супу", "Інше"],
+        "Верблюд": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Горб", "Ребра", "Фарш", "Для супу", "Інше"],
+        "Лама": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Ребра", "Фарш", "Для супу", "Інше"],
+        "Альпака": ["Філе", "Котлета", "Окост", "Шия", "Лопатка", "Ребра", "Фарш", "Для супу", "Інше"],
+        "Кенгуру": ["Філе", "Стейк", "Окост", "Шия", "Лопатка", "Хвіст", "Фарш", "Для супу", "Інше"],
+        "Крокодил/Алігатор": ["Хвіст", "Філе", "Гомілки", "Інше"],
+        "Ящірка": ["Хвіст", "Спина", "Гомілки", "Інше"],
+        "Змія": ["Кільця", "Інше"],
+        
+        # --- Риба ---
+        "Морська": ["Філе", "Стейк", "Ціла риба", "Філе зі шкірою", "Філе без шкіри", "Шматки", "Для супу", "Інше"],
+        "Прісноводна": ["Філе", "Стейк", "Ціла риба", "Філе зі шкірою", "Філе без шкіри", "Шматки", "Для супу", "Інше"],
+        "Морепродукти": ["Креветки", "Кальмар", "Мідії", "Устриці", "Гребінці", "Краби", "Восьминіг", "Каракатиця", "Інше"],
+        
+        # --- Молочні продукти ---
+        "Молоко": ["Цільне", "Знежирене", "Пастеризоване", "Стерилізоване", "Кип'ячене", "Згущене", "Сухе", "Інше"],
+        "Молочні переробки": ["Сир", "Сир домашній", "Сметана", "Йогурт", "Кефір", "Масло", "Сирний крем", "Інше"],
+        
+        # --- Овочі ---
+        "Свіжі": ["Цілі", "Нарізані", "Виміті", "Очищені", "Терті", "Інше"],
+        "Термічно оброблені": ["Варені", "Тушковані", "Смажені", "Запечені", "Приготовані на пару", "Інше"],
+        "Заморожені": ["Цілі", "Нарізані", "Суміш", "Пюре", "Інше"],
+        
+        # --- Фрукти ---
+        "Фрукти": ["Цілі", "Нарізані", "Очищені", "Без кісточок", "Консервовані", "Сушені", "Інше"],
+        
+        # --- Тісто та Солодощі ---
+        "Тісто": ["Дріжджове", "Пісочне", "Листкове", "Для млинців", "Для піци", "Для макарон", "Інше"],
+        "Солодощі": ["Шоколад", "Цукерки", "Печиво", "Торти", "Випічка", "Морозиво", "Вафлі", "Інше"],
+        
+        # --- Напої ---
+        "Вода": ["Газована", "Негазована", "Мінеральна", "Ароматизована", "Інше"],
+        "Вино": ["Червоне", "Біле", "Рожеве", "Ігристe", "Солодке", "Сухе", "Напівсухе", "Інше"],
+        "Сік": ["Яблучний", "Апельсиновий", "Виноградний", "Томатний", "Мультифрукт", "З м'якоттю", "Без м'якоті", "Інше"],
+        "Міцні напої": ["Горілка", "Віскі", "Коньяк", "Ром", "Джин", "Текіла", "Лікер", "Інше"],
+        "Пиво": ["Світле", "Темне", "Пшеничне", "Крафтове", "Безалкогольне", "Інше"],
+        
+        # --- Хімія та гігієна ---
+        "Санітарія": ["Для ванної", "Для туалету", "Для умивальника", "Універсальний", "Антибактеріальний", "Інше"],
+        "Особиста гігієна": ["Мило", "Шампунь", "Гель для душу", "Дезодорант", "Зубна паста", "Бритва", "Крем", "Інше"],
+        "Приладдя": ["Відро", "Швабра", "Ганчірка", "Губка", "Щітка", "Рукавиці", "Інше"],
+        
+        "Інше": ["Примітка: введіть назву продукту"]
+    },
+
+    "ruski": {
+        # --- Белое мясо ---
+        "Курица": ["Целая курица", "Грудка", "Бедро", "Голень", "Крыло", "Филе", "Спина", "Медальоны", "Наггетсы", "Панированное", "Фарш", "Для супа", "Другое"],
+        "Индейка": ["Целая индейка", "Грудка", "Бедро", "Голень", "Крыло", "Филе", "Спина", "Медальоны", "Для супа", "Фарш", "Другое"],
+        "Гусь": ["Целая гусь", "Грудка", "Бедро", "Голень", "Крыло", "Спина", "Шея", "Печень", "Гусиный жир", "Фарш", "Для супа", "Другое"],
+        "Утка": ["Целая утка", "Грудка", "Бедро", "Голень", "Крыло", "Спина", "Шея", "Утиный жир", "Печень", "Фарш", "Для супа", "Другое"],
+        
+        # --- Красное мясо ---
+        "Свинина": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Подплечный край", "Фарш", "Для супа", "Другое"],
+        "Баранина": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Фарш", "Для супа", "Другое"],
+        "Телятина": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Фарш", "Для супа", "Другое"],
+        "Говядина": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Фарш", "Для супа", "Другое"],
+        "Кролик": ["Задние лапы", "Передние лапы", "Спинка", "Ребра", "Для супа", "Другое"],
+        
+        # --- Мелкая дичь ---
+        "Перепел": ["Целая тушка", "Грудка", "Бедра", "Крылья", "Печень", "Другое"],
+        "Фазан": ["Целая тушка", "Грудка", "Бедра", "Крылья", "Печень", "Другое"],
+        "Куропатка": ["Целая тушка", "Грудка", "Бедра", "Крылья", "Печень", "Другое"],
+        "Голубь": ["Целая тушка", "Грудка", "Бедра", "Крылья", "Печень", "Другое"],
+        "Заяц": ["Задние лапы", "Передние лапы", "Спинка", "Ребра", "Другое"],
+        "Дикая утка": ["Целая тушка", "Грудка", "Бедра", "Крылья", "Печень", "Другое"],
+        "Дикий гусь": ["Целая тушка", "Грудка", "Бедра", "Крылья", "Печень", "Другое"],
+        
+        # --- Крупная дичь ---
+        "Олень": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Фарш", "Для супа", "Другое"],
+        "Косуля": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Фарш", "Для супа", "Другое"],
+        "Кабан": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Фарш", "Для супа", "Другое"],
+        "Лось": ["Вырезка", "Корейка", "Окорок", "Шея", "Лопатка", "Грудинка", "Ребра", "Рулька", "Фарш", "Для супа", "Другое"],
+        
+        # --- Рыба ---
+        "Морская": ["Филе", "Стейк", "Целая рыба", "Филе с кожей", "Филе без кожи", "Филе на коже", "Куски", "Для супа", "Другое"],
+        "Пресноводная": ["Филе", "Стейк", "Целая рыба", "Филе с кожей", "Филе без кожи", "Филе на коже", "Куски", "Для супа", "Другое"],
+        "Морепродукты": ["Креветки", "Кальмары", "Мидии", "Устрицы", "Гребешки", "Крабы", "Осьминоги", "Каракатицы", "Другое"],
+        
+        # --- Молочные продукты ---
+        "Молоко": ["Цельное", "Обезжиренное", "Пастеризованное", "Стерилизованное", "Топленое", "Сгущенное", "Сухое", "Другое"],
+        "Молочные переработки": ["Сыр", "Творог", "Сметана", "Йогурт", "Кефир", "Ряженка", "Сливочное масло", "Творожный сыр", "Другое"],
+        
+        # --- Овощи ---
+        "Свежие": ["Целые", "Нарезанные", "Вымытые", "Чищенные", "Натертые", "Другое"],
+        "Термически обработанные": ["Вареные", "Тушеные", "Жареные", "Запеченные", "Приготовленные на пару", "Другое"],
+        "Замороженные": ["Целые", "Нарезанные", "Смесь", "Пюре", "Другое"],
+        
+        # --- Фрукты ---
+        "Фрукты": ["Целые", "Нарезанные", "Очищенные", "Без косточек", "Консервированные", "Сушеные", "Другое"],
+        
+        # --- Тесто и сладости ---
+        "Тесто": ["Дрожжевое", "Песочное", "Слоеное", "Блинное", "Для пиццы", "Для пасты", "Другое"],
+        "Сладости": ["Шоколад", "Конфеты", "Печенье", "Торты", "Пирожные", "Мороженое", "Вафли", "Другое"],
+        
+        # --- Напитки ---
+        "Вода": ["Газированная", "Негазированная", "Минеральная", "Ароматизированная", "Другое"],
+        "Вино": ["Красное", "Белое", "Розовое", "Игристое", "Сладкое", "Сухое", "Полусухое", "Другое"],
+        "Сок": ["Яблочный", "Апельсиновый", "Виноградный", "Томатный", "Мультифрукт", "С мякотью", "Без мякоти", "Другое"],
+        "Крепкие напитки": ["Водка", "Виски", "Коньяк", "Ром", "Джин", "Текила", "Ликер", "Другое"],
+        "Пиво": ["Светлое", "Темное", "Пшеничное", "Крафтовое", "Безалкогольное", "Другое"],
+        
+        # --- Химия и гигиена ---
+        "Сантехника": ["Для ванной", "Для туалета", "Для раковины", "Универсальное", "Антибактериальное", "Другое"],
+        "Личная гигиена": ["Мыло", "Шампунь", "Гель для душа", "Дезодорант", "Зубная паста", "Бритва", "Крем", "Другое"],
+        "Оборудование": ["Ведро", "Швабра", "Тряпка", "Губка", "Щетка", "Перчатки", "Другое"],
+        
+        "Другое": ["Примечание: введите название продукта"]
+    },
+
+    "english": {
+        # --- White meat ---
+        "Chicken": ["Whole chicken", "Breast", "Thigh", "Drumstick", "Wing", "Filet", "Back", "Medallions", "Nuggets", "Breaded cutlet", "Minced meat", "For soup", "Other"],
+        "Turkey": ["Whole turkey", "Breast", "Thigh", "Wing", "Filet", "Back", "Medallions", "For soup", "Minced meat", "Other"],
+        "Goose": ["Whole goose", "Breast", "Thigh", "Wing", "Back", "Neck", "Liver", "Goose fat", "Minced meat", "For soup", "Other"],
+        "Duck": ["Whole duck", "Breast", "Thigh", "Wing", "Back", "Neck", "Duck fat", "Liver", "Minced meat", "For soup", "Other"],
+        
+        # --- Red meat ---
+        "Pork": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Belly", "Ribs", "Hock", "Ham", "Minced meat", "For soup", "Other"],
+        "Lamb": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Belly", "Ribs", "Hock", "Minced meat", "For soup", "Other"],
+        "Beef": ["Sirloin", "Steak", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Shank", "Minced meat", "For soup", "Other"],
+        "Veal": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Belly", "Ribs", "Hock", "Minced meat", "For soup", "Other"],
+        "Rabbit": ["Hind legs", "Front legs", "Saddle", "Ribs", "For soup", "Other"],
+        
+        # --- Small game ---
+        "Quail": ["Whole", "Breast", "Legs", "Wings", "Liver", "Other"],
+        "Pheasant": ["Whole", "Breast", "Legs", "Wings", "Liver", "Other"],
+        "Partridge": ["Whole", "Breast", "Legs", "Wings", "Liver", "Other"],
+        "Pigeon": ["Whole", "Breast", "Legs", "Wings", "Liver", "Other"],
+        "Hare": ["Hind legs", "Front legs", "Saddle", "Ribs", "Other"],
+        "Wild duck": ["Whole", "Breast", "Legs", "Wings", "Liver", "Other"],
+        "Wild goose": ["Whole", "Breast", "Legs", "Wings", "Liver", "Other"],
+        
+        # --- Big game ---
+        "Deer": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Shank", "Minced meat", "For soup", "Other"],
+        "Roe deer": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Shank", "Minced meat", "For soup", "Other"],
+        "Wild boar": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Belly", "Ribs", "Hock", "Minced meat", "For soup", "Other"],
+        "Moose": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Shank", "Minced meat", "For soup", "Other"],
+        "Reindeer": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Shank", "Minced meat", "For soup", "Other"],
+        "Bison": ["Loin", "Steak", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Shank", "Minced meat", "For soup", "Other"],
+        "Camel": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Hump", "Minced meat", "For soup", "Other"],
+        "Llama": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Minced meat", "For soup", "Other"],
+        "Alpaca": ["Loin", "Chop", "Leg", "Neck", "Shoulder", "Brisket", "Ribs", "Minced meat", "For soup", "Other"],
+        "Kangaroo": ["Loin", "Steak", "Leg", "Neck", "Shoulder", "Tail", "Minced meat", "For soup", "Other"],
+        "Crocodile/Alligator": ["Tail", "Filet", "Legs", "Other"],
+        "Lizard": ["Tail", "Back", "Legs", "Other"],
+        "Snake": ["Body rings", "Other"],
+        
+        # --- Fish ---
+        "Sea": ["Fillet", "Steak", "Whole fish", "Skin-on fillet", "Skinless fillet", "Pieces", "For soup", "Other"],
+        "Freshwater": ["Fillet", "Steak", "Whole fish", "Skin-on fillet", "Skinless fillet", "Pieces", "For soup", "Other"],
+        "Seafood": ["Shrimp", "Squid", "Mussels", "Oysters", "Scallops", "Crabs", "Octopus", "Cuttlefish", "Other"],
+        
+        # --- Dairy products ---
+        "Milk": ["Whole", "Skimmed", "Pasteurized", "Sterilized", "Boiled", "Condensed", "Powder", "Other"],
+        "Dairy processing": ["Cheese", "Cottage cheese", "Sour cream", "Yogurt", "Kefir", "Butter", "Cream cheese", "Other"],
+        
+        # --- Vegetables ---
+        "Fresh": ["Whole", "Chopped", "Washed", "Peeled", "Grated", "Other"],
+        "Heat treated": ["Boiled", "Stewed", "Fried", "Baked", "Steamed", "Other"],
+        "Frozen": ["Whole", "Chopped", "Mixed", "Puree", "Other"],
+        
+        # --- Fruits ---
+        "Fruits": ["Whole", "Sliced", "Peeled", "Seedless", "Canned", "Dried", "Other"],
+        
+        # --- Dough and Sweets ---
+        "Dough": ["Yeast dough", "Shortcrust", "Puff pastry", "Pancake batter", "Pizza dough", "Pasta dough", "Other"],
+        "Sweets": ["Chocolate", "Candy", "Cookies", "Cakes", "Pastries", "Ice cream", "Wafers", "Other"],
+        
+        # --- Beverages ---
+        "Water": ["Sparkling", "Still", "Mineral", "Flavored", "Other"],
+        "Wine": ["Red", "White", "Rosé", "Sparkling", "Sweet", "Dry", "Semi-dry", "Other"],
+        "Juice": ["Apple", "Orange", "Grape", "Tomato", "Multifruit", "With pulp", "Without pulp", "Other"],
+        "Spirits": ["Vodka", "Whisky", "Cognac", "Rum", "Gin", "Tequila", "Liqueur", "Other"],
+        "Beer": ["Light", "Dark", "Wheat", "Craft", "Non-alcoholic", "Other"],
+        
+        # --- Chemicals and hygiene ---
+        "Sanitary": ["For bathroom", "For toilet", "For sink", "Universal", "Antibacterial", "Other"],
+        "Personal hygiene": ["Soap", "Shampoo", "Shower gel", "Deodorant", "Toothpaste", "Razor", "Cream", "Other"],
+        "Equipment": ["Bucket", "Mop", "Cloth", "Sponge", "Brush", "Gloves", "Other"],
+        
+        "Other": ["Note: Enter product name"]
+    },
+
+    "deutsch": {
+        # --- Weißes Fleisch ---
+        "Huhn": ["Ganzes Huhn", "Brust", "Keule", "Flügel", "Filet", "Rücken", "Medaillons", "Nuggets", "Panierte Schnitzel", "Hackfleisch", "Für Suppe", "Andere"],
+        "Truthahn": ["Ganzes Truthahn", "Brust", "Keule", "Flügel", "Filet", "Rücken", "Medaillons", "Für Suppe", "Hackfleisch", "Andere"],
+        "Gans": ["Ganze Gans", "Brust", "Keule", "Flügel", "Rücken", "Hals", "Leber", "Gänseschmalz", "Hackfleisch", "Für Suppe", "Andere"],
+        "Ente": ["Ganze Ente", "Brust", "Keule", "Flügel", "Rücken", "Hals", "Entenschmalz", "Leber", "Hackfleisch", "Für Suppe", "Andere"],
+        
+        # --- Rotes Fleisch ---
+        "Schwein": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Schinken", "Hackfleisch", "Für Suppe", "Andere"],
+        "Lamm": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Hackfleisch", "Für Suppe", "Andere"],
+        "Rind": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Hackfleisch", "Für Suppe", "Andere"],
+        "Kalbfleisch": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Hackfleisch", "Für Suppe", "Andere"],
+        "Kaninchen": ["Hinterläufe", "Vorderläufe", "Rücken", "Rippen", "Für Suppe", "Andere"],
+        
+        # --- Kleinwild ---
+        "Wachtel": ["Ganzes Tier", "Brust", "Keulen", "Flügel", "Leber", "Andere"],
+        "Fasan": ["Ganzes Tier", "Brust", "Keulen", "Flügel", "Leber", "Andere"],
+        "Rebhuhn": ["Ganzes Tier", "Brust", "Keulen", "Flügel", "Leber", "Andere"],
+        "Taube": ["Ganzes Tier", "Brust", "Keulen", "Flügel", "Leber", "Andere"],
+        "Hase": ["Hinterläufe", "Vorderläufe", "Rücken", "Rippen", "Andere"],
+        "Wildente": ["Ganzes Tier", "Brust", "Keulen", "Flügel", "Leber", "Andere"],
+        "Wildgans": ["Ganzes Tier", "Brust", "Keulen", "Flügel", "Leber", "Andere"],
+        
+        # --- Großwild ---
+        "Hirsch": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Hackfleisch", "Für Suppe", "Andere"],
+        "Reh": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Hackfleisch", "Für Suppe", "Andere"],
+        "Wildschwein": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Hackfleisch", "Für Suppe", "Andere"],
+        "Elch": ["Filet", "Kotelett", "Keule", "Hals", "Schulter", "Brust", "Rippen", "Haxe", "Hackfleisch", "Für Suppe", "Andere"],
+        
+        # --- Fisch ---
+        "Meer": ["Filet", "Steak", "Ganzer Fisch", "Filet mit Haut", "Filet ohne Haut", "Stücke", "Für Suppe", "Andere"],
+        "Süßwasser": ["Filet", "Steak", "Ganzer Fisch", "Filet mit Haut", "Filet ohne Haut", "Stücke", "Für Suppe", "Andere"],
+        "Meeresfrüchte": ["Garnelen", "Tintenfisch", "Muscheln", "Austern", "Jakobsmuscheln", "Krabben", "Tintenfisch", "Sepia", "Andere"],
+        
+        # --- Milchprodukte ---
+        "Milch": ["Vollmilch", "Fettarme", "Pasteurisiert", "Sterilisiert", "Gekocht", "Kondensmilch", "Pulver", "Andere"],
+        "Milchverarbeitung": ["Käse", "Hüttenkäse", "Sauerrahm", "Joghurt", "Kefir", "Butter", "Frischkäse", "Andere"],
+        
+        # --- Gemüse ---
+        "Frisch": ["Ganz", "Geschnitten", "Gewaschen", "Geschält", "Geraspelt", "Andere"],
+        "Erhitzt": ["Gekocht", "Gedünstet", "Gebraten", "Gebacken", "Gedämpft", "Andere"],
+        "Gefroren": ["Ganz", "Geschnitten", "Mischung", "Püree", "Andere"],
+        
+        # --- Obst ---
+        "Früchte": ["Ganz", "Geschnitten", "Geschält", "Kernlos", "Konserviert", "Getrocknet", "Andere"],
+        
+        # --- Teig und Süßigkeiten ---
+        "Teig": ["Hefeteig", "Mürbeteig", "Blätterteig", "Pfannkuchenteig", "Pizzateig", "Pastateig", "Andere"],
+        "Süßigkeiten": ["Schokolade", "Bonbons", "Kekse", "Kuchen", "Torten", "Eis", "Waffeln", "Andere"],
+        
+        # --- Getränke ---
+        "Wasser": ["Sprudel", "Still", "Mineral", "Aromatisiert", "Andere"],
+        "Wein": ["Rot", "Weiß", "Rosé", "Sekt", "Süß", "Trocken", "Halbtrocken", "Andere"],
+        "Saft": ["Apfel", "Orange", "Traube", "Tomate", "Multifrucht", "Mit Fruchtfleisch", "Ohne Fruchtfleisch", "Andere"],
+        "Spirituosen": ["Wodka", "Whisky", "Cognac", "Rum", "Gin", "Tequila", "Likör", "Andere"],
+        "Bier": ["Hell", "Dunkel", "Weizen", "Craft", "Alkoholfrei", "Andere"],
+        
+        # --- Chemie und Hygiene ---
+        "Sanitär": ["Für Bad", "Für Toilette", "Für Waschbecken", "Universal", "Antibakteriell", "Andere"],
+        "Persönliche Hygiene": ["Seife", "Shampoo", "Duschgel", "Deodorant", "Zahnpasta", "Rasierer", "Creme", "Andere"],
+        "Ausrüstung": ["Eimer", "Mop", "Tuch", "Schwamm", "Bürste", "Handschuhe", "Andere"],
+        
+        "Andere": ["Hinweis: Produktname eingeben"]
+    },
+
+    "mandarinski": {
+        # --- 白肉 ---
+        "鸡": ["整鸡", "鸡胸", "鸡腿", "鸡翅", "鸡柳", "鸡背", "鸡块", "鸡米花", "炸鸡排", "鸡绞肉", "汤用", "其他"],
+        "火鸡": ["整火鸡", "火鸡胸", "火鸡腿", "火鸡翅", "火鸡柳", "火鸡背", "火鸡块", "汤用", "火鸡绞肉", "其他"],
+        "鹅": ["整鹅", "鹅胸", "鹅腿", "鹅翅", "鹅背", "鹅颈", "鹅肝", "鹅油", "鹅绞肉", "汤用", "其他"],
+        "鸭": ["整鸭", "鸭胸", "鸭腿", "鸭翅", "鸭背", "鸭颈", "鸭油", "鸭肝", "鸭绞肉", "汤用", "其他"],
+        
+        # --- 红肉 ---
+        "猪肉": ["里脊", "排骨", "猪腿", "猪颈", "猪肩", "猪胸", "猪肋", "猪蹄", "猪绞肉", "汤用", "其他"],
+        "羊肉": ["里脊", "排骨", "羊腿", "羊颈", "羊肩", "羊胸", "羊肋", "羊蹄", "羊绞肉", "汤用", "其他"],
+        "牛肉": ["里脊", "牛排", "牛腿", "牛颈", "牛肩", "牛胸", "牛肋", "牛蹄", "牛绞肉", "汤用", "其他"],
+        "兔肉": ["后腿", "前腿", "兔背", "兔肋", "汤用", "其他"],
+        
+        # --- 小型野味 ---
+        "鹌鹑": ["整只", "鹌鹑胸", "鹌鹑腿", "鹌鹑翅", "鹌鹑肝", "其他"],
+        "野鸡": ["整只", "野鸡胸", "野鸡腿", "野鸡翅", "野鸡肝", "其他"],
+        "鹧鸪": ["整只", "鹧鸪胸", "鹧鸪腿", "鹧鸪翅", "鹧鸪肝", "其他"],
+        "鸽子": ["整只", "鸽子胸", "鸽子腿", "鸽子翅", "鸽子肝", "其他"],
+        "野兔": ["后腿", "前腿", "兔背", "兔肋", "其他"],
+        "野鸭": ["整只", "野鸭胸", "野鸭腿", "野鸭翅", "野鸭肝", "其他"],
+        "野鹅": ["整只", "野鹅胸", "野鹅腿", "野鹅翅", "野鹅肝", "其他"],
+        
+        # --- 大型野味 ---
+        "鹿": ["里脊", "鹿排", "鹿腿", "鹿颈", "鹿肩", "鹿胸", "鹿肋", "鹿蹄", "鹿绞肉", "汤用", "其他"],
+        "狍子": ["里脊", "狍子排", "狍子腿", "狍子颈", "狍子肩", "狍子胸", "狍子肋", "狍子蹄", "狍子绞肉", "汤用", "其他"],
+        "野猪": ["里脊", "野猪排", "野猪腿", "野猪颈", "野猪肩", "野猪胸", "野猪肋", "野猪蹄", "野猪绞肉", "汤用", "其他"],
+        "驼鹿": ["里脊", "驼鹿排", "驼鹿腿", "驼鹿颈", "驼鹿肩", "驼鹿胸", "驼鹿肋", "驼鹿蹄", "驼鹿绞肉", "汤用", "其他"],
+        
+        # --- 鱼 ---
+        "海鱼": ["鱼片", "鱼排", "整鱼", "带皮鱼片", "去皮鱼片", "鱼块", "汤用", "其他"],
+        "淡水鱼": ["鱼片", "鱼排", "整鱼", "带皮鱼片", "去皮鱼片", "鱼块", "汤用", "其他"],
+        "海鲜": ["虾", "鱿鱼", "蛤蜊", "牡蛎", "扇贝", "螃蟹", "章鱼", "墨鱼", "其他"],
+        
+        # --- 乳制品 ---
+        "牛奶": ["全脂", "脱脂", "巴氏杀菌", "灭菌", "煮沸", "炼乳", "奶粉", "其他"],
+        "乳制品加工": ["奶酪", "干酪", "酸奶油", "酸奶", "开菲尔", "黄油", "奶油奶酪", "其他"],
+        
+        # --- 蔬菜 ---
+        "新鲜": ["整颗", "切片", "洗净", "去皮", "擦丝", "其他"],
+        "热处理": ["煮熟", "炖煮", "油炸", "烘烤", "蒸煮", "其他"],
+        "冷冻": ["整颗", "切片", "混合", "泥状", "其他"],
+        
+        # --- 水果 ---
+        "水果": ["整颗", "切片", "去皮", "去核", "罐头", "干果", "其他"],
+        
+        # --- 面团和糖果 ---
+        "面团": ["酵母面团", "酥皮面团", "千层酥皮", "煎饼面糊", "披萨面团", "意大利面团", "其他"],
+        "糖果": ["巧克力", "糖果", "饼干", "蛋糕", "糕点", "冰淇淋", "华夫饼", "其他"],
+        
+        # --- 饮料 ---
+        "水": ["气泡水", "静水", "矿泉水", "调味水", "其他"],
+        "酒": ["红酒", "白酒", "桃红", "起泡酒", "甜酒", "干酒", "半干", "其他"],
+        "果汁": ["苹果汁", "橙汁", "葡萄汁", "番茄汁", "混合果汁", "带果肉", "无果肉", "其他"],
+        "烈酒": ["伏特加", "威士忌", "干邑", "朗姆酒", "金酒", "龙舌兰", "利口酒", "其他"],
+        "啤酒": ["淡啤", "黑啤", "小麦啤", "精酿", "无酒精", "其他"],
+        
+        # --- 化学品和卫生 ---
+        "卫生": ["浴室用", "厕所用", "洗手池用", "通用", "抗菌", "其他"],
+        "个人卫生": ["肥皂", "洗发水", "沐浴露", "除臭剂", "牙膏", "剃须刀", "面霜", "其他"],
+        "设备": ["桶", "拖把", "布", "海绵", "刷子", "手套", "其他"],
+        
+        "其他": ["注：输入产品名称"]
+    },
+
+    "espanol": {
+        # --- Carne blanca ---
+        "Pollo": ["Pollo entero", "Pechuga", "Muslo", "Ala", "Filete", "Espalda", "Medallones", "Nuggets", "Milanesa", "Carne molida", "Para sopa", "Otro"],
+        "Pavo": ["Pavo entero", "Pechuga", "Muslo", "Ala", "Filete", "Espalda", "Medallones", "Para sopa", "Carne molida", "Otro"],
+        "Ganso": ["Ganso entero", "Pechuga", "Muslo", "Ala", "Espalda", "Cuello", "Hígado", "Grasa de ganso", "Carne molida", "Para sopa", "Otro"],
+        "Pato": ["Pato entero", "Pechuga", "Muslo", "Ala", "Espalda", "Cuello", "Grasa de pato", "Hígado", "Carne molida", "Para sopa", "Otro"],
+        
+        # --- Carne roja ---
+        "Cerdo": ["Lomo", "Chuleta", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Jamón", "Carne molida", "Para sopa", "Otro"],
+        "Cordero": ["Lomo", "Chuleta", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Carne molida", "Para sopa", "Otro"],
+        "Res": ["Lomo", "Bistec", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Carne molida", "Para sopa", "Otro"],
+        "Ternera": ["Lomo", "Chuleta", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Carne molida", "Para sopa", "Otro"],
+        "Conejo": ["Patas traseras", "Patas delanteras", "Lomo", "Costillas", "Para sopa", "Otro"],
+        
+        # --- Caza menor ---
+        "Codorniz": ["Entera", "Pechuga", "Muslos", "Alas", "Hígado", "Otro"],
+        "Faisán": ["Entera", "Pechuga", "Muslos", "Alas", "Hígado", "Otro"],
+        "Perdiz": ["Entera", "Pechuga", "Muslos", "Alas", "Hígado", "Otro"],
+        "Paloma": ["Entera", "Pechuga", "Muslos", "Alas", "Hígado", "Otro"],
+        "Liebre": ["Patas traseras", "Patas delanteras", "Lomo", "Costillas", "Otro"],
+        "Pato salvaje": ["Entera", "Pechuga", "Muslos", "Alas", "Hígado", "Otro"],
+        "Ganso salvaje": ["Entera", "Pechuga", "Muslos", "Alas", "Hígado", "Otro"],
+        
+        # --- Caza mayor ---
+        "Ciervo": ["Lomo", "Chuleta", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Carne molida", "Para sopa", "Otro"],
+        "Corzo": ["Lomo", "Chuleta", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Carne molida", "Para sopa", "Otro"],
+        "Jabalí": ["Lomo", "Chuleta", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Carne molida", "Para sopa", "Otro"],
+        "Alce": ["Lomo", "Chuleta", "Pierna", "Cuello", "Paleta", "Pecho", "Costilla", "Codillo", "Carne molida", "Para sopa", "Otro"],
+        
+        # --- Pescado ---
+        "Mar": ["Filete", "Filete con piel", "Filete sin piel", "Entero", "Trozos", "Para sopa", "Otro"],
+        "Agua dulce": ["Filete", "Filete con piel", "Filete sin piel", "Entero", "Trozos", "Para sopa", "Otro"],
+        "Mariscos": ["Camarones", "Calamar", "Mejillones", "Ostras", "Vieiras", "Cangrejos", "Pulpo", "Sepia", "Otro"],
+        
+        # --- Productos lácteos ---
+        "Leche": ["Entera", "Descremada", "Pasteurizada", "Esterilizada", "Hervida", "Condensada", "En polvo", "Otro"],
+        "Procesamiento lácteo": ["Queso", "Requesón", "Crema agria", "Yogur", "Kéfir", "Mantequilla", "Queso crema", "Otro"],
+        
+        # --- Verduras ---
+        "Frescas": ["Enteras", "Cortadas", "Lavadas", "Peladas", "Ralladas", "Otro"],
+        "Tratadas térmicamente": ["Cocidas", "Estofadas", "Fritas", "Horneadas", "Al vapor", "Otro"],
+        "Congeladas": ["Enteras", "Cortadas", "Mezcla", "Puré", "Otro"],
+        
+        # --- Frutas ---
+        "Frutas": ["Enteras", "Cortadas", "Peladas", "Sin semillas", "Enlatadas", "Secas", "Otro"],
+        
+        # --- Masa y dulces ---
+        "Masa": ["Levadura", "Quebrada", "Hojaldre", "Para panqueques", "Para pizza", "Para pasta", "Otro"],
+        "Dulces": ["Chocolate", "Caramelos", "Galletas", "Pasteles", "Tortas", "Helado", "Wafles", "Otro"],
+        
+        # --- Bebidas ---
+        "Agua": ["Con gas", "Sin gas", "Mineral", "Saborizada", "Otro"],
+        "Vino": ["Tinto", "Blanco", "Rosado", "Espumoso", "Dulce", "Seco", "Semiseco", "Otro"],
+        "Jugo": ["Manzana", "Naranja", "Uva", "Tomate", "Multifruta", "Con pulpa", "Sin pulpa", "Otro"],
+        "Licores": ["Vodka", "Whisky", "Coñac", "Ron", "Ginebra", "Tequila", "Licor", "Otro"],
+        "Cerveza": ["Clara", "Oscura", "Trigo", "Artesanal", "Sin alcohol", "Otro"],
+        
+        # --- Química e higiene ---
+        "Sanitario": ["Para baño", "Para inodoro", "Para lavabo", "Universal", "Antibacterial", "Otro"],
+        "Higiene personal": ["Jabón", "Champú", "Gel de baño", "Desodorante", "Pasta dental", "Maquinilla", "Crema", "Otro"],
+        "Equipo": ["Cubo", "Trapeador", "Paño", "Esponja", "Cepillo", "Guantes", "Otro"],
+        
+        "Otro": ["Nota: Ingrese el nombre del producto"]
+    },
+
+	"portugalski": {
+		"Frango": ["Frango grelhado", "Frango inteiro", "Coxa inteira", "Sobrecoxa", "Coxinha", "Peito", "Filé", "Costas", "Asas", "Medalhões", "Nuggets", "Bife empanado", "Moído", "Para sopa", "Outro"],
+		"Peru": ["Coxa inteira", "Sobrecoxa", "Coxinha", "Coxa enrolada", "Bifes de coxa", "Peito", "Asas", "Costas", "Pontas de asa", "Para sopa", "Moído", "Outro"],
+		"Ganso": ["Peito", "Sobrecoxa", "Coxinha", "Asas", "Costas", "Pescoço", "Fígado (foie gras)", "Banha de ganso", "Moído", "Para sopa", "Outro"],
+		"Pato": ["Peito", "Sobrecoxa", "Coxinha", "Asas", "Costas", "Pescoço", "Banha de pato", "Moído", "Fígado", "Para sopa", "Outro"],
+		"Porco": ["Bife", "Costeleta", "Pescoço", "Pernil", "Lombo", "Costelas", "Barriga", "Paleta", "Espádua", "Jarret", "Moído", "Picado", "Para sopa", "Outro"],
+		"Cordeiro": ["Cabeça", "Pescoço", "Paleta", "Lombo", "Peito", "Rim", "Pernil", "Jarret", "Outro"],
+		"Boi": ["Bife", "Pescoço", "Peito", "Paleta", "Jarret", "Costelas", "Fralda", "T-bone", "Alcatra", "Rib-eye", "Rabo", "Outro"],
+		"Coelho": ["Perna traseira", "Perna dianteira", "Filé do lombo", "Costelas", "Outro"],
+		# --- Sitna divljač ---
+		"Codorna": ["Carne inteira", "Peito (filés)", "Coxas", "Fígado", "Outro"],
+		"Faisão": ["Carne inteira", "Peito (filés)", "Coxas", "Fígado", "Outro"],
+		"Perdiz": ["Carne inteira", "Peito (filés)", "Coxas", "Fígado", "Outro"],
+		"Pato selvagem": ["Carne inteira", "Peito (filés)", "Coxas", "Fígado", "Outro"],
+		"Ganso selvagem": ["Carne inteira", "Peito (filés)", "Coxas", "Fígado", "Outro"],
+		"Lebre": ["Perna traseira", "Perna dianteira", "Filé do lombo", "Costelas", "Outro"],
+		"Pombo": ["Carne inteira", "Peito (filés)", "Coxas", "Fígado", "Outro"],
+		# --- Krupna divljač ---
+		"Cervo": ["Perna", "Filé (lombo)", "Bife", "Costelas", "Peito", "Paleta", "Jarrete", "Picado", "Outro"],
+		"Corça": ["Perna", "Filé (lombo)", "Bife", "Costelas", "Peito", "Paleta", "Jarrete", "Picado", "Outro"],
+		"Cabra selvagem": ["Perna", "Filé (lombo)", "Bife", "Costelas", "Peito", "Paleta", "Jarrete", "Picado", "Outro"],
+		"Alce": ["Perna", "Filé (lombo)", "Bife", "Costelas", "Peito", "Paleta", "Jarrete", "Picado", "Outro"],
+		"Rena": ["Perna", "Filé (lombo)", "Bife", "Costelas", "Peito", "Paleta", "Jarrete", "Picado", "Outro"],
+		"Javali": ["Perna", "Paleta", "Costelas", "Bacon", "Jarrete", "Pescoço", "Cabeça", "Outro"],
+		"Bisão": ["Perna", "Paleta", "Bife", "Alcatra", "Costelas", "Lombo", "Pescoço", "Jarrete", "Outro"],
+		"Camelo": ["Perna", "Paleta", "Filé (lombo)", "Filé (dorso)", "Costelas", "Peito", "Pescoço", "Corcova", "Outro"],
+		"Lhama": ["Perna", "Paleta", "Filé (dorso e lombo)", "Costelas", "Pescoço", "Outro"],
+		"Alpaca": ["Perna", "Paleta", "Filé (dorso e lombo)", "Costelas", "Pescoço", "Outro"],
+		"Canguru": ["Perna", "Paleta", "Filé (dorso e lombo)", "Costelas", "Rabo", "Outro"],
+		"Crocodilo/Jacaré": ["Rabo", "Filé (dorso)", "Coxas", "Outro"],
+		"Lagarto": ["Rabo", "Dorso", "Coxas", "Outro"],
+		"Cobra": ["Tronco (anéis)", "Outro"],
+		"Mar": ["Salmão", "Atum", "Sardinha", "Bacalhau", "Pescada", "Cavala", "Robalo", "Dourada", "Linguado", "Arenque", "Anchova", "Outro"],
+		"Água doce": ["Carpa", "Truta", "Bagre", "Percha", "Sander", "Tilápia", "Panga", "Esturjão", "Lúcio", "Carpa capim", "Pirarucu", "Outro"],
+		"Frutos do mar": ["Camarão", "Lula", "Vieiras", "Amêijoas", "Mexilhões", "Ostras", "Caranguejo", "Polvo", "Ouriço", "Pepino do mar", "Abalone", "Outro"],
+		"Leite": ["Leite", "Kefir", "Creme azedo", "Creme", "Creme de cozinha", "Outro"],
+		"Processamento de leite": ["Queijo fresco", "Queijo jovem", "Queijo cremoso", "Gouda", "Edam", "Trappista", "Kashkaval", "Parmesão", "Gorgonzola", "Roquefort", "Halloumi", "Outro"],
+		"Fresco": ["Ervilhas", "Feijão verde", "Couve-flor", "Brócolis", "Abóbora", "Tomate", "Pepino", "Pimentão", "Outro"],
+		"Tratado termicamente": ["Ervilhas", "Feijão verde", "Milho", "Couve-flor", "Brócolis", "Pimentão", "Abobrinha", "Espinafre", "Outro"],
+		"Congelado": ["Ervilhas", "Feijão verde", "Milho", "Couve-flor", "Brócolis", "Pimentão", "Abobrinha", "Espinafre", "Outro"],
+		"Frutas": ["Damasco", "Pera", "Cereja", "Geleia de morango", "Geleia de ameixa", "Cereja doce", "Geleia de framboesa", "Marmelo", "Abacaxi", "Geleia de manga", "Outro"],
+		"Vegetais": ["Picles", "Pimentão em conserva", "Purê de tomate", "Beterraba", "Ajvar", "Conservas", "Chucrute", "Outro"],
+		"Massa": ["Pão", "Pão de centeio", "Ciabatta", "Pão de milho", "Baguete", "Farinha de trigo", "Farinha integral", "Farinha de trigo sarraceno", "Farinha de arroz", "Temperos", "Outro"],
+		"Doces": ["Bolos", "Tortas", "Padaria", "Sorvete", "Chocolate", "Doces", "Outro"],
+		"Água": ["Mineral", "Sem gás", "Com gás", "Outro"],
+		"Vinho": ["Tinto", "Branco", "Rosé", "Outro"],
+		"Suco": ["Fruta", "Vegetal", "Outro"],
+		"Bebidas destiladas": ["Conhaque", "Vodka", "Uísque", "Outro"],
+		"Cerveja": ["Escura", "Clara", "Outro"],
+		"Sanitário": ["Limpa-vidros", "Detergente", "Limpa-pisos", "Limpa-banheiro", "Outro"],
+		"Higiene pessoal": ["Desodorante", "Lâmina", "Maquiagem", "Sabão", "Xampu", "Creme", "Outro"],
+		"Equipamento": ["Balde", "Pano", "Espanador", "Vassoura", "Outro"],
+		"Outro": ["Nota: Digite o nome do produto"]
+	},
+
+    "francais": {
+        # --- Viande blanche ---
+        "Poulet": ["Poulet entier", "Poitrine", "Cuisse", "Aile", "Filet", "Dos", "Médaillons", "Nuggets", "Escalope panée", "Viande hachée", "Pour soupe", "Autre"],
+        "Dinde": ["Dinde entière", "Poitrine", "Cuisse", "Aile", "Filet", "Dos", "Médaillons", "Pour soupe", "Viande hachée", "Autre"],
+        "Oie": ["Oie entière", "Poitrine", "Cuisse", "Aile", "Dos", "Cou", "Foie", "Graisse d'oie", "Viande hachée", "Pour soupe", "Autre"],
+        "Canard": ["Canard entier", "Magret", "Cuisse", "Aile", "Dos", "Cou", "Graisse de canard", "Foie", "Viande hachée", "Pour soupe", "Autre"],
+        
+        # --- Viande rouge ---
+        "Porc": ["Filet", "Côtelette", "Jambon", "Échine", "Épaule", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Agneau": ["Filet", "Côtelette", "Gigot", "Collet", "Épaule", "Poitrine", "Côtes", "Souris", "Viande hachée", "Pour soupe", "Autre"],
+        "Bœuf": ["Filet", "Entrecôte", "Rumsteck", "Collier", "Paleron", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Veau": ["Filet", "Côtelette", "Rognonnade", "Collet", "Épaule", "Poitrine", "Côtes", "Osso buco", "Viande hachée", "Pour soupe", "Autre"],
+        "Lapin": ["Cuisses arrière", "Cuisses avant", "Râble", "Côtes", "Pour soupe", "Autre"],
+        
+        # --- Petit gibier ---
+        "Caille": ["Entière", "Poitrine", "Cuisses", "Ailes", "Foie", "Autre"],
+        "Faisan": ["Entier", "Poitrine", "Cuisses", "Ailes", "Foie", "Autre"],
+        "Perdrix": ["Entière", "Poitrine", "Cuisses", "Ailes", "Foie", "Autre"],
+        "Pigeon": ["Entier", "Poitrine", "Cuisses", "Ailes", "Foie", "Autre"],
+        "Lièvre": ["Cuisses arrière", "Cuisses avant", "Râble", "Côtes", "Autre"],
+        "Canard sauvage": ["Entier", "Poitrine", "Cuisses", "Ailes", "Foie", "Autre"],
+        "Oie sauvage": ["Entière", "Poitrine", "Cuisses", "Ailes", "Foie", "Autre"],
+        
+        # --- Gros gibier ---
+        "Cerf": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Chevreuil": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Sanglier": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Élan": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Renne": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Bison": ["Filet", "Entrecôte", "Cuissot", "Collet", "Épaule", "Poitrine", "Côtes", "Jarret", "Viande hachée", "Pour soupe", "Autre"],
+        "Chameau": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Bosse", "Côtes", "Viande hachée", "Pour soupe", "Autre"],
+        "Lama": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Côtes", "Viande hachée", "Pour soupe", "Autre"],
+        "Alpaga": ["Filet", "Côtelette", "Cuissot", "Collet", "Épaule", "Côtes", "Viande hachée", "Pour soupe", "Autre"],
+        "Kangourou": ["Filet", "Steak", "Cuissot", "Collet", "Épaule", "Queue", "Viande hachée", "Pour soupe", "Autre"],
+        "Crocodile/Alligator": ["Queue", "Filet", "Cuisses", "Autre"],
+        "Lézard": ["Queue", "Dos", "Cuisses", "Autre"],
+        "Serpent": ["Anneaux", "Autre"],
+        
+        # --- Poisson ---
+        "Mer": ["Filet", "Darnes", "Poisson entier", "Filet avec peau", "Filet sans peau", "Morceaux", "Pour soupe", "Autre"],
+        "Eau douce": ["Filet", "Darnes", "Poisson entier", "Filet avec peau", "Filet sans peau", "Morceaux", "Pour soupe", "Autre"],
+        "Fruits de mer": ["Crevettes", "Calmar", "Moules", "Huîtres", "Coquilles Saint-Jacques", "Crabes", "Poulpe", "Seiche", "Autre"],
+        
+        # --- Produits laitiers ---
+        "Lait": ["Entier", "Écrémé", "Pasteurisé", "Stérilisé", "Bouilli", "Condensé", "En poudre", "Autre"],
+        "Transformation laitière": ["Fromage", "Fromage blanc", "Crème fraîche", "Yaourt", "Kéfir", "Beurre", "Fromage à tartiner", "Autre"],
+        
+        # --- Légumes ---
+        "Frais": ["Entiers", "Coupés", "Lavés", "Pelés", "Râpés", "Autre"],
+        "Traité thermiquement": ["Cuits", "Étuvés", "Frits", "Rôtis", "Vapeur", "Autre"],
+        "Congelé": ["Entiers", "Coupés", "Mélange", "Purée", "Autre"],
+        
+        # --- Fruits ---
+        "Fruits": ["Entiers", "Tranchés", "Pelés", "Sans pépins", "En conserve", "Séchés", "Autre"],
+        
+        # --- Pâte et Sucreries ---
+        "Pâte": ["Pâte à levure", "Pâte brisée", "Pâte feuilletée", "Pâte à crêpes", "Pâte à pizza", "Pâte à pâtes", "Autre"],
+        "Sucreries": ["Chocolat", "Bonbons", "Biscuits", "Gâteaux", "Pâtisseries", "Glace", "Gaufres", "Autre"],
+        
+        # --- Boissons ---
+        "Eau": ["Pétillante", "Plate", "Minérale", "Aromatisée", "Autre"],
+        "Vin": ["Rouge", "Blanc", "Rosé", "Mousseux", "Doux", "Sec", "Demi-sec", "Autre"],
+        "Jus": ["Pomme", "Orange", "Raisin", "Tomate", "Multifruits", "Avec pulpe", "Sans pulpe", "Autre"],
+        "Spiritueux": ["Vodka", "Whisky", "Cognac", "Rhum", "Gin", "Tequila", "Liqueur", "Autre"],
+        "Bière": ["Blonde", "Brune", "Blanche", "Artisanale", "Sans alcool", "Autre"],
+        
+        # --- Chimie et hygiène ---
+        "Sanitaire": ["Pour salle de bain", "Pour toilettes", "Pour lavabo", "Universel", "Antibactérien", "Autre"],
+        "Hygiène personnelle": ["Savon", "Shampooing", "Gel douche", "Déodorant", "Dentifrice", "Rasoir", "Crème", "Autre"],
+        "Équipement": ["Seau", "Balai", "Chiffon", "Éponge", "Brosse", "Gants", "Autre"],
+        
+        "Autre": ["Note : Saisir le nom du produit"]
+    },
 }
 
 # --- POMOĆNE FUNKCIJE ZA JEZIKE ---
@@ -795,8 +1533,10 @@ st.markdown("""
             margin: auto;
         }
         div.stButton > button { 
-            font-size: 16px !important; 
-            height: 50px !important;
+            font-size: 14px !important; 
+            height: 45px !important;
+            margin: 1px !important;
+            padding: 2px 5px !important;
         } /* Veći font za PC */
     }
 
@@ -809,29 +1549,35 @@ st.markdown("""
         }
         div.stButton > button { 
             font-size: 11px !important; 
-            height: 40px !important;
+            height: 35px !important;
+            margin: 1px !important;
+            padding: 2px 3px !important;
         } /* Manji font za mobilni */
     }
 
-    /* Heder fiksiran u jednom redu bez prelamanja */
+    /* Heder - kompaktniji razmak */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
         justify-content: space-between !important;
-        gap: 2px !important;
+        gap: 1px !important; /* SMANJEN razmak */
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
-    /* Dugmad bez okvira */
+    /* Dugmad bez okvira - kompaktnija */
     div.stButton > button {
         border: none !important;
         background: none !important;
-        padding: 5px !important;
+        padding: 3px 5px !important; /* SMANJEN padding */
         font-weight: bold !important;
         color: black !important;
         white-space: nowrap !important;
-        margin: 2px !important;
+        margin: 1px !important; /* SMANJEN margin */
+        font-size: 12px !important;
+        min-width: 60px !important;
     }
 
     div.stButton > button:contains("Izlaz") { 
@@ -841,33 +1587,79 @@ st.markdown("""
     
     /* Linija separatora */
     hr { 
-        margin: 10px 0 !important; 
+        margin: 5px 0 !important; /* SMANJEN margin */
         border-color: #ccc !important;
     }
     
-    /* Kategorija dugmad sa bojama */
+    /* Kategorija dugmad sa bojama - kompaktnija */
     .category-button {
-        border-radius: 10px !important;
-        margin: 5px !important;
+        border-radius: 8px !important;
+        margin: 2px !important; /* SMANJEN margin */
         border: 1px solid #ddd !important;
+        font-size: 13px !important;
+        padding: 8px 5px !important;
     }
     
-    /* Stil za jezik dugmad */
+    /* Stil za jezik dugmad - KOMPAKTNIJE */
     .language-button-container {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 15px 0;
+        align-items: flex-start; /* TEKST U LEVO */
+        justify-content: flex-start;
+        margin: 5px 0 !important; /* SMANJEN margin */
+        padding: 3px !important; /* SMANJEN padding */
+        min-height: 100px;
     }
     
-    .language-flag {
-        margin-bottom: 8px;
+    .language-button-container img {
+        width: 70px !important; /* SMANJENA veličina */
+        height: 45px !important; /* SMANJENA visina */
+        object-fit: contain;
+        margin-bottom: 3px !important; /* SMANJEN razmak */
+        border-radius: 3px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     
     .language-text {
         font-weight: bold;
-        margin-top: 5px;
+        font-size: 12px !important; /* SMANJEN font */
+        text-align: left; /* TEKST U LEVO */
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        width: 100%;
+    }
+    
+    /* Dugmad za jezike - manja i bez teksta */
+    .language-select-button {
+        width: 70px !important;
+        height: 25px !important;
+        font-size: 10px !important;
+        margin-top: 2px !important;
+        padding: 2px !important;
+    }
+    
+    /* Kategorije - mnogo bliže */
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3px !important; /* VEOMA MALI razmak */
+        margin: 5px 0 !important;
+    }
+    
+    .category-item {
+        margin: 1px !important;
+        padding: 0 !important;
+    }
+    
+    /* Kompaktniji spacing za sve */
+    .stButton > button {
+        margin: 1px !important;
+        padding: 4px 6px !important;
+    }
+    
+    /* Kompaktniji form elementi */
+    .stTextInput, .stTextArea, .stNumberInput, .stSelectbox, .stDateInput {
+        margin-bottom: 5px !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -878,7 +1670,7 @@ def prikazi_heder():
     st.markdown("""
         <style>
         .main .block-container {
-            padding-top: 0.5rem !important;
+            padding-top: 0.2rem !important; /* SMANJENO */
         }
         </style>
     """, unsafe_allow_html=True)
@@ -889,27 +1681,27 @@ def prikazi_heder():
     page_name = st.session_state.get('korak', 'unknown')
     
     with col1: 
-        if st.button("🏠 Home", key=f"h_home_{page_name}"):
+        if st.button("🏠", key=f"h_home_{page_name}", help="Početna"):  # SAMO IKONA
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col2: 
-        if st.button("📂 Kategorije", key=f"h_kat_{page_name}"):
+        if st.button("📂", key=f"h_kat_{page_name}", help="Kategorije"):  # SAMO IKONA
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col3: 
-        if st.button("📦 Zalihe", key=f"h_zal_{page_name}"):
+        if st.button("📦", key=f"h_zal_{page_name}", help="Zalihe"):  # SAMO IKONA
             st.session_state.korak = "zalihe"
             st.rerun()
     
     with col4: 
-        if st.button("🛒 Spisak", key=f"h_spis_{page_name}"):
+        if st.button("🛒", key=f"h_spis_{page_name}", help="Spisak"):  # SAMO IKONA
             st.session_state.korak = "spisak"
             st.rerun()
     
     with col5: 
-        if st.button("🚪 Izlaz", key=f"h_izl_{page_name}"):
+        if st.button("🚪", key=f"h_izl_{page_name}", help="Izlaz"):  # SAMO IKONA
             st.session_state.korak = "jezik"
             st.rerun()
     
@@ -918,57 +1710,19 @@ def prikazi_heder():
 # --- STRANICE APLIKACIJE ---
 
 def stranica_jezik():
-    """Stranica za odabir jezika - samo zastave i tekst jedan ispod drugog"""
-    
-    # Ukloni heder sa stranice za jezik
-    # ne pozivaj prikazi_heder() ovde
+    """Stranica za odabir jezika - kompaktnija verzija"""
     
     # Dodaj malo prostora na vrhu
-    st.markdown("<div style='height: 40px;'></div>", unsafe_allow_html=True)
-    
-    # CSS za vertikalno poravnanje
-    st.markdown("""
-        <style>
-        .language-button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-            padding: 10px;
-        }
-        
-        .language-button-container img {
-            width: 80px !important;
-            height: 50px !important;
-            object-fit: contain;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .language-text {
-            font-weight: bold;
-            font-size: 14px;
-            text-align: center;
-        }
-        
-        .language-button-col {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     
     # PRVI RED (3 jezika)
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Srpski.png", width=80)
+        st.image("icons/Srpski.png", width=70)
         st.markdown('<div class="language-text">Srpski</div>', unsafe_allow_html=True)
-        if st.button("Izaberi", key="lang_sr_1", use_container_width=True):
+        if st.button("✓", key="lang_sr_1", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Srpski"
             st.session_state.izabrani_jezik_naziv = "Srpski"
             st.session_state.jezik_kljuc = "srpski"
@@ -978,9 +1732,9 @@ def stranica_jezik():
     
     with col2:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Engleski.png", width=80)
+        st.image("icons/Engleski.png", width=70)
         st.markdown('<div class="language-text">English</div>', unsafe_allow_html=True)
-        if st.button("Choose", key="lang_en_2", use_container_width=True):
+        if st.button("✓", key="lang_en_2", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Engleski"
             st.session_state.izabrani_jezik_naziv = "English"
             st.session_state.jezik_kljuc = "english"
@@ -990,9 +1744,9 @@ def stranica_jezik():
     
     with col3:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Nemacki.png", width=80)
+        st.image("icons/Nemacki.png", width=70)
         st.markdown('<div class="language-text">Deutsch</div>', unsafe_allow_html=True)
-        if st.button("Wählen", key="lang_de_3", use_container_width=True):
+        if st.button("✓", key="lang_de_3", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Nemacki"
             st.session_state.izabrani_jezik_naziv = "Deutsch"
             st.session_state.jezik_kljuc = "deutsch"
@@ -1005,9 +1759,9 @@ def stranica_jezik():
     
     with col4:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Ruski.png", width=80)
+        st.image("icons/Ruski.png", width=70)
         st.markdown('<div class="language-text">Русский</div>', unsafe_allow_html=True)
-        if st.button("Выбрать", key="lang_ru_4", use_container_width=True):
+        if st.button("✓", key="lang_ru_4", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Ruski"
             st.session_state.izabrani_jezik_naziv = "Русский"
             st.session_state.jezik_kljuc = "ruski"
@@ -1017,9 +1771,9 @@ def stranica_jezik():
     
     with col5:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Ukrajinski.png", width=80)
+        st.image("icons/Ukrajinski.png", width=70)
         st.markdown('<div class="language-text">Українська</div>', unsafe_allow_html=True)
-        if st.button("Вибрати", key="lang_uk_5", use_container_width=True):
+        if st.button("✓", key="lang_uk_5", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Ukrajinski"
             st.session_state.izabrani_jezik_naziv = "Українська"
             st.session_state.jezik_kljuc = "ukrajinski"
@@ -1029,9 +1783,9 @@ def stranica_jezik():
     
     with col6:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Madjarski.png", width=80)
+        st.image("icons/Madjarski.png", width=70)
         st.markdown('<div class="language-text">Magyar</div>', unsafe_allow_html=True)
-        if st.button("Választ", key="lang_hu_6", use_container_width=True):
+        if st.button("✓", key="lang_hu_6", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Madjarski"
             st.session_state.izabrani_jezik_naziv = "Magyar"
             st.session_state.jezik_kljuc = "hungary"
@@ -1044,9 +1798,9 @@ def stranica_jezik():
     
     with col7:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Spanski.png", width=80)
+        st.image("icons/Spanski.png", width=70)
         st.markdown('<div class="language-text">Español</div>', unsafe_allow_html=True)
-        if st.button("Elegir", key="lang_es_7", use_container_width=True):
+        if st.button("✓", key="lang_es_7", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Spanski"
             st.session_state.izabrani_jezik_naziv = "Español"
             st.session_state.jezik_kljuc = "espanol"
@@ -1056,9 +1810,9 @@ def stranica_jezik():
     
     with col8:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Portugalski.png", width=80)
+        st.image("icons/Portugalski.png", width=70)
         st.markdown('<div class="language-text">Português</div>', unsafe_allow_html=True)
-        if st.button("Escolher", key="lang_pt_8", use_container_width=True):
+        if st.button("✓", key="lang_pt_8", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Portugalski"
             st.session_state.izabrani_jezik_naziv = "Português"
             st.session_state.jezik_kljuc = "portugalski"
@@ -1068,9 +1822,9 @@ def stranica_jezik():
     
     with col9:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Mandarinski.png", width=80)
+        st.image("icons/Mandarinski.png", width=70)
         st.markdown('<div class="language-text">中文</div>', unsafe_allow_html=True)
-        if st.button("选择", key="lang_zh_9", use_container_width=True):
+        if st.button("✓", key="lang_zh_9", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Mandarinski"
             st.session_state.izabrani_jezik_naziv = "中文"
             st.session_state.jezik_kljuc = "mandarinski"
@@ -1083,9 +1837,9 @@ def stranica_jezik():
     
     with col11:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Francuski.png", width=80)
+        st.image("icons/Francuski.png", width=70)
         st.markdown('<div class="language-text">Français</div>', unsafe_allow_html=True)
-        if st.button("Choisir", key="lang_fr_10", use_container_width=True):
+        if st.button("✓", key="lang_fr_10", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Francuski"
             st.session_state.izabrani_jezik_naziv = "Français"
             st.session_state.jezik_kljuc = "francais"
@@ -1094,23 +1848,23 @@ def stranica_jezik():
         st.markdown('</div>', unsafe_allow_html=True)
 
 def stranica_kategorije():
-    """Stranica glavnih kategorija"""
+    """Stranica glavnih kategorija - KOMPAKTNIJE"""
     
     # Prikazi heder
     prikazi_heder()
     
     # Naslov na trenutnom jeziku
-    st.markdown(f"<h3 style='text-align: center;'>{t('glavne_kategorije')}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('glavne_kategorije')}</h4>", unsafe_allow_html=True)
     
     # Uzmi kategorije na trenutnom jeziku
     jezik = st.session_state.jezik_kljuc
     kategorije = main_categories_translations.get(jezik, main_categories_translations["srpski"])
     
-    # Prikaz kategorija u gridu 2x2
+    # KOMPAKTNIJI prikaz kategorija u gridu 2x2 sa minimalnim razmakom
     for i in range(0, len(kategorije), 2):
         col1, col2 = st.columns(2)
         
-        # Prva kolona u redu
+        # Prva kolona u redu - KOMPAKTNIJE
         if i < len(kategorije):
             kat1 = kategorije[i]
             with col1:
@@ -1119,7 +1873,7 @@ def stranica_kategorije():
                     st.session_state.korak = "podkategorije"
                     st.rerun()
         
-        # Druga kolona u redu
+        # Druga kolona u redu - KOMPAKTNIJE
         if i + 1 < len(kategorije):
             kat2 = kategorije[i + 1]
             with col2:
@@ -1128,164 +1882,167 @@ def stranica_kategorije():
                     st.session_state.korak = "podkategorije"
                     st.rerun()
     
-    # Dugme za nazad
+    # Dugme za nazad - KOMPAKTNIJE
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button(f"⬅️ {t('nazad')} na jezike", use_container_width=True):
+        if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
             st.session_state.korak = "jezik"
             st.rerun()
 
 def stranica_podkategorije():
-    """Stranica podkategorija"""
+    """Stranica podkategorija - KOMPAKTNIJE"""
     
     # Prikazi heder
     prikazi_heder()
     
     # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>{t('podkategorije')} {st.session_state.trenutna_kategorija}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('podkategorije')} {st.session_state.trenutna_kategorija}</h4>", unsafe_allow_html=True)
     
     # Uzmi podkategorije na trenutnom jeziku
     jezik = st.session_state.jezik_kljuc
     trenutna_kategorija = st.session_state.trenutna_kategorija
     
     # Pronađi podkategorije za ovu kategoriju
-    # Ovo je pojednostavljeno - trebalo bi da imaš mapiranje za sve jezike
     podkategorije = subcategories_translations.get("srpski", {}).get(trenutna_kategorija, ["Nema podkategorija"])
     
-    # Prikaz podkategorija
+    # KOMPAKTNIJI prikaz podkategorija
     for i, podkat in enumerate(podkategorije):
         if st.button(podkat, key=f"podkat_{i}", use_container_width=True):
             st.session_state.trenutna_podkategorija = podkat
             st.session_state.korak = "delovi_proizvoda"
             st.rerun()
     
-    # Dugmad za navigaciju
+    # Dugmad za navigaciju - KOMPAKTNIJE
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
-        if st.button(f"⬅️ {t('nazad')} na kategorije", use_container_width=True):
+        if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
             st.session_state.korak = "kategorije"
             st.rerun()
     with col2:
-        if st.button("🏠 Home", use_container_width=True):
+        if st.button("🏠", use_container_width=True, help="Početna"):
             st.session_state.korak = "kategorije"
             st.rerun()
 
 def stranica_delovi_proizvoda():
-    """Stranica delova proizvoda"""
+    """Stranica delova proizvoda - KOMPAKTNIJE"""
     
     # Prikazi heder
     prikazi_heder()
     
     # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>{t('delovi_proizvoda')} {st.session_state.trenutna_podkategorija}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('delovi_proizvoda')} {st.session_state.trenutna_podkategorija}</h4>", unsafe_allow_html=True)
     
     # Uzmi delove proizvoda na trenutnom jeziku
     jezik = st.session_state.jezik_kljuc
     trenutna_podkategorija = st.session_state.trenutna_podkategorija
     
     # Pronađi delove proizvoda za ovu podkategoriju
-    # Ovo je pojednostavljeno - trebalo bi da imaš mapiranje za sve jezike
     delovi = product_parts_translations.get("srpski", {}).get(trenutna_podkategorija, ["Nema delova"])
     
-    # Prikaz delova proizvoda
+    # KOMPAKTNIJI prikaz delova proizvoda
     for i, deo in enumerate(delovi):
         if st.button(deo, key=f"deo_{i}", use_container_width=True):
             st.session_state.trenutni_deo_proizvoda = deo
             st.session_state.korak = "unos"
             st.rerun()
     
-    # Dugmad za navigaciju
+    # Dugmad za navigaciju - KOMPAKTNIJE
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
-        if st.button(f"⬅️ {t('nazad')} na podkategorije", use_container_width=True):
+        if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
             st.session_state.korak = "podkategorije"
             st.rerun()
     with col2:
-        if st.button("🏠 Home", use_container_width=True):
+        if st.button("🏠", use_container_width=True, help="Početna"):
             st.session_state.korak = "kategorije"
             st.rerun()
 
 def stranica_unos():
-    """Stranica za unos podataka"""
+    """Stranica za unos podataka - KOMPAKTNIJE"""
     
     # Prikazi heder
     prikazi_heder()
     
     # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>{t('unos_podataka')}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('unos_podataka')}</h4>", unsafe_allow_html=True)
     
-    # Prikaz trenutne selekcije
-    st.info(f"Kategorija: {st.session_state.trenutna_kategorija} > "
-            f"Podkategorija: {st.session_state.trenutna_podkategorija} > "
-            f"Deo: {st.session_state.trenutni_deo_proizvoda}")
+    # KOMPAKTNIJI prikaz trenutne selekcije
+    st.info(f"{st.session_state.trenutna_kategorija} > "
+            f"{st.session_state.trenutna_podkategorija} > "
+            f"{st.session_state.trenutni_deo_proizvoda}")
     
-    # Forma za unos
+    # KOMPAKTNIJA forma za unos
     with st.form("unos_forma"):
-        st.markdown(f"**{t('naziv_proizvoda')}**")
-        naziv = st.text_input("", value=st.session_state.trenutni_deo_proizvoda, label_visibility="collapsed")
+        col1, col2 = st.columns(2)
         
-        st.markdown(f"**{t('opis')}**")
-        opis = st.text_area("", label_visibility="collapsed")
-        
-        st.markdown(f"**{t('komad')}**")
-        komad = st.text_input("", label_visibility="collapsed")
-        
-        st.markdown(f"**{t('kolicina')}**")
-        kolicina = st.number_input("", min_value=0.0, value=1.0, step=0.5, label_visibility="collapsed")
-        
-        st.markdown(f"**{t('jedinica_mere')}**")
-        jedinica = st.selectbox("", ["kg", "g", "l", "ml", "kom"], label_visibility="collapsed")
-        
-        st.markdown(f"**{t('datum_unosa')}**")
-        datum_unosa = st.date_input("", value=datetime.now(), label_visibility="collapsed")
-        
-        st.markdown(f"**{t('rok_trajanja')}**")
-        rok_meseci = st.number_input("", min_value=0, max_value=60, value=12, label_visibility="collapsed")
-        
-        st.markdown(f"**{t('mesto_skladistenja')}**")
-        mesto = st.selectbox("", [
-            t('zamrzivac_1'), t('zamrzivac_2'), t('zamrzivac_3'),
-            t('frizider'), t('ostava'), "Ostalo"
-        ], label_visibility="collapsed")
-        
-        # Dugme za unos
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            submitted = st.form_submit_button(f"✅ {t('unesi')}", use_container_width=True)
+        with col1:
+            st.markdown(f"**{t('naziv_proizvoda')}**")
+            naziv = st.text_input("", value=st.session_state.trenutni_deo_proizvoda, label_visibility="collapsed")
             
-            if submitted:
-                # Izračunaj datum isteka
-                datum_isteka = datum_unosa + timedelta(days=rok_meseci * 30)
-                
-                # Sačuvaj u bazu
-                sacuvaj_u_bazu(
-                    naziv, opis, komad, kolicina, jedinica,
-                    datum_unosa.strftime("%Y-%m-%d"), rok_meseci,
-                    datum_isteka.strftime("%Y-%m-%d"), mesto
-                )
-                
-                st.success(f"Proizvod '{naziv}' uspešno unet!")
-                st.balloons()
+            st.markdown(f"**{t('opis')}**")
+            opis = st.text_area("", height=60, label_visibility="collapsed")
+            
+            st.markdown(f"**{t('komad')}**")
+            komad = st.text_input("", label_visibility="collapsed")
+            
+            st.markdown(f"**{t('kolicina')}**")
+            kolicina = st.number_input("", min_value=0.0, value=1.0, step=0.5, label_visibility="collapsed")
+        
+        with col2:
+            st.markdown(f"**{t('jedinica_mere')}**")
+            jedinica = st.selectbox("", ["kg", "g", "l", "ml", "kom"], label_visibility="collapsed")
+            
+            st.markdown(f"**{t('datum_unosa')}**")
+            datum_unosa = st.date_input("", value=datetime.now(), label_visibility="collapsed")
+            
+            st.markdown(f"**{t('rok_trajanja')}**")
+            rok_meseci = st.number_input("", min_value=0, max_value=60, value=12, label_visibility="collapsed")
+            
+            st.markdown(f"**{t('mesto_skladistenja')}**")
+            mesto = st.selectbox("", [
+                t('zamrzivac_1'), t('zamrzivac_2'), t('zamrzivac_3'),
+                t('frizider'), t('ostava'), "Ostalo"
+            ], label_visibility="collapsed")
+        
+        # Dugme za unos - KOMPAKTNIJE
+        submitted = st.form_submit_button(f"✅ {t('unesi')}", use_container_width=True)
+            
+        if submitted:
+            # Izračunaj datum isteka
+            datum_isteka = datum_unosa + timedelta(days=rok_meseci * 30)
+            
+            # Sačuvaj u bazu
+            sacuvaj_u_bazu(
+                naziv, opis, komad, kolicina, jedinica,
+                datum_unosa.strftime("%Y-%m-%d"), rok_meseci,
+                datum_isteka.strftime("%Y-%m-%d"), mesto
+            )
+            
+            st.success(f"Proizvod '{naziv}' unet!")
     
-    # Dugmad za navigaciju
+    # Dugmad za navigaciju - KOMPAKTNIJE
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
-        if st.button(f"⬅️ {t('nazad')} na delove", use_container_width=True):
+        if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
             st.session_state.korak = "delovi_proizvoda"
             st.rerun()
     with col2:
-        if st.button("🏠 Home", use_container_width=True):
+        if st.button("🏠", use_container_width=True, help="Početna"):
             st.session_state.korak = "kategorije"
             st.rerun()
 
 def stranica_zalihe():
-    """Stranica za prikaz zaliha"""
+    """Stranica za prikaz zaliha - KOMPAKTNIJE"""
     
     # Prikazi heder
     prikazi_heder()
     
     # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>{t('stanje_zaliha')}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('stanje_zaliha')}</h4>", unsafe_allow_html=True)
     
     # Učitaj podatke iz baze
     conn = sqlite3.connect('inventory.db')
@@ -1293,37 +2050,38 @@ def stranica_zalihe():
     conn.close()
     
     if len(df) > 0:
-        # Prikaz tabele
-        st.dataframe(df, use_container_width=True)
+        # KOMPAKTNIJI prikaz tabele
+        st.dataframe(df, use_container_width=True, height=300)
         
-        # Opcije
+        # KOMPAKTNIJE opcije
         col1, col2, col3 = st.columns(3)
         with col1:
-            if st.button(f"🔄 {t('azuriraj')}", use_container_width=True):
+            if st.button(f"🔄", use_container_width=True, help=t('azuriraj')):
                 st.session_state.korak = "azuriranje"
                 st.rerun()
         with col2:
-            if st.button(f"🗑️ {t('obrisi')}", use_container_width=True):
-                st.warning("Funkcionalnost brisanja će biti implementirana")
+            if st.button(f"🗑️", use_container_width=True, help=t('obrisi')):
+                st.warning("Brisanje - u izradi")
         with col3:
-            if st.button(f"🖨️ {t('stampaj')}", use_container_width=True):
-                st.info("Funkcionalnost štampanja će biti implementirana")
+            if st.button(f"🖨️", use_container_width=True, help=t('stampaj')):
+                st.info("Štampanje - u izradi")
     else:
         st.info(t('nema_proizvoda'))
     
-    # Dugme za nazad
-    if st.button(f"⬅️ {t('nazad')}", use_container_width=True):
+    # Dugme za nazad - KOMPAKTNIJE
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
         st.session_state.korak = "kategorije"
         st.rerun()
 
 def stranica_spisak():
-    """Stranica za spisak potreba"""
+    """Stranica za spisak potreba - KOMPAKTNIJE"""
     
     # Prikazi heder
     prikazi_heder()
     
     # Naslov
-    st.markdown(f"<h3 style='text-align: center;'>{t('spisak_potreba')}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('spisak_potreba')}</h4>", unsafe_allow_html=True)
     
     # Učitaj podatke iz baze
     conn = sqlite3.connect('inventory.db')
@@ -1331,26 +2089,27 @@ def stranica_spisak():
     conn.close()
     
     if len(df) > 0:
-        # Prikaz tabele
-        st.dataframe(df, use_container_width=True)
+        # KOMPAKTNIJI prikaz tabele
+        st.dataframe(df, use_container_width=True, height=250)
         
-        # Opcije
+        # KOMPAKTNIJE opcije
         col1, col2, col3 = st.columns(3)
         with col1:
-            if st.button(f"📧 {t('posalji_email')}", use_container_width=True):
+            if st.button(f"📧", use_container_width=True, help=t('posalji_email')):
                 st.session_state.korak = "email"
                 st.rerun()
         with col2:
-            if st.button(f"📱 {t('posalji_messenger')}", use_container_width=True):
-                st.info("Funkcionalnost slanja na Messenger će biti implementirana")
+            if st.button(f"📱", use_container_width=True, help=t('posalji_messenger')):
+                st.info("Messenger - u izradi")
         with col3:
-            if st.button(f"📋 {t('kopiraj')}", use_container_width=True):
-                st.info("Funkcionalnost kopiranja će biti implementirana")
+            if st.button(f"📋", use_container_width=True, help=t('kopiraj')):
+                st.info("Kopiranje - u izradi")
     else:
         st.info("Spisak je prazan")
     
-    # Dugme za nazad
-    if st.button(f"⬅️ {t('nazad')}", use_container_width=True):
+    # Dugme za nazad - KOMPAKTNIJE
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
         st.session_state.korak = "kategorije"
         st.rerun()
 
@@ -1427,9 +2186,9 @@ elif st.session_state.korak == "spisak":
 elif st.session_state.korak == "email":
     # Prikazi heder i na email stranici
     prikazi_heder()
-    st.title(f"📧 {t('posalji_email')}")
-    st.info("Funkcionalnost slanja email-a će biti implementirana")
-    if st.button(f"⬅️ {t('nazad')}"):
+    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>📧 {t('posalji_email')}</h4>", unsafe_allow_html=True)
+    st.info("Email funkcionalnost - u izradi")
+    if st.button(f"⬅️", help=t('nazad')):
         st.session_state.korak = "spisak"
         st.rerun()
 else:
