@@ -140,7 +140,8 @@ master_strings = {
             "proizvod": "Termék",
             "opis": "Leírás",
             "datum_unosa": "Beviteli dátum"
-        },
+         }
+    },
 
     "ukrajinski": {
         "nazad": "Назад", "stanje": "Запаси", "izlaz": "Вихід", "spisak": "Список", 
@@ -193,7 +194,7 @@ master_strings = {
             "proizvod": "Продукт",
             "opis": "Опис",
             "datum_unosa": "Дата внесення"
-        }
+         }
     },
 
     "ruski": {
@@ -572,7 +573,7 @@ master_strings = {
             "opis": "Description",
             "datum_unosa": "Date d'entrée"
         }
-    }
+    },
 }
 
 # --- KATEGORIJE, PODKATEGORIJE, DELOVI PROIZVODA ---
