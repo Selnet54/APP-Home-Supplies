@@ -1822,7 +1822,7 @@ def stranica_jezik():
     
     with col9:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-         st.image("icons/中文.png", width=70)
+         st.image("icons/Chinese.png", width=70)
         st.markdown('<div class="language-text">中文</div>', unsafe_allow_html=True)
         if st.button("✓", key="lang_zh_9", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Mandarinski"
