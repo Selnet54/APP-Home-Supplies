@@ -628,8 +628,8 @@ main_categories_translations = {
         "Viande blanche", "Viande rouge", "Petit gibier", "Gros gibier",
         "Poisson", "Produits laitiers", "Légumes", "Conserves et compotes",
         "Pâte et Sucreries", "Boissons", "Chimie et hygiène", "Autre"
-    ]
-},
+    ],
+}
 
 subcategories_translations = {
     "srpski": {
