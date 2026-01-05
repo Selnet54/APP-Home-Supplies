@@ -1771,7 +1771,7 @@ def stranica_jezik():
     
     with col5:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Ujrajinski.png", width=70)
+        st.image("icons/Ukrajinski.png", width=70)
         st.markdown('<div class="language-text">Українська</div>', unsafe_allow_html=True)
         if st.button("✓", key="lang_uk_5", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Ukrajinski"
