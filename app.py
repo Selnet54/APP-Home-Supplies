@@ -1759,7 +1759,7 @@ def stranica_jezik():
     
     with col4:
         st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        sst.image("icons/Русский.png", width=70)
+        st.image("icons/Русский.png", width=70)
         st.markdown('<div class="language-text">Русский</div>', unsafe_allow_html=True)
         if st.button("✓", key="lang_ru_4", use_container_width=True, type="primary"):
             st.session_state.izabrani_jezik_kod = "Ruski"
