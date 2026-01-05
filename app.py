@@ -1820,17 +1820,17 @@ def stranica_jezik():
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
     
-	with col9:
-		st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-		st.image("icons/Chinese.png", width=70)
-		st.markdown('<div class="language-text">中文</div>', unsafe_allow_html=True)
-		if st.button("✓", key="lang_zh_9", use_container_width=True, type="primary"):
-			st.session_state.izabrani_jezik_kod = "Mandarinski"
-			st.session_state.izabrani_jezik_naziv = "中文"
-			st.session_state.jezik_kljuc = "mandarinski"
-			st.session_state.korak = "kategorije"
-			st.rerun()
-		st.markdown('</div>', unsafe_allow_html=True)
+    with col9:  # ⬅️ OVA LINIJA MORA IMATI RAZMAKE, NE TABOVE
+        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)  # ⬅️ RAZMAK
+        st.image("icons/Chinese.png", width=70)  # ⬅️ RAZMAK
+        st.markdown('<div class="language-text">中文</div>', unsafe_allow_html=True)  # ⬅️ RAZMAK
+        if st.button("✓", key="lang_zh_9", use_container_width=True, type="primary"):  # ⬅️ RAZMAK
+            st.session_state.izabrani_jezik_kod = "Mandarinski"  # ⬅️ 8 RAZMAKA
+            st.session_state.izabrani_jezik_naziv = "中文"  # ⬅️ 8 RAZMAKA
+            st.session_state.jezik_kljuc = "mandarinski"  # ⬅️ 8 RAZMAKA
+            st.session_state.korak = "kategorije"  # ⬅️ 8 RAZMAKA
+            st.rerun()  # ⬅️ 8 RAZMAKA
+        st.markdown('</div>', unsafe_allow_html=True)  # ⬅️ RAZMAK
     
     # ČETVRTI RED (samo francuski centriran)
     col10, col11, col12 = st.columns([1, 2, 1])
