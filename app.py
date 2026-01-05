@@ -1468,6 +1468,15 @@ product_parts_translations = {
         
         "Autre": ["Note : Saisir le nom du produit"]
     },
+	    # ... nakon francais definicije, DODAJ OVO:
+    
+    # Kopiraj srpske podkategorije za sve jezike
+    "ruski": subcategories_translations["srpski"],
+    "english": subcategories_translations["srpski"],
+    "deutsch": subcategories_translations["srpski"],
+    "mandarinski": subcategories_translations["srpski"],
+    "espanol": subcategories_translations["srpski"],
+    "portugalski": subcategories_translations["srpski"]
 }
 
 # --- POMOĆNE FUNKCIJE ZA JEZIKE ---
