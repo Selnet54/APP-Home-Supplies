@@ -1679,7 +1679,20 @@ def prikazi_heder():
     st.markdown("""
         <style>
         .main .block-container {
-            padding-top: 0.2rem !important; /* SMANJENO */
+            padding-top: 0.2rem !important;
+        }
+        
+        .header-button {
+            font-size: 12px !important;
+            padding: 4px 6px !important;
+            margin: 1px !important;
+        }
+        
+        @media (max-width: 768px) {
+            .header-button {
+                font-size: 10px !important;
+                padding: 3px 4px !important;
+            }
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1690,27 +1703,32 @@ def prikazi_heder():
     page_name = st.session_state.get('korak', 'unknown')
     
     with col1: 
-        if st.button("🏠", key=f"h_home_{page_name}", help="Početna"):  # SAMO IKONA
+        if st.button("🏠 Home", key=f"h_home_{page_name}", use_container_width=True, 
+                    help="Početna", type="secondary"):
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col2: 
-        if st.button("📂", key=f"h_kat_{page_name}", help="Kategorije"):  # SAMO IKONA
+        if st.button("📂 Kategorije", key=f"h_kat_{page_name}", use_container_width=True,
+                    help="Kategorije", type="secondary"):
             st.session_state.korak = "kategorije"
             st.rerun()
     
     with col3: 
-        if st.button("📦", key=f"h_zal_{page_name}", help="Zalihe"):  # SAMO IKONA
+        if st.button("📦 Zalihe", key=f"h_zal_{page_name}", use_container_width=True,
+                    help="Zalihe", type="secondary"):
             st.session_state.korak = "zalihe"
             st.rerun()
     
     with col4: 
-        if st.button("🛒", key=f"h_spis_{page_name}", help="Spisak"):  # SAMO IKONA
+        if st.button("🛒 Spisak", key=f"h_spis_{page_name}", use_container_width=True,
+                    help="Spisak", type="secondary"):
             st.session_state.korak = "spisak"
             st.rerun()
     
     with col5: 
-        if st.button("🚪", key=f"h_izl_{page_name}", help="Izlaz"):  # SAMO IKONA
+        if st.button("🚪 Izlaz", key=f"h_izl_{page_name}", use_container_width=True,
+                    help="Izlaz", type="secondary"):
             st.session_state.korak = "jezik"
             st.rerun()
     
@@ -1721,8 +1739,48 @@ def prikazi_heder():
 def stranica_jezik():
     """Stranica za odabir jezika - kompaktnija verzija"""
     
+    # ⭐⭐⭐ DODAJ OVO ⭐⭐⭐
+    st.markdown("""
+        <style>
+        .app-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            color: #333;
+        }
+        
+        .language-title {
+            text-align: center;
+            font-size: 18px;
+            margin: 15px 0 20px 0;
+            color: #444;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 18px;
+                margin: 8px 0 3px 0;
+            }
+            .language-title {
+                font-size: 16px;
+                margin: 12px 0 15px 0;
+            }
+        }
+        </style>
+        
+        <div class="app-title">HOME INVENTORY MONITORING</div>
+    """, unsafe_allow_html=True)
+    
+    # Prikazi heder
+    prikazi_heder()
+    
+    # ⭐⭐⭐ DODAJ OVO ⭐⭐⭐
+    st.markdown('<div class="language-title">CHOOSE LANGUAGE</div>', unsafe_allow_html=True)
+    
     # Dodaj malo prostora na vrhu
-    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     
     # PRVI RED (3 jezika)
     col1, col2, col3 = st.columns(3)
