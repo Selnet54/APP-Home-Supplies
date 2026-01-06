@@ -1962,9 +1962,12 @@ def stranica_podkategorije():
     # Prikazi heder
     prikazi_heder()
     
+    # DEBUG: Proveri koji je jezik
+    st.write(f"DEBUG: Jezik ključ = {st.session_state.jezik_kljuc}")
+    st.write(f"DEBUG: Trenutna kategorija = {st.session_state.trenutna_kategorija}")
+    
     # Naslov
     st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('podkategorije')} {st.session_state.trenutna_kategorija}</h4>", unsafe_allow_html=True)
-    
     # Uzmi podkategorije na trenutnom jeziku
     jezik = st.session_state.jezik_kljuc
     trenutna_kategorija = st.session_state.trenutna_kategorija
