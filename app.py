@@ -1855,285 +1855,125 @@ def stranica_jezik():
     # Prikazi heder
     prikazi_heder()
     
-    # ⭐⭐⭐ DODAJ OVO ⭐⭐⭐
-    st.markdown('<div class="language-title">CHOOSE LANGUAGE</div>', unsafe_allow_html=True)
-    
-    # Dodaj malo prostora na vrhu
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-    
-    # PRVI RED (3 jezika)
+    # 1. SRPSKI, ENGLISH, DEUTSCH
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Srpski.png", width=70)
-        st.markdown('<div class="language-text">Srpski</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_sr_1", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Srpski.png", width=70)
+        container.markdown("<center><b>Srpski</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Odaberi", key="btn_sr", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Srpski"
             st.session_state.izabrani_jezik_naziv = "Srpski"
             st.session_state.jezik_kljuc = "srpski"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Engleski.png", width=70) 
-        st.markdown('<div class="language-text">English</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_en_2", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Engleski.png", width=70)
+        container.markdown("<center><b>English</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Select", key="btn_en", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Engleski"
             st.session_state.izabrani_jezik_naziv = "English"
             st.session_state.jezik_kljuc = "english"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col3:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Nemacki.png", width=70)
-        st.markdown('<div class="language-text">Deutsch</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_de_3", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Nemacki.png", width=70)
+        container.markdown("<center><b>Deutsch</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Auswählen", key="btn_de", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Nemacki"
             st.session_state.izabrani_jezik_naziv = "Deutsch"
             st.session_state.jezik_kljuc = "deutsch"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
-    # DRUGI RED (3 jezika)
+    # 2. RUSKI, UKRAJINSKI, MADJARSKI
     col4, col5, col6 = st.columns(3)
     
     with col4:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Ruski.png", width=70)
-        st.markdown('<div class="language-text">Русский</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_ru_4", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Ruski.png", width=70)
+        container.markdown("<center><b>Русский</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Выбрать", key="btn_ru", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ruski"
             st.session_state.izabrani_jezik_naziv = "Русский"
             st.session_state.jezik_kljuc = "ruski"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col5:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Ukrajinski.png", width=70)
-        st.markdown('<div class="language-text">Українська</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_uk_5", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Ukrajinski.png", width=70)
+        container.markdown("<center><b>Українська</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Вибрати", key="btn_uk", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Ukrajinski"
             st.session_state.izabrani_jezik_naziv = "Українська"
             st.session_state.jezik_kljuc = "ukrajinski"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col6:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Madjarski.png", width=70)
-        st.markdown('<div class="language-text">Magyar</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_hu_6", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Madjarski.png", width=70)
+        container.markdown("<center><b>Magyar</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Kiválaszt", key="btn_hu", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Madjarski"
             st.session_state.izabrani_jezik_naziv = "Magyar"
             st.session_state.jezik_kljuc = "hungary"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
-    # TREĆI RED (3 jezika)
+    # 3. ŠPANSKI, PORTUGALSKI, KINESKI
     col7, col8, col9 = st.columns(3)
     
     with col7:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Spanski.png", width=70)
-        st.markdown('<div class="language-text">Español</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_es_7", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Spanski.png", width=70)
+        container.markdown("<center><b>Español</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Seleccionar", key="btn_es", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Spanski"
             st.session_state.izabrani_jezik_naziv = "Español"
             st.session_state.jezik_kljuc = "espanol"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
     with col8:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Portugalski.png", width=70)
-        st.markdown('<div class="language-text">Português</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_pt_8", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Portugalski.png", width=70)
+        container.markdown("<center><b>Português</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Selecionar", key="btn_pt", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Portugalski"
             st.session_state.izabrani_jezik_naziv = "Português"
             st.session_state.jezik_kljuc = "portugalski"
             st.session_state.korak = "kategorije"
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
     
-    with col9:  # ⬅️ OVA LINIJA MORA IMATI RAZMAKE, NE TABOVE
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)  # ⬅️ RAZMAK
-        st.image("icons/Mandarinski.png", width=70)  # ⬅️ RAZMAK
-        st.markdown('<div class="language-text">中文</div>', unsafe_allow_html=True)  # ⬅️ RAZMAK
-        if st.button("✓", key="lang_zh_9", use_container_width=True, type="primary"):  # ⬅️ RAZMAK
-            st.session_state.izabrani_jezik_kod = "Mandarinski"  # ⬅️ 8 RAZMAKA
-            st.session_state.izabrani_jezik_naziv = "中文"  # ⬅️ 8 RAZMAKA
-            st.session_state.jezik_kljuc = "mandarinski"  # ⬅️ 8 RAZMAKA
-            st.session_state.korak = "kategorije"  # ⬅️ 8 RAZMAKA
-            st.rerun()  # ⬅️ 8 RAZMAKA
-        st.markdown('</div>', unsafe_allow_html=True)  # ⬅️ RAZMAK
+    with col9:
+        container = st.container(border=True)
+        container.image("icons/Mandarinski.png", width=70)
+        container.markdown("<center><b>中文</b></center>", unsafe_allow_html=True)
+        if container.button("✓ 选择", key="btn_zh", use_container_width=True):
+            st.session_state.izabrani_jezik_kod = "Mandarinski"
+            st.session_state.izabrani_jezik_naziv = "中文"
+            st.session_state.jezik_kljuc = "mandarinski"
+            st.session_state.korak = "kategorije"
+            st.rerun()
     
-    # ČETVRTI RED (samo francuski centriran)
+    # 4. FRANCUSKI - CENTRIRAN
     col10, col11, col12 = st.columns([1, 2, 1])
     
     with col11:
-        st.markdown('<div class="language-button-container">', unsafe_allow_html=True)
-        st.image("icons/Francuski.png", width=70)
-        st.markdown('<div class="language-text">Français</div>', unsafe_allow_html=True)
-        if st.button("✓", key="lang_fr_10", use_container_width=True, type="primary"):
+        container = st.container(border=True)
+        container.image("icons/Francuski.png", width=70)
+        container.markdown("<center><b>Français</b></center>", unsafe_allow_html=True)
+        if container.button("✓ Sélectionner", key="btn_fr", use_container_width=True):
             st.session_state.izabrani_jezik_kod = "Francuski"
             st.session_state.izabrani_jezik_naziv = "Français"
             st.session_state.jezik_kljuc = "francais"
-            st.session_state.korak = "kategorije"
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-
-def stranica_kategorije():
-    """Stranica glavnih kategorija - KOMPAKTNIJE"""
-    
-    # Prikazi heder
-    prikazi_heder()
-    
-    # Naslov na trenutnom jeziku
-    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('glavne_kategorije')}</h4>", unsafe_allow_html=True)
-    
-    # ⭐⭐⭐ DODAJ OVDE - POČETAK ⭐⭐⭐
-    # Definiši boje za kategorije
-    category_colors = {
-        "Belo meso": "#FFEBEE",  # Svetlo crvena
-        "Crveno meso": "#FFCDD2", # Crvena
-        "Sitna divljač": "#F8BBD0", # Roze
-        "Krupna divljač": "#E1BEE7", # Ljubičasta
-        "Riba": "#D1C4E9",        # Svetlo ljubičasta
-        "Mlečni proizvodi": "#C5CAE9", # Plava
-        "Povrće": "#BBDEFB",      # Svetlo plava
-        "Zimnica i kompoti": "#B3E5FC", # Cijan
-        "Testo i Slatkiši": "#B2EBF2",  # Aqua
-        "Pića": "#B2DFDB",        # Svetlo zelena
-        "Hemija i higijena": "#C8E6C9", # Zelena
-        "Ostalo": "#DCEDC8"       # Svetlo žuta
-    }
-    
-    # Dodaj CSS za boje
-    st.markdown("""
-        <style>
-        .category-btn-colored {
-            border: 1px solid #ccc !important;
-            border-radius: 8px !important;
-            margin: 3px !important;
-            padding: 10px 5px !important;
-            font-size: 13px !important;
-            font-weight: bold !important;
-            transition: all 0.3s !important;
-            color: #333 !important;
-        }
-        
-        .category-btn-colored:hover {
-            transform: scale(1.02);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
-        
-        @media (max-width: 768px) {
-            .category-btn-colored {
-                font-size: 11px !important;
-                padding: 8px 3px !important;
-                margin: 2px !important;
-            }
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    # ⭐⭐⭐ DODAJ OVDE - KRAJ ⭐⭐⭐
-    
-    # Uzmi kategorije na trenutnom jeziku
-    jezik = st.session_state.jezik_kljuc
-    kategorije = main_categories_translations.get(jezik, main_categories_translations["srpski"])
-    
-    # KOMPAKTNIJI prikaz kategorija u gridu 2x2 sa minimalnim razmakom
-    for i in range(0, len(kategorije), 2):
-        col1, col2 = st.columns(2)
-        
-        # Prva kolona u redu - KOMPAKTNIJE
-        if i < len(kategorije):
-            kat1 = kategorije[i]
-            with col1:
-                # ⭐⭐⭐ DODAJ OVDE - PROMENA ⭐⭐⭐
-                btn_color = category_colors.get(kat1, "#FFFFFF")
-                if st.button(
-                    kat1, 
-                    key=f"kat_{i}", 
-                    use_container_width=True,
-                    type="primary",
-                    help=f"Odaberi: {kat1}"
-                ):
-                    st.session_state.trenutna_kategorija = kat1
-                    st.session_state.korak = "podkategorije"
-                    st.rerun()
-        
-        # Druga kolona u redu - KOMPAKTNIJE
-        if i + 1 < len(kategorije):
-            kat2 = kategorije[i + 1]
-            with col2:
-                # ⭐⭐⭐ DODAJ OVDE - PROMENA ⭐⭐⭐
-                btn_color = category_colors.get(kat2, "#FFFFFF")
-                if st.button(
-                    kat2, 
-                    key=f"kat_{i+1}", 
-                    use_container_width=True,
-                    type="primary",
-                    help=f"Odaberi: {kat2}"
-                ):
-                    st.session_state.trenutna_kategorija = kat2
-                    st.session_state.korak = "podkategorije"
-                    st.rerun()
-    
-    # Dugme za nazad - KOMPAKTNIJE
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
-            st.session_state.korak = "jezik"
-            st.rerun()
-
-def stranica_podkategorije():
-    """Stranica podkategorija - KOMPAKTNIJE"""
-    
-    # Prikazi heder
-    prikazi_heder()
-    
-    # DEBUG: Proveri koji je jezik
-    st.write(f"DEBUG: Jezik ključ = {st.session_state.jezik_kljuc}")
-    st.write(f"DEBUG: Trenutna kategorija = {st.session_state.trenutna_kategorija}")
-    
-    # Naslov
-    st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('podkategorije')} {st.session_state.trenutna_kategorija}</h4>", unsafe_allow_html=True)
-    # Uzmi podkategorije na trenutnom jeziku
-    jezik = st.session_state.jezik_kljuc
-    trenutna_kategorija = st.session_state.trenutna_kategorija
-    
-    # Pronađi podkategorije za ovu kategoriju
-    podkategorije = subcategories_translations.get("srpski", {}).get(trenutna_kategorija, ["Nema podkategorija"])
-    
-    # KOMPAKTNIJI prikaz podkategorija
-    for i, podkat in enumerate(podkategorije):
-        if st.button(podkat, key=f"podkat_{i}", use_container_width=True):
-            st.session_state.trenutna_podkategorija = podkat
-            st.session_state.korak = "delovi_proizvoda"
-            st.rerun()
-    
-    # Dugmad za navigaciju - KOMPAKTNIJE
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button(f"⬅️", use_container_width=True, help=t('nazad')):
-            st.session_state.korak = "kategorije"
-            st.rerun()
-    with col2:
-        if st.button("🏠", use_container_width=True, help="Početna"):
             st.session_state.korak = "kategorije"
             st.rerun()
 
