@@ -1998,6 +1998,20 @@ def stranica_kategorije():
     
     # Prikazi heder
     prikazi_heder()
+category_colors = {
+    "Belo meso": "#FFEBEE",  # Svetlo crvena
+    "Crveno meso": "#FFCDD2", # Crvena
+    "Sitna divljač": "#F8BBD0", # Roze
+    "Krupna divljač": "#E1BEE7", # Ljubičasta
+    "Riba": "#D1C4E9",        # Svetlo ljubičasta
+    "Mlečni proizvodi": "#C5CAE9", # Plava
+    "Povrće": "#BBDEFB",      # Svetlo plava
+    "Zimnica i kompoti": "#B3E5FC", # Cijan
+    "Testo i Slatkiši": "#B2EBF2",  # Aqua
+    "Pića": "#B2DFDB",        # Svetlo zelena
+    "Hemija i higijena": "#C8E6C9", # Zelena
+    "Ostalo": "#DCEDC8"       # Svetlo žuta
+}
     
     # Naslov na trenutnom jeziku
     st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('glavne_kategorije')}</h4>", unsafe_allow_html=True)
