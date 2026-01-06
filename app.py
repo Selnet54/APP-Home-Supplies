@@ -1485,16 +1485,15 @@ def jezik_mapa(ime_fajla):
         "Srpski": "srpski", 
         "Engleski": "english", 
         "Nemacki": "deutsch",
-        "Ruski": "ruski", 
-        "Ukrajinski": "ukrajinski", 
-        "Madjarski": "hungary",
-        "Spanski": "espanol", 
-        "Portugalski": "portugalski", 
-        "Mandarinski": "mandarinski",
-        "Francuski": "francais"
+        "Ruski": "ruski",  # ✅
+        "Ukrajinski": "ukrajinski",  # ✅
+        "Madjarski": "hungary",  # ✅
+        "Spanski": "espanol",  # ✅
+        "Portugalski": "portugalski",  # ✅
+        "Mandarinski": "mandarinski",  # ✅
+        "Francuski": "francais"  # ✅
     }
     return mape.get(ime_fajla, "srpski")
-
 def t(key):
     """Funkcija za prevod na trenutni jezik"""
     try:
