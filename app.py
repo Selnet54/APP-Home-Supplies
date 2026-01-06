@@ -1738,38 +1738,118 @@ def prikazi_heder():
 def stranica_jezik():
     """Stranica za odabir jezika - kompaktnija verzija"""
     
-    # ⭐⭐⭐ DODAJ OVO ⭐⭐⭐
+    # ⭐⭐⭐ DODAJ OVU PORED KODA KOJI VEĆ IMAŠ ⭐⭐⭐
     st.markdown("""
         <style>
-        .app-title {
+        /* CUSTOM LAYOUT ZA JEZIKE - KAO NA SLICI */
+        
+        /* Kontejner za sve jezike */
+        .language-master-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px !important;
+            padding: 5px !important;
+            margin: 0 !important;
+            width: 100%;
+        }
+        
+        /* Pojedinačni jezik kartica */
+        .language-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 5px !important;
+            margin: 0 !important;
             text-align: center;
-            font-size: 20px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Slika jezika */
+        .language-card img {
+            width: 60px !important;
+            height: 40px !important;
+            object-fit: contain;
+            margin: 3px auto !important;
+            display: block;
+        }
+        
+        /* Tekst ispod slike */
+        .language-name {
+            font-size: 12px !important;
             font-weight: bold;
-            margin: 10px 0 5px 0;
+            margin: 2px 0 !important;
+            padding: 0 !important;
             color: #333;
+            line-height: 1.2;
         }
         
-        .language-title {
-            text-align: center;
-            font-size: 18px;
-            margin: 15px 0 20px 0;
-            color: #444;
-            font-weight: 600;
+        /* Dugme za izbor */
+        .language-select-btn {
+            width: 80% !important;
+            margin: 3px auto !important;
+            padding: 3px !important;
+            font-size: 11px !important;
+            border-radius: 4px;
+            border: 1px solid #4CAF50 !important;
+            background: #4CAF50 !important;
+            color: white !important;
         }
         
+        /* Francuski posebno - centriran u sredini */
+        .french-special {
+            grid-column: 2 / 3 !important;
+            justify-self: center !important;
+            width: 100px !important;
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            .app-title {
-                font-size: 18px;
-                margin: 8px 0 3px 0;
+            .language-master-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px !important;
             }
-            .language-title {
-                font-size: 16px;
-                margin: 12px 0 15px 0;
+            
+            .language-card {
+                min-height: 110px;
+                padding: 4px !important;
+            }
+            
+            .language-card img {
+                width: 55px !important;
+                height: 35px !important;
+            }
+            
+            .language-name {
+                font-size: 11px !important;
+            }
+            
+            .language-select-btn {
+                font-size: 10px !important;
+                padding: 2px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .language-master-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3px !important;
+            }
+            
+            .language-card {
+                min-height: 100px;
+            }
+            
+            .language-card img {
+                width: 50px !important;
+                height: 30px !important;
             }
         }
         </style>
-        
-        <div class="app-title">HOME INVENTORY MONITORING</div>
     """, unsafe_allow_html=True)
     
     # Prikazi heder
