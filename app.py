@@ -1998,23 +1998,56 @@ def stranica_kategorije():
     
     # Prikazi heder
     prikazi_heder()
-category_colors = {
-    "Belo meso": "#FFEBEE",  # Svetlo crvena
-    "Crveno meso": "#FFCDD2", # Crvena
-    "Sitna divljač": "#F8BBD0", # Roze
-    "Krupna divljač": "#E1BEE7", # Ljubičasta
-    "Riba": "#D1C4E9",        # Svetlo ljubičasta
-    "Mlečni proizvodi": "#C5CAE9", # Plava
-    "Povrće": "#BBDEFB",      # Svetlo plava
-    "Zimnica i kompoti": "#B3E5FC", # Cijan
-    "Testo i Slatkiši": "#B2EBF2",  # Aqua
-    "Pića": "#B2DFDB",        # Svetlo zelena
-    "Hemija i higijena": "#C8E6C9", # Zelena
-    "Ostalo": "#DCEDC8"       # Svetlo žuta
-}
     
     # Naslov na trenutnom jeziku
     st.markdown(f"<h4 style='text-align: center; margin: 5px 0;'>{t('glavne_kategorije')}</h4>", unsafe_allow_html=True)
+    
+    # ⭐⭐⭐ DODAJ OVDE - POČETAK ⭐⭐⭐
+    # Definiši boje za kategorije
+    category_colors = {
+        "Belo meso": "#FFEBEE",  # Svetlo crvena
+        "Crveno meso": "#FFCDD2", # Crvena
+        "Sitna divljač": "#F8BBD0", # Roze
+        "Krupna divljač": "#E1BEE7", # Ljubičasta
+        "Riba": "#D1C4E9",        # Svetlo ljubičasta
+        "Mlečni proizvodi": "#C5CAE9", # Plava
+        "Povrće": "#BBDEFB",      # Svetlo plava
+        "Zimnica i kompoti": "#B3E5FC", # Cijan
+        "Testo i Slatkiši": "#B2EBF2",  # Aqua
+        "Pića": "#B2DFDB",        # Svetlo zelena
+        "Hemija i higijena": "#C8E6C9", # Zelena
+        "Ostalo": "#DCEDC8"       # Svetlo žuta
+    }
+    
+    # Dodaj CSS za boje
+    st.markdown("""
+        <style>
+        .category-btn-colored {
+            border: 1px solid #ccc !important;
+            border-radius: 8px !important;
+            margin: 3px !important;
+            padding: 10px 5px !important;
+            font-size: 13px !important;
+            font-weight: bold !important;
+            transition: all 0.3s !important;
+            color: #333 !important;
+        }
+        
+        .category-btn-colored:hover {
+            transform: scale(1.02);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .category-btn-colored {
+                font-size: 11px !important;
+                padding: 8px 3px !important;
+                margin: 2px !important;
+            }
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    # ⭐⭐⭐ DODAJ OVDE - KRAJ ⭐⭐⭐
     
     # Uzmi kategorije na trenutnom jeziku
     jezik = st.session_state.jezik_kljuc
@@ -2028,7 +2061,15 @@ category_colors = {
         if i < len(kategorije):
             kat1 = kategorije[i]
             with col1:
-                if st.button(kat1, key=f"kat_{i}", use_container_width=True, type="primary"):
+                # ⭐⭐⭐ DODAJ OVDE - PROMENA ⭐⭐⭐
+                btn_color = category_colors.get(kat1, "#FFFFFF")
+                if st.button(
+                    kat1, 
+                    key=f"kat_{i}", 
+                    use_container_width=True,
+                    type="primary",
+                    help=f"Odaberi: {kat1}"
+                ):
                     st.session_state.trenutna_kategorija = kat1
                     st.session_state.korak = "podkategorije"
                     st.rerun()
@@ -2037,7 +2078,15 @@ category_colors = {
         if i + 1 < len(kategorije):
             kat2 = kategorije[i + 1]
             with col2:
-                if st.button(kat2, key=f"kat_{i+1}", use_container_width=True, type="primary"):
+                # ⭐⭐⭐ DODAJ OVDE - PROMENA ⭐⭐⭐
+                btn_color = category_colors.get(kat2, "#FFFFFF")
+                if st.button(
+                    kat2, 
+                    key=f"kat_{i+1}", 
+                    use_container_width=True,
+                    type="primary",
+                    help=f"Odaberi: {kat2}"
+                ):
                     st.session_state.trenutna_kategorija = kat2
                     st.session_state.korak = "podkategorije"
                     st.rerun()
