@@ -1,25 +1,32 @@
 // ============================================
 // APP-HOME-SUPPLIES - script.js
-// OČIŠĆENA VERZIJA - 
+// PRERAĐENA VERZIJA - usklađena sa index.html i productParts.js
 // ============================================
 console.log('✅ Script.js je učitan!');
 
-// Globalna stanja
-let currentLanguage = localStorage.getItem('appLanguage') || 'sr_lat';
+// ===== Globalna stanja =====
+let currentLanguage = localStorage.getItem('appLanguage') || null;
 let currentCategory = '';
-let currentSubcategory = '';
-let currentPart = '';
-let currentScreenState = 'languages'; // Pristutna stanja: 'languages', 'categories', 'subcategories', 'productParts', 'dataEntry'
+let currentItem = '';
+let editingId = null; // id stavke koja se trenutno menja (null = nova stavka)
+let screenStack = ['inventory']; // istorija ekrana unutar glavnog dela aplikacije
 
-// Pomocna funkcija za prevode
-function t(key) {
-    if (typeof translations !== 'undefined' && translations[currentLanguage] && translations[currentLanguage][key]) {
-        return translations[currentLanguage][key];
-    }
-    return key;
-}
+// ===== Podaci o jezicima (nazivi kategorija dolaze iz productParts.js) =====
+const LANG_INFO = {
+    sr: { flag: '🇷🇸', name: 'Srpski' },
+    en: { flag: '🇬🇧', name: 'English' },
+    de: { flag: '🇩🇪', name: 'Deutsch' },
+    hu: { flag: '🇭🇺', name: 'Magyar' },
+    uk: { flag: '🇺🇦', name: 'Українська' },
+    ru: { flag: '🇷🇺', name: 'Русский' },
+    zh: { flag: '🇨🇳', name: '中文' },
+    es: { flag: '🇪🇸', name: 'Español' },
+    pt: { flag: '🇵🇹', name: 'Português' },
+    fr: { flag: '🇫🇷', name: 'Français' }
+};
+const CATEGORY_COLORS = ['#e3f2fd', '#f1f8e9', '#fff3e0', '#fce4ec', '#ede7f6', '#e0f7fa', '#fffde7', '#efebe9'];
 
-// Inicijalizacija aplikacije
+// ===== Inicijalizacija aplikacije =====
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
     setupEventListeners();
@@ -27,30 +34,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initApp() {
     renderLanguages();
-    updateUIStaticTexts();
-    
-    // Ako već postoji zapamćen jezik, automatski učitaj kategorije
+
     const savedLang = localStorage.getItem('appLanguage');
-    if (savedLang) {
-        selectLanguage(savedLang, false);
+    const savedPhone = localStorage.getItem('userPhone');
+
+    // Ako korisnik već ima sačuvan broj telefona i jezik, preskoči login i izbor jezika
+    if (savedLang && savedPhone) {
+        currentLanguage = savedLang;
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('languageScreen').style.display = 'none';
+        document.getElementById('mainScreen').style.display = 'flex';
+        showInventory();
     }
 }
 
-function updateUIStaticTexts() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        el.textContent = t(key);
-    });
-}
-
-// OVDJE DODAJETE LOGIKU ZA ENTER:
-// Stvarna login funkcija - proverava broj telefona i prelazi na ekran za izbor jezika
+// ===== LOGIN =====
 function handleLogin() {
     const phoneInput = document.getElementById('phoneInput');
     const phone = phoneInput ? phoneInput.value.trim() : '';
 
     if (!phone) {
-        showModernAlert(t('warning') || 'Upozorenje', t('enter_phone_number') || 'Unesite broj telefona.', '⚠️');
+        showModernAlert('Upozorenje', 'Unesite broj telefona.', '⚠️');
         return;
     }
 
@@ -60,257 +64,393 @@ function handleLogin() {
     document.getElementById('languageScreen').style.display = 'flex';
 }
 
-// Generisanje jezika
+// ===== IZBOR JEZIKA =====
 function renderLanguages() {
     const grid = document.getElementById('languageGrid');
-    if (!grid || typeof languages === 'undefined') return;
-    
+    if (!grid) return;
+
     grid.innerHTML = '';
-    languages.forEach(lang => {
+    Object.keys(LANG_INFO).forEach(code => {
+        const info = LANG_INFO[code];
         const card = document.createElement('div');
-        card.className = `language-card ${lang.id === currentLanguage ? 'active' : ''}`;
-        card.onclick = () => selectLanguage(lang.id);
+        card.className = 'lang-btn-main';
         card.innerHTML = `
-            <span class="flag-icon">${lang.flag}</span>
-            <span class="lang-name">${lang.name}</span>
+            <span style="font-size:44px;line-height:1;">${info.flag}</span>
+            <span class="lang-name">${info.name}</span>
         `;
+        card.onclick = () => selectLanguage(code);
         grid.appendChild(card);
     });
 }
 
-function selectLanguage(langId, switchScreen = true) {
-    currentLanguage = langId;
-    localStorage.setItem('appLanguage', langId);
-    
-    renderLanguages();
-    updateUIStaticTexts();
-    
-    if (switchScreen) {
-        showCategories();
+function selectLanguage(langCode) {
+    if (!productParts[langCode]) return;
+
+    currentLanguage = langCode;
+    localStorage.setItem('appLanguage', langCode);
+
+    document.getElementById('languageScreen').style.display = 'none';
+    document.getElementById('mainScreen').style.display = 'flex';
+
+    screenStack = ['inventory'];
+    showInventory();
+}
+
+// ===== NAVIGACIJA NAZAD =====
+function goBack() {
+    if (screenStack.length <= 1) return; // već smo na početnom ekranu
+    screenStack.pop();
+    const prev = screenStack[screenStack.length - 1];
+    renderScreen(prev);
+}
+
+function renderScreen(name) {
+    switch (name) {
+        case 'shopping': renderShoppingScreen(); break;
+        case 'categories': renderCategoriesScreen(); break;
+        case 'items': renderItemsScreen(); break;
+        case 'dataEntry': renderDataEntryScreen(); break;
+        default: renderInventoryScreen();
     }
 }
 
-// Prikaz Kategorija
-function showCategories() {
-    currentScreenState = 'categories';
-    hideAllScreens();
-    
-    const screen = document.getElementById('categoriesScreen');
-    const container = document.getElementById('categoriesList');
-    if (!screen || !container || typeof categories === 'undefined') return;
-    
-    container.innerHTML = '';
-    categories.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'category-btn';
-        btn.innerHTML = `<span class="icon">${cat.icon}</span> <span>${t(cat.key)}</span>`;
-        btn.onclick = () => selectCategory(cat.key);
-        container.appendChild(btn);
-    });
-    
-    screen.classList.remove('hidden');
+// ===== GLAVNI EKRAN: ZALIHE (početni ekran) =====
+function showInventory() {
+    screenStack = ['inventory'];
+    renderInventoryScreen();
 }
 
-function selectCategory(catKey) {
-    currentCategory = catKey;
-    showSubcategories(catKey);
+function renderInventoryScreen() {
+    const container = document.getElementById('mainContent');
+    container.innerHTML = `
+        <div class="title">📦 Vaše zalihe</div>
+        <div style="text-align:center;margin-bottom:25px;">
+            <button class="btn btn-green" id="addItemBtn" style="width:auto;padding:14px 40px;">➕ Dodaj stavku</button>
+        </div>
+        <div id="inventoryListContainer"></div>
+    `;
+    document.getElementById('addItemBtn').onclick = () => showCategories();
+    renderInventoryList();
 }
 
-// Prikaz Podkategorija
-function showSubcategories(catKey) {
-    currentScreenState = 'subcategories';
-    hideAllScreens();
-    
-    const screen = document.getElementById('subcategoriesScreen');
-    const container = document.getElementById('subcategoriesList');
-    if (!screen || !container || typeof subcategories === 'undefined') return;
-    
-    const list = subcategories[catKey] || [];
-    container.innerHTML = '';
-    
-    list.forEach(sub => {
-        const btn = document.createElement('button');
-        btn.className = 'subcategory-btn';
-        btn.innerHTML = `<span class="icon">${sub.icon}</span> <span>${t(sub.key)}</span>`;
-        btn.onclick = () => selectSubcategory(sub.key);
-        container.appendChild(btn);
-    });
-    
-    screen.classList.remove('hidden');
-}
-
-function selectSubcategory(subKey) {
-    currentSubcategory = subKey;
-    showProductParts(subKey);
-}
-
-// Prikaz Delova Proizvoda
-function showProductParts(subKey) {
-    currentScreenState = 'productParts';
-    hideAllScreens();
-    
-    const screen = document.getElementById('productPartsScreen');
-    const container = document.getElementById('productPartsList');
-    if (!screen || !container || typeof productParts === 'undefined') return;
-    
-    const parts = productParts[subKey] || [];
-    container.innerHTML = '';
-    
-    parts.forEach(part => {
-        const btn = document.createElement('button');
-        btn.className = 'product-part-btn';
-        btn.innerHTML = `<span class="icon">${part.icon}</span> <span>${t(part.key)}</span>`;
-        btn.onclick = () => selectProductPart(part.key);
-        container.appendChild(btn);
-    });
-    
-    screen.classList.remove('hidden');
-}
-
-function selectProductPart(partKey) {
-    currentPart = partKey;
-    showDataEntryScreen();
-}
-
-// Unos podataka
-function showDataEntryScreen() {
-    currentScreenState = 'dataEntry';
-    hideAllScreens();
-    
-    const screen = document.getElementById('dataEntryScreen');
-    if (!screen) return;
-    
-    // Postavljanje podrazumevanog datuma na današnji
-    const today = new Date().toISOString().split('T')[0];
-    const dateInput = document.getElementById('entryDate');
-    if (dateInput) dateInput.value = today;
-    
-    updateExpiryDate();
-    screen.classList.remove('hidden');
-}
-
-// Automatsko izračunavanje roka trajanja
-function updateExpiryDate() {
-    const entryDateVal = document.getElementById('entryDate')?.value;
-    const monthsVal = parseInt(document.getElementById('expiryMonths')?.value || '0', 10);
-    const expiryDisplay = document.getElementById('calculatedExpiry');
-    
-    if (!entryDateVal || isNaN(monthsVal) || !expiryDisplay) return;
-    
-    const d = new Date(entryDateVal);
-    d.setMonth(d.getMonth() + monthsVal);
-    
-    const formattedDate = d.toISOString().split('T')[0];
-    expiryDisplay.textContent = formattedDate;
-}
-
-// Skladištenje i Upravljanje Zalihama
-function sacuvajZalihe() {
-    const quantity = document.getElementById('itemQuantity')?.value;
-    const unit = document.getElementById('itemUnit')?.value;
-    const entryDate = document.getElementById('entryDate')?.value;
-    const expiryMonths = document.getElementById('expiryMonths')?.value;
-    const calculatedExpiry = document.getElementById('calculatedExpiry')?.textContent;
-    
-    if (!quantity || quantity <= 0) {
-        showModernAlert(t('warning'), t('enter_valid_quantity'), '⚠️');
-        return;
-    }
-    
-    const newItem = {
-        id: Date.now(),
-        category: currentCategory,
-        subcategory: currentSubcategory,
-        part: currentPart,
-        quantity: parseFloat(quantity),
-        unit: unit,
-        entryDate: entryDate,
-        expiryMonths: parseInt(expiryMonths, 10),
-        expiryDate: calculatedExpiry
-    };
-    
-    let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    zalihe.push(newItem);
-    localStorage.setItem('zalihe', JSON.stringify(zalihe));
-    
-    showModernAlert(t('success'), t('item_saved_success'), '✅');
-    showCategories();
-}
-
-// Prikaz Liste Zaliha
-function renderInventory() {
+function renderInventoryList() {
     const container = document.getElementById('inventoryListContainer');
     if (!container) return;
-    
+
     const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    container.innerHTML = '';
-    
+
     if (zalihe.length === 0) {
-        container.innerHTML = `<p class="empty-msg">${t('no_items_in_stock') || 'Nema stavki na zalihama.'}</p>`;
+        container.innerHTML = `<p style="text-align:center;color:#888;font-size:20px;padding:30px;">Nema stavki na zalihama.</p>`;
         return;
     }
-    
+
+    let html = `
+        <div class="table-container">
+            <div class="table-row header-row">
+                <div class="cell">Kategorija</div>
+                <div class="cell">Stavka</div>
+                <div class="cell">Količina</div>
+                <div class="cell">Rok ističe</div>
+                <div class="cell">Akcije</div>
+            </div>
+    `;
+
     zalihe.forEach(item => {
-        const card = document.createElement('div');
-        
         let isLow = false;
-        if ((item.unit === 'g' && item.quantity < 400) || 
-            (item.unit === 'kg' && item.quantity < 0.4) || 
+        if ((item.unit === 'g' && item.quantity < 400) ||
+            (item.unit === 'kg' && item.quantity < 0.4) ||
             (item.unit === 'kom' && item.quantity <= 2)) {
             isLow = true;
         }
-        
-        card.className = `inventory-card ${isLow ? 'low-stock' : ''}`;
-        card.innerHTML = `
-            <div class="inv-info">
-                <strong>${t(item.part) || item.part}</strong>
-                <span>${item.quantity} ${item.unit}</span>
-                <small>${t('expires') || 'Ističe'}: ${item.expiryDate}</small>
-            </div>
-            <div class="inv-actions">
-                <button onclick="urediZalihe(${item.id})">✏️</button>
-                <button onclick="obrisiZalihe(${item.id})">🗑️</button>
+        html += `
+            <div class="table-row" style="${isLow ? 'background:#ffebee;' : ''}">
+                <div class="cell">${item.category}</div>
+                <div class="cell">${item.item}</div>
+                <div class="cell">${item.quantity} ${item.unit}</div>
+                <div class="cell">${item.expiryDate || '-'}</div>
+                <div class="cell">
+                    <button onclick="urediZalihe(${item.id})" style="border:none;background:none;font-size:20px;cursor:pointer;">✏️</button>
+                    <button onclick="obrisiZalihe(${item.id})" style="border:none;background:none;font-size:20px;cursor:pointer;">🗑️</button>
+                </div>
             </div>
         `;
-        container.appendChild(card);
     });
+
+    html += `</div>`;
+    container.innerHTML = html;
 }
+
 function obrisiZalihe(id) {
     showModernConfirm(
-        t('delete_confirm_title') || 'Brisanje',
-        t('delete_confirm_msg') || 'Da li ste sigurni da želite da obrišete ovu stavku?',
+        'Brisanje',
+        'Da li ste sigurni da želite da obrišete ovu stavku?',
         '🗑️',
         function onYes() {
             let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
             zalihe = zalihe.filter(item => item.id !== id);
             localStorage.setItem('zalihe', JSON.stringify(zalihe));
-            renderInventory();
+            renderInventoryList();
         }
     );
 }
 
-// Spisak Za Kupovinu (Shopping List)
+function urediZalihe(id) {
+    const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
+    const item = zalihe.find(z => z.id === id);
+    if (!item) return;
+
+    currentCategory = item.category;
+    currentItem = item.item;
+    editingId = id;
+
+    screenStack.push('dataEntry');
+    renderDataEntryScreen(item);
+}
+
+// ===== KATEGORIJE =====
+function showCategories() {
+    screenStack.push('categories');
+    renderCategoriesScreen();
+}
+
+function renderCategoriesScreen() {
+    const container = document.getElementById('mainContent');
+    const data = productParts[currentLanguage] || {};
+    const cats = Object.keys(data);
+
+    let html = `<div class="title">Izaberite kategoriju</div><div class="categories-grid">`;
+    cats.forEach((cat, i) => {
+        const color = CATEGORY_COLORS[i % CATEGORY_COLORS.length];
+        html += `<button class="category-btn" style="background:${color};" data-cat="${cat}">${cat}</button>`;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
+
+    container.querySelectorAll('.category-btn').forEach(btn => {
+        btn.onclick = () => selectCategory(btn.getAttribute('data-cat'));
+    });
+}
+
+function selectCategory(catName) {
+    currentCategory = catName;
+    screenStack.push('items');
+    renderItemsScreen();
+}
+
+// ===== STAVKE U OKVIRU KATEGORIJE =====
+function renderItemsScreen() {
+    const container = document.getElementById('mainContent');
+    const items = (productParts[currentLanguage] && productParts[currentLanguage][currentCategory]) || [];
+
+    let html = `<div class="title">${currentCategory}</div><div class="categories-grid">`;
+    items.forEach(item => {
+        html += `<button class="category-btn" style="background:#f5f5f5;" data-item="${item}">${item}</button>`;
+    });
+    html += `</div>`;
+    container.innerHTML = html;
+
+    container.querySelectorAll('.category-btn').forEach(btn => {
+        btn.onclick = () => {
+            currentItem = btn.getAttribute('data-item');
+            editingId = null;
+            screenStack.push('dataEntry');
+            renderDataEntryScreen();
+        };
+    });
+}
+
+// ===== UNOS PODATAKA =====
+function renderDataEntryScreen(existingItem) {
+    const container = document.getElementById('mainContent');
+    const today = new Date().toISOString().split('T')[0];
+
+    const qty = existingItem ? existingItem.quantity : '';
+    const unit = existingItem ? existingItem.unit : 'kom';
+    const entryDate = existingItem ? existingItem.entryDate : today;
+    const expiryMonths = existingItem ? existingItem.expiryMonths : 0;
+
+    container.innerHTML = `
+        <div class="title">${currentCategory} — ${currentItem}</div>
+
+        <div class="row">
+            <label>Količina:</label>
+            <div class="inline-group">
+                <input type="number" id="itemQuantity" min="0" step="0.1" value="${qty}" placeholder="npr. 1.5">
+                <select id="itemUnit">
+                    <option value="kom" ${unit === 'kom' ? 'selected' : ''}>kom</option>
+                    <option value="g" ${unit === 'g' ? 'selected' : ''}>g</option>
+                    <option value="kg" ${unit === 'kg' ? 'selected' : ''}>kg</option>
+                    <option value="ml" ${unit === 'ml' ? 'selected' : ''}>ml</option>
+                    <option value="l" ${unit === 'l' ? 'selected' : ''}>l</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <label>Datum unosa:</label>
+            <input type="date" id="entryDate" value="${entryDate}">
+        </div>
+
+        <div class="row">
+            <label>Rok trajanja (meseci):</label>
+            <input type="number" id="expiryMonths" min="0" value="${expiryMonths}">
+            <div id="expiryDisplay">-</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-save" id="btnSaveData">💾 Sačuvaj</button>
+            <button class="btn-cancel" id="btnCancelData">✖ Otkaži</button>
+        </div>
+    `;
+
+    document.getElementById('entryDate').addEventListener('change', updateExpiryDate);
+    document.getElementById('expiryMonths').addEventListener('input', updateExpiryDate);
+    document.getElementById('btnSaveData').addEventListener('click', sacuvajZalihe);
+    document.getElementById('btnCancelData').addEventListener('click', goBack);
+
+    updateExpiryDate();
+}
+
+function updateExpiryDate() {
+    const entryDateVal = document.getElementById('entryDate')?.value;
+    const monthsVal = parseInt(document.getElementById('expiryMonths')?.value || '0', 10);
+    const expiryDisplay = document.getElementById('expiryDisplay');
+
+    if (!entryDateVal || isNaN(monthsVal) || !expiryDisplay) return;
+
+    const d = new Date(entryDateVal);
+    d.setMonth(d.getMonth() + monthsVal);
+
+    expiryDisplay.textContent = d.toISOString().split('T')[0];
+}
+
+function sacuvajZalihe() {
+    const quantity = document.getElementById('itemQuantity')?.value;
+    const unit = document.getElementById('itemUnit')?.value;
+    const entryDate = document.getElementById('entryDate')?.value;
+    const expiryMonths = document.getElementById('expiryMonths')?.value;
+    const expiryDate = document.getElementById('expiryDisplay')?.textContent;
+
+    if (!quantity || quantity <= 0) {
+        showModernAlert('Upozorenje', 'Unesite ispravnu količinu.', '⚠️');
+        return;
+    }
+
+    let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
+
+    if (editingId) {
+        zalihe = zalihe.map(item => item.id === editingId ? {
+            ...item,
+            category: currentCategory,
+            item: currentItem,
+            quantity: parseFloat(quantity),
+            unit, entryDate,
+            expiryMonths: parseInt(expiryMonths, 10),
+            expiryDate
+        } : item);
+    } else {
+        zalihe.push({
+            id: Date.now(),
+            category: currentCategory,
+            item: currentItem,
+            quantity: parseFloat(quantity),
+            unit, entryDate,
+            expiryMonths: parseInt(expiryMonths, 10),
+            expiryDate
+        });
+    }
+
+    localStorage.setItem('zalihe', JSON.stringify(zalihe));
+    editingId = null;
+
+    showModernAlert('Uspešno', 'Stavka je sačuvana.', '✅');
+    showInventory();
+}
+
+// ===== SPISAK ZA KUPOVINU =====
+function showShoppingList() {
+    screenStack = ['inventory', 'shopping'];
+    renderShoppingScreen();
+}
+
+function renderShoppingScreen() {
+    const container = document.getElementById('mainContent');
+    container.innerHTML = `
+        <div class="title">🛒 Spisak za kupovinu</div>
+
+        <div class="row">
+            <input type="text" id="shopName" placeholder="Naziv stavke" style="flex:2;">
+            <input type="number" id="shopQty" placeholder="Kol." min="0" step="0.1" style="flex:1;">
+            <select id="shopUnit" style="flex:1;">
+                <option value="kom">kom</option>
+                <option value="g">g</option>
+                <option value="kg">kg</option>
+                <option value="l">l</option>
+            </select>
+            <button class="btn btn-green" id="addShopBtn" style="width:auto;padding:16px 25px;">➕</button>
+        </div>
+
+        <button class="btn btn-orange" id="clearCheckedBtn" style="margin:15px 0;">🧹 Obriši označeno</button>
+
+        <div id="shoppingListContainer"></div>
+    `;
+
+    document.getElementById('addShopBtn').onclick = dodajNaSpisak;
+    document.getElementById('clearCheckedBtn').onclick = obrisiOznacenoShopping;
+
+    renderShoppingList();
+}
+
+function dodajNaSpisak() {
+    const name = document.getElementById('shopName')?.value.trim();
+    const quantity = document.getElementById('shopQty')?.value;
+    const unit = document.getElementById('shopUnit')?.value;
+
+    if (!name) {
+        showModernAlert('Upozorenje', 'Unesite naziv stavke.', '⚠️');
+        return;
+    }
+
+    let list = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+    list.push({ name, quantity: quantity || '', unit, checked: false });
+    localStorage.setItem('shoppingList', JSON.stringify(list));
+    renderShoppingList();
+
+    document.getElementById('shopName').value = '';
+    document.getElementById('shopQty').value = '';
+}
+
 function renderShoppingList() {
     const container = document.getElementById('shoppingListContainer');
     if (!container) return;
-    
+
     const shoppingList = JSON.parse(localStorage.getItem('shoppingList') || '[]');
     container.innerHTML = '';
-    
+
     if (shoppingList.length === 0) {
-        container.innerHTML = `<p class="empty-msg">${t('shopping_list_empty')}</p>`;
+        container.innerHTML = `<p style="text-align:center;color:#888;font-size:20px;padding:30px;">Spisak je prazan.</p>`;
         return;
     }
-    
+
     shoppingList.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = 'shopping-item';
+        div.className = 'row';
+        div.style.background = '#f5f5f5';
+        div.style.borderRadius = '10px';
+        div.style.padding = '12px 15px';
         div.innerHTML = `
-            <input type="checkbox" id="shop_${index}" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${index})">
-            <label for="shop_${index}">${t(item.name) || item.name} - ${item.quantity} ${item.unit}</label>
-            <button onclick="obrisiSaSpiska(${index})">❌</button>
+            <input type="checkbox" id="shop_${index}" ${item.checked ? 'checked' : ''} style="width:auto;flex:none;transform:scale(1.4);">
+            <label for="shop_${index}" style="flex:1;text-align:left;font-size:20px;text-decoration:${item.checked ? 'line-through' : 'none'};color:${item.checked ? '#999' : '#333'};">${item.name} ${item.quantity ? '- ' + item.quantity + ' ' + item.unit : ''}</label>
+            <button data-idx="${index}" class="delShopBtn" style="border:none;background:none;font-size:20px;cursor:pointer;">❌</button>
         `;
         container.appendChild(div);
+    });
+
+    container.querySelectorAll('input[type="checkbox"]').forEach((cb, index) => {
+        cb.onchange = () => toggleShoppingItem(index);
+    });
+    container.querySelectorAll('.delShopBtn').forEach(btn => {
+        btn.onclick = () => obrisiSaSpiska(parseInt(btn.getAttribute('data-idx'), 10));
     });
 }
 
@@ -319,13 +459,14 @@ function toggleShoppingItem(index) {
     if (list[index]) {
         list[index].checked = !list[index].checked;
         localStorage.setItem('shoppingList', JSON.stringify(list));
+        renderShoppingList();
     }
 }
 
 function obrisiSaSpiska(index) {
     showModernConfirm(
-        t('delete_confirm_title') || 'Brisanje',
-        t('delete_confirm_msg') || 'Da li želite da uklonite stavku sa spiska?',
+        'Brisanje',
+        'Da li želite da uklonite stavku sa spiska?',
         '❌',
         function onYes() {
             let list = JSON.parse(localStorage.getItem('shoppingList') || '[]');
@@ -338,8 +479,8 @@ function obrisiSaSpiska(index) {
 
 function obrisiOznacenoShopping() {
     showModernConfirm(
-        t('delete_confirm_title') || 'Čišćenje spiska',
-        t('delete_selected_msg') || 'Da li želite da obrišete sve označene stavke?',
+        'Čišćenje spiska',
+        'Da li želite da obrišete sve označene stavke?',
         '🧹',
         function onYes() {
             let list = JSON.parse(localStorage.getItem('shoppingList') || '[]');
@@ -350,43 +491,28 @@ function obrisiOznacenoShopping() {
     );
 }
 
-// Navigacija Unazad (Back Action)
-function handleBackAction() {
-    switch (currentScreenState) {
-        case 'dataEntry':
-            showProductParts(currentSubcategory);
-            break;
-        case 'productParts':
-            showSubcategories(currentCategory);
-            break;
-        case 'subcategories':
-            showCategories();
-            break;
-        case 'categories':
-            hideAllScreens();
-            document.getElementById('languagesScreen')?.classList.remove('hidden');
-            currentScreenState = 'languages';
-            break;
-        default:
-            break;
-    }
+// ===== IZLAZ =====
+function handleExit() {
+    showModernConfirm(
+        'Izlaz',
+        'Da li želite da se izlogujete?',
+        '🚪',
+        function onYes() {
+            localStorage.removeItem('userPhone');
+            document.getElementById('mainScreen').style.display = 'none';
+            document.getElementById('languageScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+    );
 }
 
-// Pomoćna funkcija za sakrivanje svih ekrana
-function hideAllScreens() {
-    const screens = document.querySelectorAll('.screen-container');
-    screens.forEach(s => s.classList.add('hidden'));
-}
-
-// Događaji / Event Listeners
+// ===== Događaji / Event Listeners =====
 function setupEventListeners() {
     // Login: klik na dugme ENTER
     const loginBtn = document.getElementById('loginBtn');
-    if (loginBtn) {
-        loginBtn.addEventListener('click', handleLogin);
-    }
+    if (loginBtn) loginBtn.addEventListener('click', handleLogin);
 
-    // Login: taster Enter na formi (sprečava reload i zove istu login funkciju)
+    // Login: submit forme (Enter u polju za broj telefona)
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', (event) => {
@@ -395,7 +521,6 @@ function setupEventListeners() {
         });
     }
 
-    // Login: taster Enter direktno u polju za broj telefona (dodatna sigurnost)
     const phoneInput = document.getElementById('phoneInput');
     if (phoneInput) {
         phoneInput.addEventListener('keydown', (event) => {
@@ -406,15 +531,38 @@ function setupEventListeners() {
         });
     }
 
-    document.getElementById('btnBack')?.addEventListener('click', handleBackAction);
-    document.getElementById('entryDate')?.addEventListener('change', updateExpiryDate);
-    document.getElementById('expiryMonths')?.addEventListener('input', updateExpiryDate);
-    document.getElementById('btnSaveData')?.addEventListener('click', sacuvajZalihe);
+    // Support dijalog
+    document.getElementById('supportBtn')?.addEventListener('click', () => {
+        document.getElementById('supportDialog').classList.add('active');
+    });
+    document.getElementById('closeSupportBtn')?.addEventListener('click', () => {
+        document.getElementById('supportDialog').classList.remove('active');
+    });
+    document.getElementById('closeSupportBtn2')?.addEventListener('click', () => {
+        document.getElementById('supportDialog').classList.remove('active');
+    });
+
+    // Izlaz sa login ekrana
+    document.getElementById('exitLoginBtn')?.addEventListener('click', () => {
+        showModernConfirm('Izlaz', 'Da li želite da zatvorite aplikaciju?', '🚪', () => window.close());
+    });
+
+    // Izlaz sa ekrana za jezike
+    document.getElementById('exitLangBtn')?.addEventListener('click', () => {
+        document.getElementById('languageScreen').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'flex';
+    });
+
+    // Glavni header
+    document.getElementById('backBtn')?.addEventListener('click', goBack);
+    document.getElementById('invBtn')?.addEventListener('click', showInventory);
+    document.getElementById('shopBtn')?.addEventListener('click', showShoppingList);
+    document.getElementById('exitMainBtn')?.addEventListener('click', handleExit);
 }
 
-// Modern Modal Dialog Helpers
+// ===== Modern Modal Dialog Helpers =====
 function showModernAlert(title, message, icon = 'ℹ️') {
-    const alertModal = document.getElementById('customAlertModal');
+    const alertModal = document.getElementById('modernAlert');
     if (!alertModal) {
         alert(message);
         return;
@@ -422,11 +570,16 @@ function showModernAlert(title, message, icon = 'ℹ️') {
     document.getElementById('alertIcon').textContent = icon;
     document.getElementById('alertTitle').textContent = title;
     document.getElementById('alertMessage').textContent = message;
-    alertModal.classList.remove('hidden');
+    alertModal.style.display = 'flex';
+}
+
+function closeModernAlert() {
+    const alertModal = document.getElementById('modernAlert');
+    if (alertModal) alertModal.style.display = 'none';
 }
 
 function showModernConfirm(title, message, icon = '❓', onYesCallback) {
-    const confirmModal = document.getElementById('customConfirmModal');
+    const confirmModal = document.getElementById('modernConfirm');
     if (!confirmModal) {
         if (confirm(message)) onYesCallback();
         return;
@@ -434,70 +587,29 @@ function showModernConfirm(title, message, icon = '❓', onYesCallback) {
     document.getElementById('confirmIcon').textContent = icon;
     document.getElementById('confirmTitle').textContent = title;
     document.getElementById('confirmMessage').textContent = message;
-    
-    const btnYes = document.getElementById('confirmBtnYes');
-    const btnNo = document.getElementById('confirmBtnNo');
-    
+
+    const btnYes = document.getElementById('confirmYesBtn');
+    const btnNo = document.getElementById('confirmNoBtn');
+
     const closeConfirm = () => {
-        confirmModal.classList.add('hidden');
-        document.removeEventListener('keydown', handleModalEnter); // Uklanja slušalac nakon zatvaranja
+        confirmModal.style.display = 'none';
+        document.removeEventListener('keydown', handleModalEnter);
     };
-    
+
     btnYes.onclick = () => {
         closeConfirm();
         if (onYesCallback) onYesCallback();
     };
     btnNo.onclick = () => closeConfirm();
-    
-    // Omogućava pritisak na Enter za potvrdu modala (čak i ako fokus nije na inputu)
+
     const handleModalEnter = (e) => {
-        if (e.key === 'Enter' && !confirmModal.classList.contains('hidden')) {
+        if (e.key === 'Enter' && confirmModal.style.display !== 'none') {
             e.preventDefault();
             btnYes.click();
         }
     };
     document.addEventListener('keydown', handleModalEnter);
 
-    confirmModal.classList.remove('hidden');
-    btnYes.focus(); // Stavlja fokus na "DA" dugme
+    confirmModal.style.display = 'flex';
+    btnYes.focus();
 }
-
-// Omogućava rad tipke Enter za login i sve ostale unose
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        const aktivniElement = document.activeElement;
-        
-        // Provjera da li je fokus na bilo kom unosu (input ili select)
-        if (aktivniElement && (aktivniElement.tagName === 'INPUT' || aktivniElement.tagName === 'SELECT')) {
-            
-            // Provjera za custom confirm modal
-            const confirmModal = document.getElementById('customConfirmModal');
-            if (confirmModal && !confirmModal.classList.contains('hidden')) {
-                return;
-            }
-
-            event.preventDefault(); // Sprečava osvežavanje stranice
-
-            // 1. Potraga za dugmetom unutar iste forme ili bloka
-            const roditelj = aktivniElement.closest('form, .login-card, .login-container, .modal, div');
-            
-            let potvrdnoDugme = null;
-            if (roditelj) {
-                potvrdnoDugme = roditelj.querySelector('button[type="submit"], #btnLogin, .btn-login, #loginBtn, .btn-primary, .btn-save');
-            }
-
-            // 2. Ako nije nađeno u roditelju, traži globalno login dugme na stranici
-            if (!potvrdnoDugme) {
-                potvrdnoDugme = document.getElementById('btnLogin') || 
-                                document.getElementById('loginBtn') || 
-                                document.querySelector('.btn-login') || 
-                                document.querySelector('button[type="submit"]');
-            }
-
-            // Ako je dugme pronađeno i vidljivo je na ekranu — klikni ga
-            if (potvrdnoDugme && potvrdnoDugme.offsetParent !== null) {
-                potvrdnoDugme.click();
-            }
-        }
-    }
-});
