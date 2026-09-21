@@ -280,33 +280,5 @@ console.log('✅ HTML spreman!');
 <script src="productParts.js"></script>
 <script src="script.js"></script>
 
-<!-- ===== SERVICE WORKER ===== -->
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/Household_supplies/sw.js', {
-        scope: '/Household_supplies/'
-    }).then(function(reg) {
-        console.log('✅ SW registrovan:', reg.scope);
-
-        // Proveri ima li nove verzije čim se app otvori/vrati u fokus
-        reg.update();
-        document.addEventListener('visibilitychange', function() {
-            if (document.visibilityState === 'visible') reg.update();
-        });
-    }).catch(function(err) {
-        console.error('❌ SW greška:', err);
-    });
-
-    // Kad novi SW preuzme kontrolu, automatski osveži stranicu
-    let reloadedOnce = false;
-    navigator.serviceWorker.addEventListener('controllerchange', function() {
-        if (reloadedOnce) return;
-        reloadedOnce = true;
-        console.log('🔄 Nova verzija app-a - osvežavam...');
-        window.location.reload();
-    });
-}
-</script>
-
 </body>
 </html>
