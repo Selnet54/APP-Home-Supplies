@@ -701,6 +701,12 @@ function updateHeaderTexts() {
     if (backText) backText.textContent = t('nazad');
     if (invText) invText.textContent = t('stanje');
     if (shopText) shopText.textContent = t('spisak');
+    
+    // Ažuriraj placeholder za pretragu ako postoji
+    const searchInput = document.getElementById('inventorySearchInput');
+    if (searchInput) {
+        searchInput.placeholder = `${t('pretrazi')}...`;
+    }
 }
 
 function getMainCategories() {
@@ -1049,7 +1055,7 @@ function saveProduct() {
     const quantity = document.getElementById('quantityInput')?.value.trim();
     const shelfLife = document.getElementById('shelfLifeInput')?.value.trim();
     
-    // Provera obaveznih polja
+    // Provera obaveznih polja - OVE PORUKE OSTAJU (validacija je bitna)
     if (!product) {
         showModernAlert(t('missing_info'), t('enter_product_name'), '📝');
         document.getElementById('productInput')?.focus();
@@ -1080,7 +1086,6 @@ function saveProduct() {
 
     let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
 
-    // Isti proizvod (po nazivu) na istom skladištu i istoj jedinici mere -> saberi količinu
     const postojeci = zalihe.find(p =>
         p.quantity > 0 &&
         p.product_name.trim().toLowerCase() === product.trim().toLowerCase() &&
@@ -1114,7 +1119,7 @@ function saveProduct() {
     localStorage.setItem('zalihe', JSON.stringify(zalihe));
     prikaziSveUnose();
     
-    // Resetuj polja (osim productName)
+    // Resetuj polja
     document.getElementById('pieceInput').value = '';
     document.getElementById('quantityInput').value = '';
     document.getElementById('shelfLifeInput').value = '';
@@ -1122,9 +1127,10 @@ function saveProduct() {
     document.getElementById('productInput').focus();
     document.getElementById('productInput').select();
     
-    showModernAlert(t('success'), t('product_saved'), '✅');
+    // ❌ UKLONJEN POPUP: showModernAlert(t('success'), t('product_saved'), '✅');
+    // Umesto toga - samo vizuelna potvrda bez prekida rada
+    console.log('✅ Proizvod sačuvan bez popup-a');
 }
-
 function renderInventory() {
     currentScreenState = 'inventory';
     const content = document.getElementById('mainContent');
@@ -1133,10 +1139,21 @@ function renderInventory() {
     const aktivneZalihe = zalihe.filter(p => p.quantity > 0);
     
     let html = `<div class="title">${t('stanje')}</div>`;
-    html += `<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">`;
+    html += `<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; align-items:center;">`;
     html += `<button onclick="azurirajZalihe()" style="background:#4CAF50; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">✅ ${t('azuriraj')}</button>`;
     html += `<button onclick="obrisiZalihe()" style="background:#666; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">🗑️ ${t('obrisi')}</button>`;
     html += `<button onclick="renderCategories()" style="background:#f44336; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">✖ ${t('odustani')}</button>`;
+    
+    // ===== NOVO: POLJE ZA PRETRAGU =====
+    html += `<div style="position:relative; flex:1; min-width:200px;">`;
+    html += `<input type="text" id="inventorySearchInput" 
+                placeholder="${t('pretrazi')}..." 
+                autocomplete="off"
+                style="width:100%; padding:10px 15px; border:2px solid #1a237e; border-radius:8px; font-size:16px; box-sizing:border-box;"
+                oninput="handleInventorySearchInput(this.value)"
+                onkeydown="handleInventorySearchKeydown(event)">`;
+    html += `<div id="inventorySuggestions" style="position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ccc; border-top:none; border-radius:0 0 8px 8px; max-height:200px; overflow-y:auto; z-index:1000; display:none; box-shadow:0 4px 8px rgba(0,0,0,0.1);"></div>`;
+    html += `</div>`;
     html += `</div>`;
     
     html += `<div class="table-container" style="max-height:400px; overflow-y:auto;">`;
@@ -1156,7 +1173,7 @@ function renderInventory() {
     if (aktivneZalihe.length === 0) {
         html += `<div class="table-row"><div class="cell" style="grid-column:span 8;padding:30px;color:#999;text-align:center;">${t('nema_proizvoda')}</div></div>`;
     } else {
-        aktivneZalihe.forEach((p) => {
+        aktivneZalihe.forEach((p, idx) => {
             const originalIndex = zalihe.indexOf(p);
             const expiry = new Date(p.entry_date);
             expiry.setMonth(expiry.getMonth() + p.shelf_life_months);
@@ -1172,9 +1189,12 @@ function renderInventory() {
             } else if (isNew) {
                 bgColor = '#BBDEFB';
             }
+            
+            // ===== NOVO: data-search-row atribut za lakše pronalaženje =====
             const rowStyle = `display:grid; grid-template-columns:40px 1.2fr 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap:2px; border-bottom:1px solid #eee; padding:5px 0; background:${bgColor}; color:${textColor};`;
-
-            html += `<div class="table-row" style="${rowStyle}">`;
+            const searchKey = (p.product_name || '').toLowerCase();
+            
+            html += `<div class="table-row" data-search-row="${searchKey}" data-original-index="${originalIndex}" style="${rowStyle}">`;
             html += `<div class="cell" style="text-align:center;"><input type="checkbox" class="row-checkbox" data-index="${originalIndex}"></div>`;
             html += `<div class="cell">${p.product_name}</div>`;
             html += `<div class="cell">${p.description || ''}</div>`;
@@ -1189,7 +1209,157 @@ function renderInventory() {
     html += `</div></div>`;
     content.innerHTML = html;
 }
+// ===== PRETRAGA U INVENTARU =====
+let inventorySearchTimeout = null;
 
+function handleInventorySearchInput(value) {
+    const suggestions = document.getElementById('inventorySuggestions');
+    if (!suggestions) return;
+    
+    clearTimeout(inventorySearchTimeout);
+    const query = value.trim().toLowerCase();
+    
+    if (query.length === 0) {
+        suggestions.style.display = 'none';
+        suggestions.innerHTML = '';
+        return;
+    }
+    
+    inventorySearchTimeout = setTimeout(() => {
+        const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
+        const aktivne = zalihe.filter(p => p.quantity > 0);
+        
+        // Pronađi sve koji počinju sa upisanim slovima
+        const matches = aktivne.filter(p => 
+            (p.product_name || '').toLowerCase().startsWith(query)
+        );
+        
+        // Jedinstveni nazivi
+        const uniqueNames = [...new Set(matches.map(p => p.product_name))];
+        
+        if (uniqueNames.length === 0) {
+            suggestions.style.display = 'none';
+            suggestions.innerHTML = '';
+            return;
+        }
+        
+        // Ako ima SAMO JEDAN pogodak - automatski dopuni polje (autocomplete)
+        if (uniqueNames.length === 1) {
+            const input = document.getElementById('inventorySearchInput');
+            if (input && input.value.toLowerCase() !== uniqueNames[0].toLowerCase()) {
+                input.value = uniqueNames[0];
+                // Postavi kursor na kraj
+                input.setSelectionRange(input.value.length, input.value.length);
+                // Odmah izvrši pretragu
+                performInventorySearch(uniqueNames[0]);
+            }
+            suggestions.style.display = 'none';
+            suggestions.innerHTML = '';
+            return;
+        }
+        
+        // Prikaži listu predloga
+        suggestions.innerHTML = '';
+        uniqueNames.slice(0, 10).forEach(name => {
+            const div = document.createElement('div');
+            div.textContent = name;
+            div.style.padding = '10px 15px';
+            div.style.cursor = 'pointer';
+            div.style.borderBottom = '1px solid #eee';
+            div.style.fontSize = '15px';
+            div.onmouseover = () => { div.style.background = '#e3f2fd'; };
+            div.onmouseout = () => { div.style.background = 'white'; };
+            div.onclick = () => {
+                const input = document.getElementById('inventorySearchInput');
+                input.value = name;
+                suggestions.style.display = 'none';
+                suggestions.innerHTML = '';
+                performInventorySearch(name);
+            };
+            suggestions.appendChild(div);
+        });
+        suggestions.style.display = 'block';
+    }, 150);
+}
+
+function handleInventorySearchKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const input = document.getElementById('inventorySearchInput');
+        const suggestions = document.getElementById('inventorySuggestions');
+        if (suggestions) {
+            suggestions.style.display = 'none';
+            suggestions.innerHTML = '';
+        }
+        if (input && input.value.trim()) {
+            performInventorySearch(input.value.trim());
+        }
+    } else if (event.key === 'Escape') {
+        const suggestions = document.getElementById('inventorySuggestions');
+        if (suggestions) {
+            suggestions.style.display = 'none';
+            suggestions.innerHTML = '';
+        }
+    }
+}
+
+function performInventorySearch(searchTerm) {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) return;
+    
+    const rows = document.querySelectorAll('[data-search-row]');
+    let foundRow = null;
+    let matchCount = 0;
+    
+    rows.forEach(row => {
+        const rowKey = row.getAttribute('data-search-row');
+        // Resetuj prethodno isticanje
+        row.style.background = '';
+        row.style.color = '';
+        row.style.outline = '';
+        
+        // Vrati originalnu boju
+        const originalIndex = parseInt(row.getAttribute('data-original-index'));
+        const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
+        const p = zalihe[originalIndex];
+        if (p) {
+            const isLow = (p.unit === 'g' && p.quantity <= 1000) || (p.unit === 'kg' && p.quantity <= 1) || ((p.unit === 'kom' || p.unit === 'pcs') && p.quantity <= 2);
+            const isNew = newlyAddedIds.has(p.id);
+            if (isLow) {
+                row.style.background = '#f44336';
+                row.style.color = 'white';
+            } else if (isNew) {
+                row.style.background = '#BBDEFB';
+            }
+        }
+        
+        // Traži poklapanje
+        if (rowKey === query || rowKey.includes(query)) {
+            matchCount++;
+            if (!foundRow) foundRow = row;
+        }
+    });
+    
+    if (foundRow) {
+        // Označi pronađeni red - ROYAL PLAVA pozadina sa ŽUTIM slovima
+        foundRow.style.background = '#1a237e'; // Royal blue
+        foundRow.style.color = '#FFD700';       // Gold/žuto
+        foundRow.style.fontWeight = 'bold';
+        foundRow.style.outline = '2px solid #FFD700';
+        foundRow.style.outlineOffset = '-2px';
+        
+        // Skroluj do reda
+        foundRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Označi checkbox u tom redu
+        const checkbox = foundRow.querySelector('.row-checkbox');
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+    } else {
+        showModernAlert(t('nema_proizvoda'), `"${searchTerm}" - ${t('nema_proizvoda')}`, '🔍');
+    }
+}
 function toggleAllCheckboxes() {
     const selectAll = document.getElementById('selectAll');
     const checkboxes = document.querySelectorAll('.row-checkbox');
@@ -1202,8 +1372,8 @@ function obrisiZalihe() {
         showModernAlert(t('no_selection'), t('no_items_selected'), '⚠️');
         return;
     }
-    // Koristi showModernAlert umesto confirm (ili ostavi confirm za sada)
-    if (!confirm(t('delete_confirm').replace('{count}', selected.length))) return;
+    
+    // ❌ UKLONJEN confirm() - briše odmah bez pitanja
     const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
     const indices = Array.from(selected).map(cb => parseInt(cb.dataset.index));
     indices.sort((a, b) => b - a);
@@ -1310,6 +1480,7 @@ function updateUpdateExpiryDate() {
 function sacuvajAzuriranje(index) {
     const product = document.getElementById('updateProductInput')?.value.trim();
     const quantity = document.getElementById('updateQuantityInput')?.value.trim();
+    
     if (!product) {
         showModernAlert(t('missing_info'), t('enter_product_name'), '📝');
         return;
@@ -1323,11 +1494,10 @@ function sacuvajAzuriranje(index) {
     let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
     let shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
     
-    // Ako je količina 0, prebaci u spisak potreba
+    // Ako je količina 0, prebaci u spisak potreba BEZ POPUP-a
     if (novaKolicina === 0) {
         const proizvod = zalihe[index];
         if (proizvod) {
-            // Dodaj u spisak potreba
             shopping.push({
                 product_name: proizvod.product_name,
                 description: proizvod.description || '',
@@ -1335,16 +1505,15 @@ function sacuvajAzuriranje(index) {
                 unit: proizvod.unit || 'kom'
             });
             localStorage.setItem('shoppingList', JSON.stringify(shopping));
-            // Obriši iz zaliha
             zalihe.splice(index, 1);
             localStorage.setItem('zalihe', JSON.stringify(zalihe));
-            showModernAlert(t('success'), t('shopping_moved'), '🛒');
+            // ❌ UKLONJEN POPUP
             renderInventory();
             return;
         }
     }
     
-    // Inače ažuriraj
+    // Ažuriraj BEZ POPUP-a
     zalihe[index] = {
         product_name: product,
         description: document.getElementById('updateDescriptionInput')?.value.trim() || '',
@@ -1357,7 +1526,7 @@ function sacuvajAzuriranje(index) {
     };
     
     localStorage.setItem('zalihe', JSON.stringify(zalihe));
-    showModernAlert(t('success'), t('product_updated'), '✅');
+    // ❌ UKLONJEN POPUP
     renderInventory();
 }
  
@@ -1466,7 +1635,7 @@ function obrisiOznacenoShopping() {
         showModernAlert(t('no_selection'), t('no_items_selected'), '⚠️');
         return;
     }
-    if (!confirm(t('delete_confirm').replace('{count}', selected.length))) return;
+    // ❌ UKLONJEN confirm() - briše odmah
     let shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
     const indices = Array.from(selected).map(cb => parseInt(cb.dataset.index));
     indices.sort((a, b) => b - a);
@@ -1476,11 +1645,12 @@ function obrisiOznacenoShopping() {
 }
 
 function obrisiSaSpiska(index) {
-    if (!confirm(t('delete_from_shopping'))) return;
+    // ❌ UKLONJEN confirm()
     let shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
     shopping.splice(index, 1);
     localStorage.setItem('shoppingList', JSON.stringify(shopping));
     renderShoppingList();
+    // ❌ UKLONJEN showModernAlert posle brisanja
 }
 // ===== GLAVNA FUNKCIJA ZA NAZAD / ODUSTANI =====
 function handleBackAction() {
