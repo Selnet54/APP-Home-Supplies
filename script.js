@@ -1,1822 +1,409 @@
 // ============================================
 // APP-HOME-SUPPLIES - script.js
-// OČIŠĆENA VERZIJA - BEZ GLASA, BEZ CHOICE EKRANA
-// Tok: Login → Jezik → Kategorije → Podkategorije → Delovi → Forma
+// OČIŠĆENA VERZIJA - 
 // ============================================
 console.log('✅ Script.js je učitan!');
 
-// ===== SPREČI NEŽELJENA PREUSMERAVANJA =====
-(function() {
-    const originalOpen = window.open;
-    
-    window.open = function(url, name, specs) {
-        if (url && (url.includes('github') || url.includes('GitHub') || url.includes('http'))) {
-            console.warn('🚫 Blokirano otvaranje:', url);
-            if (typeof showModernAlert === 'function') {
-                showModernAlert('Blokirano', 'Otvaranje linka je blokirano!', '🛑');
-            } else {
-                alert('Otvaranje linka je blokirano!');
-            }
-            return null;
-        }
-        return originalOpen.call(this, url, name, specs);
-    };
-    
-    console.log('✅ Zaštita od preusmeravanja aktivirana!');
-})();
-
-// ===== TRENUTNO STANJE =====
-let currentLang = 'en';
+// Globalna stanja
+let currentLanguage = localStorage.getItem('appLanguage') || 'sr_lat';
 let currentCategory = '';
 let currentSubcategory = '';
-let currentProductPart = '';
-let currentScreenState = 'languages';
+let currentPart = '';
+let currentScreenState = 'languages'; // Pristutna stanja: 'languages', 'categories', 'subcategories', 'productParts', 'dataEntry'
 
-// ===== 0. EXIT FUNKCIJA =====
-function exitApp() {
-    console.log("🚪 Exit dugme kliknuto!");
-    
-    const loginScreen = document.getElementById('loginScreen');
-    const languageScreen = document.getElementById('languageScreen');
-    
-    const isLoginVisible = loginScreen && window.getComputedStyle(loginScreen).display === 'flex';
-    const isLanguageVisible = languageScreen && window.getComputedStyle(languageScreen).display === 'flex';
-    
-    let poruka;
-    if (isLoginVisible || isLanguageVisible) {
-        poruka = "Thanks for using this app! 👋";
-    } else {
-        poruka = translations[currentLang]?.exit_poruka || "Thanks for using this app! 👋";
-    }
-    
-    // PRIKAŽI ZAHVALNI EKRAN
-    document.body.innerHTML = '';
-    document.body.style.background = '#1a237e';
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.style.width = '100%';
-    document.body.style.height = '100vh';
-    document.body.style.display = 'flex';
-    document.body.style.justifyContent = 'center';
-    document.body.style.alignItems = 'center';
-    document.body.style.flexDirection = 'column';
-    document.body.style.fontFamily = 'Arial, sans-serif';
-    
-    document.body.innerHTML = `
-        <div style="text-align: center; color: #FFD700;">
-            <div style="font-size: 80px; margin-bottom: 20px;">👋</div>
-            <div style="font-size: 32px; font-weight: bold;">${poruka}</div>
-            <div style="font-size: 16px; color: #888; margin-top: 30px;">© Supplies App</div>
-            <button onclick="location.reload()" style="margin-top:30px; padding:12px 30px; background:#FFD700; color:#1a237e; border:none; border-radius:8px; font-size:18px; cursor:pointer; font-weight:bold;">
-                🔄 Restart App
-            </button>
-        </div>
-    `;
-}
-
-// ===== MODERNI ALERT =====
-function showModernAlert(title, message, icon = '📢') {
-    console.log('🔔 Alert:', title, message);
-    
-    const existing = document.getElementById('modernAlertDynamic');
-    if (existing) existing.remove();
-    
-    const overlay = document.createElement('div');
-    overlay.id = 'modernAlertDynamic';
-    overlay.style.cssText = `
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        background: rgba(0,0,0,0.7) !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        z-index: 999999 !important;
-        backdrop-filter: blur(5px) !important;
-        animation: fadeIn 0.3s ease !important;
-    `;
-    
-    const box = document.createElement('div');
-    box.style.cssText = `
-        background: #8B0000 !important;
-        border: 3px solid #FFD700 !important;
-        border-radius: 14px !important;
-        padding: 15px 20px !important;
-        max-width: 300px !important;
-        width: 70% !important;
-        text-align: center !important;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
-        color: #FFD700 !important;
-        position: relative !important;
-        z-index: 9999999 !important;
-    `;
-    
-    box.innerHTML = `
-        <div style="font-size:32px; margin-bottom:5px;">${icon || '📢'}</div>
-        <h2 style="color:#FFD700; margin-bottom:5px; font-size:17px; margin:0 0 5px 0; font-weight:bold;">${title || 'Obaveštenje'}</h2>
-        <p style="font-size:13px; color:#FFD700; margin-bottom:10px; line-height:1.3;">${message || 'Poruka'}</p>
-        <button onclick="closeModernAlert()" style="
-            background: #2E7D32 !important;
-            color: #FFD700 !important;
-            border: none !important;
-            padding: 5px 20px !important;
-            border-radius: 8px !important;
-            font-size: 13px !important;
-            cursor: pointer !important;
-            font-weight: bold !important;
-        ">OK</button>
-    `;
-    
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-    
-    setTimeout(function() {
-        closeModernAlert();
-    }, 2000);
-}
-
-function closeModernAlert() {
-    const dynamic = document.getElementById('modernAlertDynamic');
-    if (dynamic) dynamic.remove();
-    
-    const old = document.getElementById('modernAlert');
-    if (old) {
-        old.style.display = 'none';
-        old.classList.remove('active');
-    }
-}
-
-// ===== CONFIRM =====
-let confirmCallback = null;
-
-function showModernConfirm(title, message, onYesCallback, onNoCallback, icon = '⚠️') {
-    console.log('⚠️ Confirm:', title, message);
-    
-    closeModernConfirm();
-    
-    confirmCallback = {
-        onYes: onYesCallback || function() { closeModernConfirm(); },
-        onNo: onNoCallback || function() { closeModernConfirm(); }
-    };
-    
-    const overlay = document.createElement('div');
-    overlay.id = 'modernConfirmDynamic';
-    overlay.style.cssText = `
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        background: rgba(0,0,0,0.7) !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        z-index: 999999 !important;
-        backdrop-filter: blur(5px) !important;
-        animation: fadeIn 0.3s ease !important;
-    `;
-    
-    const box = document.createElement('div');
-    box.style.cssText = `
-        background: #8B0000 !important;
-        border: 3px solid #FFD700 !important;
-        border-radius: 14px !important;
-        padding: 15px 20px !important;
-        max-width: 300px !important;
-        width: 70% !important;
-        text-align: center !important;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
-        color: #FFD700 !important;
-        position: relative !important;
-        z-index: 9999999 !important;
-    `;
-    
-    box.innerHTML = `
-        <div style="font-size:32px; margin-bottom:5px;">${icon || '⚠️'}</div>
-        <h2 style="color:#FFD700; margin-bottom:5px; font-size:17px; margin:0 0 5px 0; font-weight:bold;">${title || 'Potvrda'}</h2>
-        <p style="font-size:13px; color:#FFD700; margin-bottom:10px; line-height:1.3;">${message || 'Da li ste sigurni?'}</p>
-        <div style="display:flex; gap:8px;">
-            <button onclick="handleConfirmYes()" style="
-                flex: 1;
-                background: #2E7D32 !important;
-                color: #FFD700 !important;
-                border: none !important;
-                padding: 5px 12px !important;
-                border-radius: 8px !important;
-                font-size: 13px !important;
-                cursor: pointer !important;
-                font-weight: bold !important;
-            ">✅ Da</button>
-            <button onclick="handleConfirmNo()" style="
-                flex: 1;
-                background: #B71C1C !important;
-                color: #FFD700 !important;
-                border: none !important;
-                padding: 5px 12px !important;
-                border-radius: 8px !important;
-                font-size: 13px !important;
-                cursor: pointer !important;
-                font-weight: bold !important;
-            ">✖ Ne</button>
-        </div>
-    `;
-    
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
-}
-
-function handleConfirmYes() {
-    if (confirmCallback && confirmCallback.onYes) {
-        confirmCallback.onYes();
-    }
-    closeModernConfirm();
-}
-
-function handleConfirmNo() {
-    if (confirmCallback && confirmCallback.onNo) {
-        confirmCallback.onNo();
-    }
-    closeModernConfirm();
-}
-
-function closeModernConfirm() {
-    const dynamic = document.getElementById('modernConfirmDynamic');
-    if (dynamic) dynamic.remove();
-    
-    const old = document.getElementById('modernConfirm');
-    if (old) {
-        old.style.display = 'none';
-        old.classList.remove('active');
-    }
-}
-
-// Dodaj CSS za animaciju
-(function addAnimationStyle() {
-    if (!document.getElementById('alertAnimations')) {
-        const style = document.createElement('style');
-        style.id = 'alertAnimations';
-        style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; transform: scale(0.9); }
-                to { opacity: 1; transform: scale(1); }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-})();
-
-// ===== 1. JEZICI =====
-const languages = {
-    sr: { name: 'Srpski', flag: '/Household_supplies/icons/jezici/srpski.png' },
-    en: { name: 'English', flag: '/Household_supplies/icons/jezici/engleski.png' },
-    de: { name: 'Deutsch', flag: '/Household_supplies/icons/jezici/nemacki.png' },
-    hu: { name: 'Magyar', flag: '/Household_supplies/icons/jezici/madjarski.png' },
-    uk: { name: 'Українська', flag: '/Household_supplies/icons/jezici/ukrajinski.png' },
-    ru: { name: 'Русский', flag: '/Household_supplies/icons/jezici/ruski.png' },
-    zh: { name: '中文', flag: '/Household_supplies/icons/jezici/mandarinski.png' },
-    es: { name: 'Español', flag: '/Household_supplies/icons/jezici/spanski.png' },
-    pt: { name: 'Português', flag: '/Household_supplies/icons/jezici/portugalski.png' },
-    fr: { name: 'Français', flag: '/Household_supplies/icons/jezici/francuski.png' }
-};
-
-// ===== 2. PREVODI =====
-const translations = {
-    sr: {
-        nazad: "Nazad", stanje: "Zalihe", spisak: "Spisak",
-        naziv_proizvoda: "Proizvod:", opis: "Opis:",
-        komad: "Komada:", kolicina: "Količina:", jedinica_mere: "Jed. mere:",
-        datum_unosa: "Datum unosa:", rok_trajanja: "Rok (meseci):",
-        automatski_rok: "Rok ističe:", mesto_skladistenja: "Skladište:",
-        unesi: "Unesi", odustani: "Odustani", pretrazi: "Pretraži",
-        glavne_kategorije: "Glavne kategorije", podkategorije: "Podkategorije",
-        delovi_proizvoda: "Delovi proizvoda", unos_podataka: "Unos podataka",
-        pregled_unosa: "Pregled unosa", nema_proizvoda: "Nema proizvoda",
-        spisak_potreba: "Spisak potreba", azuriraj: "Ažuriraj", obrisi: "Obriši",
-        oznaci_sve: "Označi sve", kopiraj: "Kopiraj", obrisi_oznaceno: "Obriši označeno",
-        exit_poruka: "Hvala na korišćenju! 👋",
-        zamrzivac_1: "Zamrzivač 1", zamrzivac_2: "Zamrzivač 2", zamrzivac_3: "Zamrzivač 3",
-        frizider: "Frižider", ostava: "Ostava", Ostalo: "Ostalo",
-        kg: "kg", g: "g", kom: "kom", l: "l", ml: "ml", pak: "pak", kutija: "kutija",
-        error: "Greška",
-        invalid_input: "Neispravan unos",
-        please_enter_phone: "Unesite validan broj telefona (9+ cifara)!",
-        success: "Uspešno",
-        product_saved: "Proizvod sačuvan!",
-        product_updated: "Proizvod ažuriran!",
-        no_selection: "Nema odabira",
-        no_items_selected: "Niste označili nijednu stavku!",
-        missing_info: "Nedostaju podaci",
-        enter_product_name: "Unesite naziv proizvoda!",
-        enter_quantity: "Unesite količinu!",
-        shopping_moved: "Proizvod prebačen u spisak potreba (količina 0)!",
-        copied: "Lista je kopirana!",
-        copy_error: "Greška pri kopiranju.",
-        delete_from_shopping: "Obrišite stavku sa spiska?",
-        delete_confirm: "Da li ste sigurni da želite da obrišete {count} stavku/ke?",
-        delete_confirm_title: "Potvrda brisanja",
-        list_empty: "Spisak je prazan"
-    },
-    en: {
-        nazad: "Back", stanje: "Inventory", spisak: "Shopping List",
-        naziv_proizvoda: "Product:", opis: "Description:",
-        komad: "Piece:", kolicina: "Quantity:", jedinica_mere: "Unit:",
-        datum_unosa: "Entry Date:", rok_trajanja: "Shelf Life (months):",
-        automatski_rok: "Auto Expiry:", mesto_skladistenja: "Storage:",
-        unesi: "Enter", odustani: "Cancel", pretrazi: "Search",
-        glavne_kategorije: "Main Categories", podkategorije: "Subcategories",
-        delovi_proizvoda: "Product Parts", unos_podataka: "Data Entry",
-        pregled_unosa: "Entry Review", nema_proizvoda: "No products",
-        spisak_potreba: "Shopping List", azuriraj: "Update", obrisi: "Delete",
-        oznaci_sve: "Select all", kopiraj: "Copy", obrisi_oznaceno: "Delete selected",
-        exit_poruka: "Thanks for using this app! 👋",
-        zamrzivac_1: "Freezer 1", zamrzivac_2: "Freezer 2", zamrzivac_3: "Freezer 3",
-        frizider: "Refrigerator", ostava: "Pantry", Ostalo: "Other",
-        kg: "kg", g: "g", kom: "pcs", l: "l", ml: "ml", pak: "pck", kutija: "box",
-        error: "Error",
-        invalid_input: "Invalid Input",
-        please_enter_phone: "Please enter a valid phone number (9+ digits)!",
-        success: "Success",
-        product_saved: "Product saved!",
-        product_updated: "Product updated!",
-        no_selection: "No Selection",
-        no_items_selected: "You have not selected any items!",
-        missing_info: "Missing Information",
-        enter_product_name: "Please enter a product name!",
-        enter_quantity: "Please enter a valid quantity!",
-        shopping_moved: "Product moved to shopping list (quantity 0)!",
-        copied: "List copied to clipboard!",
-        copy_error: "Failed to copy list!",
-        delete_from_shopping: "Delete item from shopping list?",
-        delete_confirm: "Are you sure you want to delete {count} item(s)?",
-        delete_confirm_title: "Delete Confirmation",
-        list_empty: "Shopping list is empty"
-    },
-    de: {
-        nazad: "Zurück", stanje: "Bestand", spisak: "Einkaufsliste",
-        naziv_proizvoda: "Produkt:", opis: "Beschreibung:",
-        komad: "Stück:", kolicina: "Menge:", jedinica_mere: "Einheit:",
-        datum_unosa: "Eingangsdatum:", rok_trajanja: "Haltbarkeit (Monate):",
-        automatski_rok: "Auto Ablauf:", mesto_skladistenja: "Lager:",
-        unesi: "Eingeben", odustani: "Abbrechen", pretrazi: "Suchen",
-        glavne_kategorije: "Hauptkategorien", podkategorije: "Unterkategorien",
-        delovi_proizvoda: "Produktteile", unos_podataka: "Dateneingabe",
-        pregled_unosa: "Eingabeübersicht", nema_proizvoda: "Keine Produkte",
-        spisak_potreba: "Einkaufsliste", azuriraj: "Aktualisieren", obrisi: "Löschen",
-        oznaci_sve: "Alle auswählen", kopiraj: "Kopieren", obrisi_oznaceno: "Ausgewählte löschen",
-        exit_poruka: "Danke für die Nutzung! 👋",
-        zamrzivac_1: "Gefrierschrank 1", zamrzivac_2: "Gefrierschrank 2", zamrzivac_3: "Gefrierschrank 3",
-        frizider: "Kühlschrank", ostava: "Vorratskammer", Ostalo: "Andere",
-        kg: "kg", g: "g", kom: "Stk", l: "l", ml: "ml", pak: "Pck", kutija: "Karton",
-        error: "Fehler",
-        invalid_input: "Ungültige Eingabe",
-        please_enter_phone: "Bitte geben Sie eine gültige Telefonnummer ein (9+ Ziffern)!",
-        success: "Erfolg",
-        product_saved: "Produkt gespeichert!",
-        product_updated: "Produkt aktualisiert!",
-        no_selection: "Keine Auswahl",
-        no_items_selected: "Sie haben keine Elemente ausgewählt!",
-        missing_info: "Fehlende Informationen",
-        enter_product_name: "Bitte geben Sie einen Produktnamen ein!",
-        enter_quantity: "Bitte geben Sie eine gültige Menge ein!",
-        shopping_moved: "Produkt wurde zur Einkaufsliste verschoben (Menge 0)!",
-        copied: "Liste kopiert!",
-        copy_error: "Fehler beim Kopieren!",
-        delete_from_shopping: "Element aus der Einkaufsliste löschen?",
-        delete_confirm: "Sind Sie sicher, dass Sie {count} Element(e) löschen möchten?",
-        delete_confirm_title: "Löschbestätigung",
-        list_empty: "Einkaufsliste ist leer"
-    },
-    hu: {
-        nazad: "Vissza", stanje: "Készlet", spisak: "Bevásárlólista",
-        naziv_proizvoda: "Termék:", opis: "Leírás:",
-        komad: "Darab:", kolicina: "Mennyiség:", jedinica_mere: "Mértékegység:",
-        datum_unosa: "Beírás dátuma:", rok_trajanja: "Szavatosság (hónap):",
-        automatski_rok: "Automatikus lejárat:", mesto_skladistenja: "Raktár:",
-        unesi: "Bevitel", odustani: "Mégsem", pretrazi: "Keresés",
-        glavne_kategorije: "Fő kategóriák", podkategorije: "Alkategóriák",
-        delovi_proizvoda: "Termék részei", unos_podataka: "Adatbevitel",
-        pregled_unosa: "Bevitel áttekintése", nema_proizvoda: "Nincsenek termékek",
-        spisak_potreba: "Bevásárlólista", azuriraj: "Frissítés", obrisi: "Törlés",
-        oznaci_sve: "Mindet kijelöl", kopiraj: "Másolás", obrisi_oznaceno: "Kijelöltek törlése",
-        exit_poruka: "Köszönjük a használatot! 👋",
-        zamrzivac_1: "Mélyhűtő 1", zamrzivac_2: "Mélyhűtő 2", zamrzivac_3: "Mélyhűtő 3",
-        frizider: "Hűtőszekrény", ostava: "Spájz", Ostalo: "Egyéb",
-        kg: "kg", g: "g", kom: "db", l: "l", ml: "ml", pak: "csom", kutija: "doboz",
-        error: "Hiba",
-        invalid_input: "Érvénytelen bevitel",
-        please_enter_phone: "Kérem, adjon meg egy érvényes telefonszámot (9+ számjegy)!",
-        success: "Siker",
-        product_saved: "Termék elmentve!",
-        product_updated: "Termék frissítve!",
-        no_selection: "Nincs kijelölés",
-        no_items_selected: "Nem jelölt ki egyetlen elemet sem!",
-        missing_info: "Hiányzó információk",
-        enter_product_name: "Kérem, adja meg a termék nevét!",
-        enter_quantity: "Kérem, adjon meg érvényes mennyiséget!",
-        shopping_moved: "Termék áthelyezve a bevásárlólistába (mennyiség 0)!",
-        copied: "Lista másolva!",
-        copy_error: "Hiba a másolás során!",
-        delete_from_shopping: "Törli az elemet a bevásárlólistából?",
-        delete_confirm: "Biztosan törölni szeretné {count} elemet?",
-        delete_confirm_title: "Törlés megerősítése",
-        list_empty: "A bevásárlólista üres"
-    },
-    uk: {
-        nazad: "Назад", stanje: "Запаси", spisak: "Список",
-        naziv_proizvoda: "Продукт:", opis: "Опис:",
-        komad: "Штука:", kolicina: "Кількість:", jedinica_mere: "Од. виміру:",
-        datum_unosa: "Дата внесення:", rok_trajanja: "Термін (місяці):",
-        automatski_rok: "Авто термін:", mesto_skladistenja: "Сховище:",
-        unesi: "Внести", odustani: "Скасувати", pretrazi: "Пошук",
-        glavne_kategorije: "Основні категорії", podkategorije: "Підкатегорії",
-        delovi_proizvoda: "Частини продукту", unos_podataka: "Введення даних",
-        pregled_unosa: "Огляд введення", nema_proizvoda: "Немає продуктів",
-        spisak_potreba: "Список потреб", azuriraj: "Оновити", obrisi: "Видалити",
-        oznaci_sve: "Вибрати все", kopiraj: "Копіювати", obrisi_oznaceno: "Видалити вибране",
-        exit_poruka: "Дякуємо за використання! 👋",
-        zamrzivac_1: "Морозилка 1", zamrzivac_2: "Морозилка 2", zamrzivac_3: "Морозилка 3",
-        frizider: "Холодильник", ostava: "Комора", Ostalo: "Інше",
-        kg: "кг", g: "г", kom: "шт", l: "л", ml: "мл", pak: "уп", kutija: "кор",
-        error: "Помилка",
-        invalid_input: "Невірне введення",
-        please_enter_phone: "Будь ласка, введіть дійсний номер телефону (9+ цифр)!",
-        success: "Успішно",
-        product_saved: "Продукт збережено!",
-        product_updated: "Продукт оновлено!",
-        no_selection: "Немає вибору",
-        no_items_selected: "Ви не вибрали жодного елемента!",
-        missing_info: "Відсутня інформація",
-        enter_product_name: "Будь ласка, введіть назву продукту!",
-        enter_quantity: "Будь ласка, введіть дійсну кількість!",
-        shopping_moved: "Продукт перенесено до списку потреб (кількість 0)!",
-        copied: "Список скопійовано!",
-        copy_error: "Помилка копіювання!",
-        delete_from_shopping: "Видалити елемент зі списку потреб?",
-        delete_confirm: "Ви впевнені, що хочете видалити {count} елемент(ів)?",
-        delete_confirm_title: "Підтвердження видалення",
-        list_empty: "Список потреб порожній"
-    },
-    ru: {
-        nazad: "Назад", stanje: "Запасы", spisak: "Список",
-        naziv_proizvoda: "Продукт:", opis: "Описание:",
-        komad: "Штука:", kolicina: "Количество:", jedinica_mere: "Ед. изм.:",
-        datum_unosa: "Дата внесения:", rok_trajanja: "Срок (месяцы):",
-        automatski_rok: "Авто срок:", mesto_skladistenja: "Склад:",
-        unesi: "Внести", odustani: "Отмена", pretrazi: "Поиск",
-        glavne_kategorije: "Основные категории", podkategorije: "Подкатегории",
-        delovi_proizvoda: "Части продукта", unos_podataka: "Ввод данных",
-        pregled_unosa: "Обзор ввода", nema_proizvoda: "Нет продуктов",
-        spisak_potreba: "Список потребностей", azuriraj: "Обновить", obrisi: "Удалить",
-        oznaci_sve: "Выбрать все", kopiraj: "Копировать", obrisi_oznaceno: "Удалить выбранное",
-        exit_poruka: "Спасибо за использование! 👋",
-        zamrzivac_1: "Морозилка 1", zamrzivac_2: "Морозилка 2", zamrzivac_3: "Морозилка 3",
-        frizider: "Холодильник", ostava: "Кладовая", Ostalo: "Другое",
-        kg: "кг", g: "г", kom: "шт", l: "л", ml: "мл", pak: "уп", kutija: "кор",
-        error: "Ошибка",
-        invalid_input: "Неверный ввод",
-        please_enter_phone: "Пожалуйста, введите действительный номер телефона (9+ цифр)!",
-        success: "Успешно",
-        product_saved: "Продукт сохранён!",
-        product_updated: "Продукт обновлён!",
-        no_selection: "Нет выбора",
-        no_items_selected: "Вы не выбрали ни одного элемента!",
-        missing_info: "Отсутствует информация",
-        enter_product_name: "Пожалуйста, введите название продукта!",
-        enter_quantity: "Пожалуйста, введите действительное количество!",
-        shopping_moved: "Продукт перемещён в список потребностей (количество 0)!",
-        copied: "Список скопирован!",
-        copy_error: "Ошибка копирования!",
-        delete_from_shopping: "Удалить элемент из списка потребностей?",
-        delete_confirm: "Вы уверены, что хотите удалить {count} элемент(ов)?",
-        delete_confirm_title: "Подтверждение удаления",
-        list_empty: "Список потребностей пуст"
-    },
-    zh: {
-        nazad: "返回", stanje: "库存", spisak: "购物清单",
-        naziv_proizvoda: "产品:", opis: "描述:",
-        komad: "件:", kolicina: "数量:", jedinica_mere: "单位:",
-        datum_unosa: "录入日期:", rok_trajanja: "保质期(月):",
-        automatski_rok: "自动到期:", mesto_skladistenja: "存储:",
-        unesi: "输入", odustani: "取消", pretrazi: "搜索",
-        glavne_kategorije: "主要类别", podkategorije: "子类别",
-        delovi_proizvoda: "产品部件", unos_podataka: "数据输入",
-        pregled_unosa: "输入记录查看", nema_proizvoda: "没有产品",
-        spisak_potreba: "购物清单", azuriraj: "更新", obrisi: "删除",
-        oznaci_sve: "全选", kopiraj: "复制", obrisi_oznaceno: "删除选中",
-        exit_poruka: "感谢使用！👋",
-        zamrzivac_1: "冷冻柜 1", zamrzivac_2: "冷冻柜 2", zamrzivac_3: "冷冻柜 3",
-        frizider: "冰箱", ostava: "储藏室", Ostalo: "其他",
-        kg: "公斤", g: "克", kom: "件", l: "升", ml: "毫升", pak: "包", kutija: "盒",
-        error: "错误",
-        invalid_input: "无效输入",
-        please_enter_phone: "请输入有效的电话号码（9位以上）！",
-        success: "成功",
-        product_saved: "产品已保存！",
-        product_updated: "产品已更新！",
-        no_selection: "未选择",
-        no_items_selected: "您未选择任何项目！",
-        missing_info: "信息缺失",
-        enter_product_name: "请输入产品名称！",
-        enter_quantity: "请输入有效数量！",
-        shopping_moved: "产品已移至购物清单（数量0）！",
-        copied: "列表已复制！",
-        copy_error: "复制失败！",
-        delete_from_shopping: "从购物清单中删除此项目？",
-        delete_confirm: "您确定要删除 {count} 个项目吗？",
-        delete_confirm_title: "删除确认",
-        list_empty: "购物清单为空"
-    },
-    es: {
-        nazad: "Atrás", stanje: "Inventario", spisak: "Lista de Compras",
-        naziv_proizvoda: "Producto:", opis: "Descripción:",
-        komad: "Pieza:", kolicina: "Cantidad:", jedinica_mere: "Unidad:",
-        datum_unosa: "Fecha de Entrada:", rok_trajanja: "Caducidad (meses):",
-        automatski_rok: "Vencimiento Auto:", mesto_skladistenja: "Almacenamiento:",
-        unesi: "Ingresar", odustani: "Cancelar", pretrazi: "Buscar",
-        glavne_kategorije: "Categorías Principales", podkategorije: "Subcategorías",
-        delovi_proizvoda: "Partes del Producto", unos_podataka: "Entrada de Datos",
-        pregled_unosa: "Revisión de entrada", nema_proizvoda: "No hay productos",
-        spisak_potreba: "Lista de Compras", azuriraj: "Actualizar", obrisi: "Eliminar",
-        oznaci_sve: "Seleccionar todo", kopiraj: "Copiar", obrisi_oznaceno: "Eliminar seleccionados",
-        exit_poruka: "¡Gracias por usar! 👋",
-        zamrzivac_1: "Congelador 1", zamrzivac_2: "Congelador 2", zamrzivac_3: "Congelador 3",
-        frizider: "Refrigerador", ostava: "Despensa", Ostalo: "Otro",
-        kg: "kg", g: "g", kom: "pz", l: "l", ml: "ml", pak: "pq", kutija: "caja",
-        error: "Error",
-        invalid_input: "Entrada inválida",
-        please_enter_phone: "¡Por favor, introduzca un número de teléfono válido (9+ dígitos)!",
-        success: "Éxito",
-        product_saved: "¡Producto guardado!",
-        product_updated: "¡Producto actualizado!",
-        no_selection: "Sin selección",
-        no_items_selected: "¡No ha seleccionado ningún elemento!",
-        missing_info: "Información faltante",
-        enter_product_name: "¡Por favor, introduzca el nombre del producto!",
-        enter_quantity: "¡Por favor, introduzca una cantidad válida!",
-        shopping_moved: "¡Producto movido a la lista de compras (cantidad 0)!",
-        copied: "¡Lista copiada!",
-        copy_error: "¡Error al copiar!",
-        delete_from_shopping: "¿Eliminar elemento de la lista de compras?",
-        delete_confirm: "¿Está seguro de que desea eliminar {count} elemento(s)?",
-        delete_confirm_title: "Confirmación de eliminación",
-        list_empty: "La lista de compras está vacía"
-    },
-    pt: {
-        nazad: "Voltar", stanje: "Estoque", spisak: "Lista de Compras",
-        naziv_proizvoda: "Produto:", opis: "Descrição:",
-        komad: "Peça:", kolicina: "Quantidade:", jedinica_mere: "Unidade:",
-        datum_unosa: "Data de Entrada:", rok_trajanja: "Validade (meses):",
-        automatski_rok: "Validade Auto:", mesto_skladistenja: "Armazenamento:",
-        unesi: "Inserir", odustani: "Cancelar", pretrazi: "Pesquisar",
-        glavne_kategorije: "Categorias Principais", podkategorije: "Subcategorias",
-        delovi_proizvoda: "Partes do Produto", unos_podataka: "Entrada de Dados",
-        pregled_unosa: "Revisão de entrada", nema_proizvoda: "Nenhum produto",
-        spisak_potreba: "Lista de Compras", azuriraj: "Atualizar", obrisi: "Excluir",
-        oznaci_sve: "Selecionar tudo", kopiraj: "Copiar", obrisi_oznaceno: "Excluir selecionados",
-        exit_poruka: "Obrigado por usar! 👋",
-        zamrzivac_1: "Congelador 1", zamrzivac_2: "Congelador 2", zamrzivac_3: "Congelador 3",
-        frizider: "Geladeira", ostava: "Despensa", Ostalo: "Outro",
-        kg: "kg", g: "g", kom: "pç", l: "l", ml: "ml", pak: "pc", kutija: "cx",
-        error: "Erro",
-        invalid_input: "Entrada inválida",
-        please_enter_phone: "Por favor, insira um número de telefone válido (9+ dígitos)!",
-        success: "Sucesso",
-        product_saved: "Produto guardado!",
-        product_updated: "Produto atualizado!",
-        no_selection: "Sem seleção",
-        no_items_selected: "Não selecionou nenhum item!",
-        missing_info: "Informação em falta",
-        enter_product_name: "Por favor, insira o nome do produto!",
-        enter_quantity: "Por favor, insira uma quantidade válida!",
-        shopping_moved: "Produto movido para a lista de compras (quantidade 0)!",
-        copied: "Lista copiada!",
-        copy_error: "Erro ao copiar!",
-        delete_from_shopping: "Eliminar item da lista de compras?",
-        delete_confirm: "Tem a certeza que deseja eliminar {count} item(ns)?",
-        delete_confirm_title: "Confirmação de exclusão",
-        list_empty: "A lista de compras está vazia"
-    },
-    fr: {
-        nazad: "Retour", stanje: "Stock", spisak: "Liste de Courses",
-        naziv_proizvoda: "Produit:", opis: "Description:",
-        komad: "Pièce:", kolicina: "Quantité:", jedinica_mere: "Unité:",
-        datum_unosa: "Date d'entrée:", rok_trajanja: "Durée (mois):",
-        automatski_rok: "Expiration Auto:", mesto_skladistenja: "Stockage:",
-        unesi: "Entrer", odustani: "Annuler", pretrazi: "Rechercher",
-        glavne_kategorije: "Catégories Principales", podkategorije: "Sous-catégories",
-        delovi_proizvoda: "Pièces du Produit", unos_podataka: "Saisie de Données",
-        pregled_unosa: "Aperçu des saisies", nema_proizvoda: "Aucun produit",
-        spisak_potreba: "Liste de Courses", azuriraj: "Mettre à jour", obrisi: "Supprimer",
-        oznaci_sve: "Tout sélectionner", kopiraj: "Copier", obrisi_oznaceno: "Supprimer sélectionnés",
-        exit_poruka: "Merci d'utiliser! 👋",
-        zamrzivac_1: "Congélateur 1", zamrzivac_2: "Congélateur 2", zamrzivac_3: "Congélateur 3",
-        frizider: "Réfrigérateur", ostava: "Garde-manger", Ostalo: "Autre",
-        kg: "kg", g: "g", kom: "pc", l: "l", ml: "ml", pak: "paq", kutija: "boîte",
-        error: "Erreur",
-        invalid_input: "Saisie invalide",
-        please_enter_phone: "Veuillez entrer un numéro de téléphone valide (9+ chiffres)!",
-        success: "Succès",
-        product_saved: "Produit enregistré!",
-        product_updated: "Produit mis à jour!",
-        no_selection: "Aucune sélection",
-        no_items_selected: "Vous n'avez sélectionné aucun élément!",
-        missing_info: "Informations manquantes",
-        enter_product_name: "Veuillez entrer le nom du produit!",
-        enter_quantity: "Veuillez entrer une quantité valide!",
-        shopping_moved: "Produit déplacé vers la liste de courses (quantité 0)!",
-        copied: "Liste copiée!",
-        copy_error: "Erreur lors de la copie!",
-        delete_from_shopping: "Supprimer l'élément de la liste de courses?",
-        delete_confirm: "Êtes-vous sûr de vouloir supprimer {count} élément(s)?",
-        delete_confirm_title: "Confirmation de suppression",
-        list_empty: "La liste de courses est vide"
-    }
-};
-
-// ===== POMOĆNA FUNKCIJA ZA PREVODE =====
+// Pomocna funkcija za prevode
 function t(key) {
-    return translations[currentLang]?.[key] || key;
-}
-
-// ===== 3. BOJE =====
-const categoryColors = {
-    "Belo meso": "#FFE295", "Crveno meso": "#F1624B",
-    "Sitna divljač": "#F59AA6", "Krupna divljač": "#E19E94",
-    "Riba": "#00BBF1", "Mlečni proizvodi": "#ACE1F9",
-    "Povrće": "#8FC74A", "Zimnica i kompoti": "#CC98C4",
-    "Testo i Slatkiši": "#FFECAB", "Pića": "#F8E06D",
-    "Hemija i higijena": "#98D6D2", "Ostalo": "#F58634"
-};
-
-const subcategoryColors = {
-    "Belo meso": ["#FFEDB5", "#F2D382"],
-    "Crveno meso": ["#FABFA9", "#F9AA75"],
-    "Sitna divljač": ["#F6C5A4", "#E8A97B"],
-    "Krupna divljač": ["#FBCEC8", "#F6998C"],
-    "Riba": ["#91D8F7", "#D5EFFC"],
-    "Mlečni proizvodi": ["#ACE1F9", "#D5EFFC"],
-    "Povrće": ["#8FC74A", "#A0D29E"],
-    "Zimnica i kompoti": ["#F3B6D1", "#E894B0"],
-    "Testo i Slatkiši": ["#FEE5CB", "#FFECAB"],
-    "Pića": ["#FFD76E", "#EEB832"],
-    "Hemija i higijena": ["#AADBD2", "#6FC7B8"],
-    "Ostalo": ["#D9D9D9", "#BFBFBF"]
-};
-
-// ===== 4. GLAVNE KATEGORIJE =====
-const mainCategories = {
-    sr: ["Belo meso", "Crveno meso", "Sitna divljač", "Krupna divljač", "Riba", "Mlečni proizvodi", "Povrće", "Zimnica i kompoti", "Testo i Slatkiši", "Pića", "Hemija i higijena", "Ostalo"],
-    en: ["White meat", "Red meat", "Small game", "Big game", "Fish", "Dairy products", "Vegetables", "Preserves and compotes", "Dough and Sweets", "Beverages", "Chemicals and hygiene", "Other"],
-    de: ["Weißes Fleisch", "Rotes Fleisch", "Kleinwild", "Großwild", "Fisch", "Milchprodukte", "Gemüse", "Konserven und Kompotte", "Teig und Süßigkeiten", "Getränke", "Chemie und Hygiene", "Andere"],
-    hu: ["Fehér hús", "Vörös hús", "Apróvad", "Nagyvad", "Hal", "Tejtermékek", "Zöldség", "Befőttek és kompótok", "Tészta és Édességek", "Italok", "Kémia és higiénia", "Egyéb"],
-    uk: ["Біле м'ясо", "Червоне м'ясо", "Дрібна дичина", "Велика дичина", "Риба", "Молочні продукти", "Овочі", "Консервація та компоти", "Тісто та Солодощі", "Напої", "Хімія та гігієна", "Інше"],
-    ru: ["Белое мясо", "Красное мясо", "Мелкая дичь", "Крупная дичь", "Рыба", "Молочные продукты", "Овощи", "Консервация и компоты", "Тесто и Сладости", "Напитки", "Химия и гигиена", "Другое"],
-    zh: ["白肉", "红肉", "小型野味", "大型野味", "鱼", "乳制品", "蔬菜", "蜜饯", "面团和糖果", "饮料", "化学品和卫生", "其他"],
-    es: ["Carne blanca", "Carne roja", "Caza menor", "Caza mayor", "Pescado", "Productos lácteos", "Verduras", "Conservas y compotas", "Masa y Dulces", "Bebidas", "Química e higiene", "Otro"],
-    pt: ["Carne branca", "Carne vermelha", "Caça pequena", "Caça grossa", "Peixe", "Laticínios", "Vegetais", "Conservas e compotas", "Massa e Doces", "Bebidas", "Química e higiene", "Outro"],
-    fr: ["Viande blanche", "Viande rouge", "Petit gibier", "Gros gibier", "Poisson", "Produits laitiers", "Légumes", "Conserves et compotes", "Pâte et Sucreries", "Boissons", "Chimie et hygiène", "Autre"]
-};
-
-// ===== 5. PODKATEGORIJE =====
-const subcategories = {
-    sr: {
-        "Belo meso": ["Pileće", "Ćureće", "Guska", "Patka", "Ostalo"],
-        "Crveno meso": ["Svinjsko", "Jagnjeće", "Ovčije", "Juneće", "Govedina", "Od bika", "Konjsko", "Zečije", "Ostalo"],
-        "Sitna divljač": ["Prepelica", "Fazan", "Jarebica", "Divlja patka", "Divlja guska", "Divlji zec", "Golub", "Ostalo"],
-        "Krupna divljač": ["Jelen", "Srna", "Divokoza", "Los", "Irvas", "Divlja svinja", "Bizon", "Kamila", "Lama", "Alpaka", "Kengur", "Krokodil/Aligator", "Gušter", "Zmija", "Ostalo"],
-        "Riba": ["Morska", "Slatkovodna", "Plodovi mora", "Ostalo"],
-        "Mlečni proizvodi": ["Mleko", "Mlečne prerađevine", "Ostalo"],
-        "Povrće": ["Sveže", "Termički obrađeno", "Zamrznuto", "Ostalo"],
-        "Zimnica i kompoti": ["Voće", "Povrće", "Ostalo"],
-        "Testo i Slatkiši": ["Testo", "Slatkiši", "Ostalo"],
-        "Pića": ["Voda", "Vino", "Sok", "Žestoka pića", "Pivo", "Ostalo"],
-        "Hemija i higijena": ["Sanitar", "Lična higijena", "Pribor", "Ostalo"],
-        "Ostalo": ["Ostalo"]
-    },
-    en: {
-        "White meat": ["Chicken", "Turkey", "Goose", "Duck", "Other"],
-        "Red meat": ["Pork", "Lamb", "Sheep", "Veal", "Beef", "Bull", "Horse", "Rabbit", "Other"],
-        "Small game": ["Quail", "Pheasant", "Partridge", "Wild duck", "Wild goose", "Hare", "Pigeon", "Other"],
-        "Big game": ["Deer", "Roe deer", "Wild goat", "Moose", "Reindeer", "Wild boar", "Bison", "Camel", "Llama", "Alpaca", "Kangaroo", "Crocodile/Alligator", "Lizard", "Snake", "Other"],
-        "Fish": ["Sea", "Freshwater", "Seafood", "Other"],
-        "Dairy products": ["Milk", "Dairy processing", "Other"],
-        "Vegetables": ["Fresh", "Heat treated", "Frozen", "Other"],
-        "Preserves and compotes": ["Fruits", "Vegetables", "Other"],
-        "Dough and Sweets": ["Dough", "Sweets", "Other"],
-        "Beverages": ["Water", "Wine", "Juice", "Spirits", "Beer", "Other"],
-        "Chemicals and hygiene": ["Sanitary", "Personal hygiene", "Equipment", "Other"],
-        "Other": ["Other"]
-    },
-    de: {
-        "Weißes Fleisch": ["Huhn", "Truthahn", "Gans", "Ente", "Andere"],
-        "Rotes Fleisch": ["Schwein", "Lamm", "Schaf", "Kalb", "Rind", "Bulle", "Pferd", "Kaninchen", "Andere"],
-        "Kleinwild": ["Wachtel", "Fasan", "Rebhuhn", "Wildente", "Wildgans", "Hase", "Taube", "Andere"],
-        "Großwild": ["Hirsch", "Reh", "Wildziege", "Elch", "Rentier", "Wildschwein", "Bison", "Kamel", "Lama", "Alpaka", "Känguru", "Krokodil/Alligator", "Eidechse", "Schlange", "Andere"],
-        "Fisch": ["Meer", "Süßwasser", "Meeresfrüchte", "Andere"],
-        "Milchprodukte": ["Milch", "Milchverarbeitung", "Andere"],
-        "Gemüse": ["Frisch", "Wärmebehandelt", "Gefroren", "Andere"],
-        "Konserven und Kompotte": ["Früchte", "Gemüse", "Andere"],
-        "Teig und Süßigkeiten": ["Teig", "Süßigkeiten", "Andere"],
-        "Getränke": ["Wasser", "Wein", "Saft", "Spirituosen", "Bier", "Andere"],
-        "Chemie und Hygiene": ["Sanitär", "Persönliche Hygiene", "Ausrüstung", "Andere"],
-        "Andere": ["Andere"]
-    },
-    hu: {
-        "Fehér hús": ["Csirke", "Pulyka", "Libacomb", "Kacsa", "Egyéb"],
-        "Vörös hús": ["Sertéshús", "Bárányhús", "Juhhús", "Borjúhús", "Marhahús", "Bikahús", "Lóhús", "Nyúlhús", "Egyéb"],
-        "Apróvad": ["Fürj", "Fácán", "Fogoly", "Vadkacsa", "Vadliba", "Vadnyúl", "Galamb", "Egyéb"],
-        "Nagyvad": ["Szarvac", "Őz", "Vadkecske", "Jávorszarvas", "Rénszarvas", "Vadkan", "Bölény", "Teve", "Láma", "Alpaka", "Kenguru", "Krokodil/Alligátor", "Gyík", "Kígyó", "Egyéb"],
-        "Hal": ["Tengeri", "Édesvízi", "Tenger gyümölcsei", "Egyéb"],
-        "Tejtermékek": ["Tej", "Tejfeldolgozások", "Egyéb"],
-        "Zöldség": ["Friss", "Hőkezelt", "Fagyasztott", "Egyéb"],
-        "Befőttek és kompótok": ["Gyümölcs", "Zöldség", "Egyéb"],
-        "Tészta és Édességek": ["Tészta", "Édességek", "Egyéb"],
-        "Italok": ["Víz", "Bor", "Lé", "Tömény italok", "Sör", "Egyéb"],
-        "Kémia és higiénia": ["WC", "Személyes higiénia", "Felszerelés", "Egyéb"],
-        "Egyéb": ["Egyéb"]
-    },
-    uk: {
-        "Біле м'ясо": ["Курятина", "Індичка", "Гуска", "Качка", "Інше"],
-        "Червоне м'ясо": ["Свинина", "Ягнятина", "Баранина", "Телятина", "Яловичина", "Бичатина", "Конина", "Кролик", "Інше"],
-        "Дрібна дичина": ["Перепілка", "Фазан", "Куріпка", "Дика качка", "Дика гуска", "Заєць", "Голуб", "Інше"],
-        "Велика дичина": ["Олень", "Косуля", "Козуль", "Лось", "Північний олень", "Дикий кабан", "Бізон", "Верблюд", "Лама", "Альпака", "Кенгуру", "Крокодил/Алігатор", "Ящірка", "Змія", "Інше"],
-        "Риба": ["Морська", "Прісноводна", "Морепродукти", "Інше"],
-        "Молочні продукти": ["Молоко", "Молочні переробки", "Інше"],
-        "Овочі": ["Свіжі", "Термічно оброблені", "Заморожені", "Інше"],
-        "Консервація та компоти": ["Фрукти", "Овочі", "Інше"],
-        "Тісто та Солодощі": ["Тісто", "Солодощі", "Інше"],
-        "Напої": ["Вода", "Вино", "Сік", "Міцні напої", "Пиво", "Інше"],
-        "Хімія та гігієна": ["Санітарія", "Особиста гігієна", "Приладдя", "Інше"],
-        "Інше": ["Інше"]
-    },
-    ru: {
-        "Белое мясо": ["Курица", "Индейка", "Гусь", "Утка", "Другое"],
-        "Красное мясо": ["Свинина", "Баранина", "Овца", "Телятина", "Говядина", "Бык", "Конина", "Кролик", "Другое"],
-        "Мелкая дичь": ["Перепел", "Фазан", "Куропатка", "Дикая утка", "Дикий гусь", "Заяц", "Голубь", "Другое"],
-        "Крупная дичь": ["Олень", "Косуля", "Дикая коза", "Лось", "Северный олень", "Кабан", "Бизон", "Верблюд", "Лама", "Альпака", "Кенгуру", "Крокодил/Аллигатор", "Ящерица", "Змея", "Другое"],
-        "Рыба": ["Морская", "Пресноводная", "Морепродукты", "Другое"],
-        "Молочные продукты": ["Молоко", "Молочные переработки", "Другое"],
-        "Овощи": ["Свежие", "Термически обработанные", "Замороженные", "Другое"],
-        "Консервация и компоты": ["Фрукты", "Овощи", "Другое"],
-        "Тесто и Сладости": ["Тесто", "Сладости", "Другое"],
-        "Напитки": ["Вода", "Вино", "Сок", "Крепкие напитки", "Пиво", "Другое"],
-        "Химия и гигиена": ["Сантехника", "Личная гигиена", "Оборудование", "Другое"],
-        "Другое": ["Другое"]
-    },
-    zh: {
-        "白肉": ["鸡", "火鸡", "鹅", "鸭", "其他"],
-        "红肉": ["猪肉", "羊肉", "羊", "小牛肉", "牛肉", "公牛", "马肉", "兔肉", "其他"],
-        "小型野味": ["鹌鹑", "野鸡", "鹧鸪", "野鸭", "野鹅", "野兔", "鸽子", "其他"],
-        "大型野味": ["鹿", "狍子", "野山羊", "驼鹿", "驯鹿", "野猪", "野牛", "骆驼", "羊驼", "袋鼠", "鳄鱼", "蜥蜴", "蛇", "其他"],
-        "鱼": ["海鱼", "淡水鱼", "海鲜", "其他"],
-        "乳制品": ["牛奶", "乳制品加工", "其他"],
-        "蔬菜": ["新鲜", "热处理", "冷冻", "其他"],
-        "蜜饯": ["水果", "蔬菜", "其他"],
-        "面团和糖果": ["面团", "糖果", "其他"],
-        "饮料": ["水", "葡萄酒", "果汁", "烈酒", "啤酒", "其他"],
-        "化学品和卫生": ["卫生", "个人卫生", "设备", "其他"],
-        "其他": ["其他"]
-    },
-    es: {
-        "Carne blanca": ["Pollo", "Pavo", "Ganso", "Pato", "Otro"],
-        "Carne roja": ["Cerdo", "Cordero", "Oveja", "Ternera", "Res", "Toro", "Caballo", "Conejo", "Otro"],
-        "Caza menor": ["Codorniz", "Faisán", "Perdiz", "Pato salvaje", "Ganso salvaje", "Liebre", "Paloma", "Otro"],
-        "Caza mayor": ["Ciervo", "Corzo", "Cabra salvaje", "Alce", "Reno", "Jabalí", "Bisonte", "Camello", "Llama", "Alpaca", "Canguro", "Cocodrilo/Caimán", "Lagarto", "Serpiente", "Otro"],
-        "Pescado": ["Mar", "Agua dulce", "Mariscos", "Otro"],
-        "Productos lácteos": ["Leche", "Procesamiento lácteo", "Otro"],
-        "Verduras": ["Frescas", "Tratadas térmicamente", "Congeladas", "Otro"],
-        "Conservas y compotas": ["Frutas", "Verduras", "Otro"],
-        "Masa y Dulces": ["Masa", "Dulces", "Otro"],
-        "Bebidas": ["Agua", "Vino", "Jugo", "Licores", "Cerveza", "Otro"],
-        "Química e higiene": ["Sanitario", "Higiene personal", "Equipo", "Otro"],
-        "Otro": ["Otro"]
-    },
-    pt: {
-        "Carne branca": ["Frango", "Peru", "Ganso", "Pato", "Outro"],
-        "Carne vermelha": ["Porco", "Cordeiro", "Ovelha", "Vitela", "Boi", "Touro", "Cavalo", "Coelho", "Outro"],
-        "Caça pequena": ["Codorna", "Faisão", "Perdiz", "Pato selvagem", "Ganso selvagem", "Lebre", "Pombo", "Outro"],
-        "Caça grossa": ["Cervo", "Corça", "Cabra selvagem", "Alce", "Rena", "Javali", "Bisão", "Camelo", "Lhama", "Alpaca", "Canguru", "Crocodilo/Jacaré", "Lagarto", "Cobra", "Outro"],
-        "Peixe": ["Mar", "Água doce", "Frutos do mar", "Outro"],
-        "Laticínios": ["Leite", "Processamento de leite", "Outro"],
-        "Vegetais": ["Fresco", "Tratado termicamente", "Congelado", "Outro"],
-        "Conservas e compotas": ["Frutas", "Vegetais", "Outro"],
-        "Massa e Doces": ["Massa", "Doces", "Outro"],
-        "Bebidas": ["Água", "Vinho", "Suco", "Bebidas destiladas", "Cerveja", "Outro"],
-        "Química e higiene": ["Sanitário", "Higiene pessoal", "Equipamento", "Outro"],
-        "Outro": ["Outro"]
-    },
-    fr: {
-        "Viande blanche": ["Poulet", "Dinde", "Oie", "Canard", "Autre"],
-        "Viande rouge": ["Porc", "Agneau", "Mouton", "Veau", "Bœuf", "Taureau", "Cheval", "Lapin", "Autre"],
-        "Petit gibier": ["Caille", "Faisan", "Perdrix", "Canard sauvage", "Oie sauvage", "Lièvre", "Pigeon", "Autre"],
-        "Gros gibier": ["Cerf", "Chevreuil", "Chèvre sauvage", "Élan", "Renne", "Sanglier", "Bison", "Chameau", "Lama", "Alpaga", "Kangourou", "Crocodile/Alligator", "Lézard", "Serpent", "Autre"],
-        "Poisson": ["Mer", "Eau douce", "Fruits de mer", "Autre"],
-        "Produits laitiers": ["Lait", "Transformation laitière", "Autre"],
-        "Légumes": ["Frais", "Traité thermiquement", "Congelé", "Autre"],
-        "Conserves et compotes": ["Fruits", "Légumes", "Autre"],
-        "Pâte et Sucreries": ["Pâte", "Sucreries", "Autre"],
-        "Boissons": ["Eau", "Vin", "Jus", "Spiritueux", "Bière", "Autre"],
-        "Chimie et hygiène": ["Sanitaire", "Hygiène personnelle", "Équipement", "Autre"],
-        "Autre": ["Autre"]
+    if (typeof translations !== 'undefined' && translations[currentLanguage] && translations[currentLanguage][key]) {
+        return translations[currentLanguage][key];
     }
-};
-
-// ===== 6. POMOĆNE FUNKCIJE =====
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-    const screen = document.getElementById(screenId);
-    if (screen) screen.style.display = 'flex';
+    return key;
 }
 
-function updateHeaderTexts() {
-    const backText = document.getElementById('backText');
-    const invText = document.getElementById('invText');
-    const shopText = document.getElementById('shopText');
-    if (backText) backText.textContent = t('nazad');
-    if (invText) invText.textContent = t('stanje');
-    if (shopText) shopText.textContent = t('spisak');
-}
+// Inicijalizacija aplikacije
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+    setupEventListeners();
+});
 
-function getMainCategories() {
-    return mainCategories[currentLang] || mainCategories.sr;
-}
-
-function getSubcategories(category) {
-    const sub = subcategories[currentLang] || subcategories.sr || {};
-    return sub[category] || ['Ostalo'];
-}
-
-function getProductParts(subcategory) {
-    if (typeof productParts !== 'undefined' && productParts[currentLang] && productParts[currentLang][subcategory]) {
-        return productParts[currentLang][subcategory];
+function initApp() {
+    renderLanguages();
+    updateUIStaticTexts();
+    
+    // Ako već postoji zapamćen jezik, automatski učitaj kategorije
+    const savedLang = localStorage.getItem('appLanguage');
+    if (savedLang) {
+        selectLanguage(savedLang, false);
     }
-    if (typeof productParts !== 'undefined' && productParts.sr && productParts.sr[subcategory]) {
-        return productParts.sr[subcategory];
-    }
-    return ["Ostalo"];
 }
 
-function getCategoryColor(category) {
-    const srList = mainCategories.sr;
-    for (let i = 0; i < srList.length; i++) {
-        if (category === mainCategories[currentLang]?.[i] || category === srList[i]) {
-            return categoryColors[srList[i]] || '#cccccc';
-        }
-    }
-    return '#cccccc';
+function updateUIStaticTexts() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        el.textContent = t(key);
+    });
 }
 
-function getSubcategoryColors(category) {
-    const srList = mainCategories.sr;
-    for (let i = 0; i < srList.length; i++) {
-        if (category === mainCategories[currentLang]?.[i] || category === srList[i]) {
-            return subcategoryColors[srList[i]] || ['#FFEDB5', '#F2D382'];
-        }
-    }
-    return ['#FFEDB5', '#F2D382'];
-}
-
-function isOtherButton(text) {
-    const ostaloVariants = ["Ostalo", "Other", "Andere", "Egyéb", "Інше", "Другое", "其他", "Otro", "Outro", "Autre"];
-    return ostaloVariants.includes(text);
-}
-
-// ===== 7. RENDER FUNKCIJE =====
+// Generisanje jezika
 function renderLanguages() {
-    if (!currentLang || currentLang === '') {
-        currentLang = 'en';
-    }
-    currentScreenState = 'languages';
-    const grid = document.getElementById('languageGrid');
-    if (!grid) return;
+    const grid = document.getElementById('languagesGrid');
+    if (!grid || typeof languages === 'undefined') return;
+    
     grid.innerHTML = '';
-    Object.keys(languages).forEach(code => {
-        const lang = languages[code];
-        const btn = document.createElement('button');
-        btn.className = 'lang-btn-main';
-        btn.innerHTML = `
-            <img src="${lang.flag}?v=3" alt="${lang.name}" onerror="this.style.display='none'">
+    languages.forEach(lang => {
+        const card = document.createElement('div');
+        card.className = `language-card ${lang.id === currentLanguage ? 'active' : ''}`;
+        card.onclick = () => selectLanguage(lang.id);
+        card.innerHTML = `
+            <span class="flag-icon">${lang.flag}</span>
             <span class="lang-name">${lang.name}</span>
         `;
-        btn.onclick = () => selectLanguage(code);
-        grid.appendChild(btn);
+        grid.appendChild(card);
     });
-    console.log('✅ Jezici prikazani');
 }
 
-function getCurrentLang() {
-    return window.currentLang || localStorage.getItem('appLanguage') || 'sr';
-}
-
-// ===== IZBOR JEZIKA - ODMAH NA KATEGORIJE =====
-function selectLanguage(langCode) {
-    currentLang = langCode;
-    window.currentLang = langCode;
-    localStorage.setItem('appLanguage', langCode);
+function selectLanguage(langId, switchScreen = true) {
+    currentLanguage = langId;
+    localStorage.setItem('appLanguage', langId);
     
-    updateHeaderTexts();
-
-    // Sakrij sve ekrane i prikaži glavni ekran sa kategorijama
-    showScreen('mainScreen');
-    renderCategories();
-}
-
-// ===== KATEGORIJE =====
-function renderCategories() {
-    console.log('📂 renderCategories pozvan za jezik:', currentLang);
+    renderLanguages();
+    updateUIStaticTexts();
     
-    const mainScreen = document.getElementById('mainScreen');
-    if (mainScreen && mainScreen.style.display !== 'flex') {
-        document.querySelectorAll('.screen').forEach(s => {
-            s.style.display = 'none';
-            s.classList.remove('active');
-        });
-        mainScreen.style.display = 'flex';
-        mainScreen.classList.add('active');
+    if (switchScreen) {
+        showCategories();
     }
-    
+}
+
+// Prikaz Kategorija
+function showCategories() {
     currentScreenState = 'categories';
-    const content = document.getElementById('mainContent');
-    if (!content) return;
+    hideAllScreens();
     
-    const catList = getMainCategories();
-    let html = `<div class="title">${t('glavne_kategorije')}</div>`;
-    html += `<div class="categories-grid">`;
-    catList.forEach(cat => {
-        const color = getCategoryColor(cat);
-        if (isOtherButton(cat)) {
-            html += `<button class="category-btn" style="background:${color};" onclick="renderDataEntry('')">${cat} ➜</button>`;
-        } else {
-            html += `<button class="category-btn" style="background:${color};" onclick="renderSubcategories('${cat.replace(/'/g, "\\'")}')">${cat}</button>`;
-        }
+    const screen = document.getElementById('categoriesScreen');
+    const container = document.getElementById('categoriesList');
+    if (!screen || !container || typeof categories === 'undefined') return;
+    
+    container.innerHTML = '';
+    categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'category-btn';
+        btn.innerHTML = `<span class="icon">${cat.icon}</span> <span>${t(cat.key)}</span>`;
+        btn.onclick = () => selectCategory(cat.key);
+        container.appendChild(btn);
     });
-    html += `</div>`;
-    content.innerHTML = html;
+    
+    screen.classList.remove('hidden');
 }
 
-// ===== PODKATEGORIJE =====
-function renderSubcategories(category) {
+function selectCategory(catKey) {
+    currentCategory = catKey;
+    showSubcategories(catKey);
+}
+
+// Prikaz Podkategorija
+function showSubcategories(catKey) {
     currentScreenState = 'subcategories';
-    currentCategory = category;
-    const content = document.getElementById('mainContent');
-    if (!content) return;
-
-    const langSubs = subcategories[currentLang] || subcategories.sr || {};
-    const subData = langSubs[category] || [];
-    const colors = getSubcategoryColors(category);
+    hideAllScreens();
     
-    let html = `<div class="title">${t('podkategorije')}</div>`;
-    html += `<div class="categories-grid">`;
+    const screen = document.getElementById('subcategoriesScreen');
+    const container = document.getElementById('subcategoriesList');
+    if (!screen || !container || typeof subcategories === 'undefined') return;
     
-    if (Array.isArray(subData) && subData.length > 0) {
-        let displayData = [...subData];
-        const hasOstalo = displayData.some(item => isOtherButton(item));
-        if (!hasOstalo) {
-            displayData.push(t('Ostalo') || "Ostalo");
-        }
-        
-        displayData.forEach((item, idx) => {
-            const color = colors[idx % colors.length];
-            const safeItem = item.toString().replace(/'/g, "\\'");
-            const hasParts = typeof productParts !== 'undefined' && ((productParts[currentLang] && productParts[currentLang][item]) || (productParts.sr && productParts.sr[item]));
-            
-            if (isOtherButton(item)) {
-                html += `<button class="category-btn" style="background:${color};" onclick="renderDataEntry('')">${item} ➜</button>`;
-            } else if (hasParts) {
-                html += `<button class="category-btn" style="background:${color};" onclick="renderProductParts('${safeItem}')">${item}</button>`;
-            } else {
-                html += `<button class="category-btn" style="background:${color};" onclick="renderDataEntry('${safeItem}')">${item}</button>`;
-            }
-        });
-    } else {
-        html += `<button class="category-btn" style="background:#ddd;" onclick="renderDataEntry('')">${t('Ostalo') || "Ostalo"} ➜</button>`;
-    }
+    const list = subcategories[catKey] || [];
+    container.innerHTML = '';
     
-    html += `</div>`;
-    content.innerHTML = html;
-}
-
-// ===== DELOVI PROIZVODA =====
-function renderProductParts(subcategory) {
-    currentScreenState = 'productParts';
-    currentSubcategory = subcategory;
-    const content = document.getElementById('mainContent');
-    let parts = getProductParts(subcategory);
-    const colors = getSubcategoryColors(currentCategory);
-    
-    let html = `<div class="title">${subcategory}</div>`;
-    html += `<div style="margin-bottom:15px;text-align:center;font-size:20px;color:#666;">${t('delovi_proizvoda')}</div>`;
-    html += `<div class="categories-grid">`;
-    if (parts && parts.length > 0) {
-        let displayParts = [...parts];
-        const hasOstalo = displayParts.some(part => isOtherButton(part));
-        if (!hasOstalo) {
-            displayParts.push(t('Ostalo') || "Ostalo");
-        }
-        displayParts.forEach((part, idx) => {
-            const color = colors[idx % colors.length];
-            const safePart = part.toString().replace(/'/g, "\\'");
-            if (isOtherButton(part)) {
-                html += `<button class="category-btn" style="background:${color};" onclick="renderDataEntry('')">${part} ➜</button>`;
-            } else {
-                html += `<button class="category-btn" style="background:${color};" onclick="renderDataEntry('${safePart}')">${part}</button>`;
-            }
-        });
-    } else {
-        html += `<button class="category-btn" style="background:#ddd;" onclick="renderDataEntry('')">${t('Ostalo') || "Ostalo"} ➜</button>`;
-    }
-    html += `</div>`;
-    content.innerHTML = html;
-}
-
-// ===== FORMA ZA UNOS =====
-function renderDataEntry(productName) {
-    currentScreenState = 'dataEntry';
-    currentProductPart = productName;
-    const content = document.getElementById('mainContent');
-    if (!content) return;
-    
-    const today = new Date().toISOString().split('T')[0];
-    content.innerHTML = `
-        <div class="title">${t('unos_podataka')}</div>
-        <div class="row"><label>${t('naziv_proizvoda')}</label><input type="text" id="productInput" value="${productName || ''}"></div>
-        <div class="row"><label>${t('opis')}</label><input type="text" id="descriptionInput"></div>
-        <div class="row">
-            <label>${t('komad')} <span style="color:red;">*</span></label>
-            <div class="inline-group">
-                <input type="text" id="pieceInput">
-                <label>${t('kolicina')} <span style="color:red;">*</span></label>
-                <input type="number" id="quantityInput" step="0.1">
-                <label>${t('jedinica_mere')}</label>
-                <select id="unitSelect">
-                    <option value="kg">${t('kg')}</option>
-                    <option value="g">${t('g')}</option>
-                    <option value="kom">${t('kom')}</option>
-                    <option value="l">${t('l')}</option>
-                    <option value="ml">${t('ml')}</option>
-                    <option value="pak">${t('pak')}</option>
-                    <option value="kutija">${t('kutija')}</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <label>${t('datum_unosa')}</label>
-            <div class="inline-group">
-                <input type="date" id="dateInput" value="${today}">
-                <label>${t('rok_trajanja')} <span style="color:red;">*</span></label>
-                <input type="number" id="shelfLifeInput">
-                <span style="font-size:18px;">mes</span>
-            </div>
-        </div>
-        <div class="row">
-            <label>${t('automatski_rok')}</label>
-            <div class="inline-group"><span id="expiryDisplay">-</span></div>
-        </div>
-        <div class="row">
-            <label>${t('mesto_skladistenja')}</label>
-            <select id="storageSelect">
-                <option value="${t('zamrzivac_1')}">❄️ ${t('zamrzivac_1')}</option>
-                <option value="${t('zamrzivac_2')}">❄️ ${t('zamrzivac_2')}</option>
-                <option value="${t('zamrzivac_3')}">❄️ ${t('zamrzivac_3')}</option>
-                <option value="${t('frizider')}">🧊 ${t('frizider')}</option>
-                <option value="${t('ostava')}">🏠 ${t('ostava')}</option>
-                <option value="${t('Ostalo')}">📦 ${t('Ostalo')}</option>
-            </select>
-        </div>
-        <div class="btn-group">
-            <button class="btn-save" onclick="saveProduct()">✅ ${t('unesi')}</button>
-            <button class="btn-cancel" onclick="handleBackAction()">✖ ${t('odustani')}</button>
-        </div>
-        <div class="table-container">
-            <div class="table-title">📊 ${t('pregled_unosa')}</div>
-            <div id="entriesContainer"></div>
-        </div>
-    `;
-    document.getElementById('dateInput')?.addEventListener('change', updateExpiryDate);
-    document.getElementById('dateInput')?.addEventListener('input', updateExpiryDate);
-    document.getElementById('shelfLifeInput')?.addEventListener('change', updateExpiryDate);
-    document.getElementById('shelfLifeInput')?.addEventListener('input', updateExpiryDate);
-    document.getElementById('productInput')?.focus();
-    updateExpiryDate();
-    prikaziSveUnose();
-}
-
-// ===== PRIKAZ UNOSA =====
-function prikaziSveUnose() {
-    const container = document.getElementById('entriesContainer');
-    if (!container) return;
-    const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    container.innerHTML = `
-        <div class="table-row header-row">
-            <div class="cell">${t('komad')}</div>
-            <div class="cell">${t('kolicina')}</div>
-            <div class="cell">${t('jedinica_mere')}</div>
-            <div class="cell">${t('rok_trajanja')}</div>
-            <div class="cell">${t('mesto_skladistenja')}</div>
-        </div>
-    `;
-    const aktivni = zalihe.filter(p => p.quantity > 0);
-    if (aktivni.length === 0) {
-        const row = document.createElement('div');
-        row.className = 'table-row';
-        row.innerHTML = `<div class="cell" style="grid-column:span 5;padding:20px;color:#999;text-align:center;">${t('nema_proizvoda')}</div>`;
-        container.appendChild(row);
-        return;
-    }
-    aktivni.forEach(p => {
-        const expiry = new Date(p.entry_date);
-        expiry.setMonth(expiry.getMonth() + p.shelf_life_months);
-        const expiryDisplay = expiry.toLocaleDateString('sr-RS', { month: '2-digit', year: '2-digit' });
-        const row = document.createElement('div');
-        row.className = 'table-row';
-        row.innerHTML = `
-            <div class="cell">${p.piece || '-'}</div>
-            <div class="cell">${p.quantity}</div>
-            <div class="cell">${p.unit}</div>
-            <div class="cell">${expiryDisplay}</div>
-            <div class="cell">${p.storage_location}</div>
-        `;
-        container.appendChild(row);
+    list.forEach(sub => {
+        const btn = document.createElement('button');
+        btn.className = 'subcategory-btn';
+        btn.innerHTML = `<span class="icon">${sub.icon}</span> <span>${t(sub.key)}</span>`;
+        btn.onclick = () => selectSubcategory(sub.key);
+        container.appendChild(btn);
     });
+    
+    screen.classList.remove('hidden');
 }
 
+function selectSubcategory(subKey) {
+    currentSubcategory = subKey;
+    showProductParts(subKey);
+}
+
+// Prikaz Delova Proizvoda
+function showProductParts(subKey) {
+    currentScreenState = 'productParts';
+    hideAllScreens();
+    
+    const screen = document.getElementById('productPartsScreen');
+    const container = document.getElementById('productPartsList');
+    if (!screen || !container || typeof productParts === 'undefined') return;
+    
+    const parts = productParts[subKey] || [];
+    container.innerHTML = '';
+    
+    parts.forEach(part => {
+        const btn = document.createElement('button');
+        btn.className = 'product-part-btn';
+        btn.innerHTML = `<span class="icon">${part.icon}</span> <span>${t(part.key)}</span>`;
+        btn.onclick = () => selectProductPart(part.key);
+        container.appendChild(btn);
+    });
+    
+    screen.classList.remove('hidden');
+}
+
+function selectProductPart(partKey) {
+    currentPart = partKey;
+    showDataEntryScreen();
+}
+
+// Unos podataka
+function showDataEntryScreen() {
+    currentScreenState = 'dataEntry';
+    hideAllScreens();
+    
+    const screen = document.getElementById('dataEntryScreen');
+    if (!screen) return;
+    
+    // Postavljanje podrazumevanog datuma na današnji
+    const today = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('entryDate');
+    if (dateInput) dateInput.value = today;
+    
+    updateExpiryDate();
+    screen.classList.remove('hidden');
+}
+
+// Automatsko izračunavanje roka trajanja
 function updateExpiryDate() {
-    const dateInput = document.getElementById('dateInput');
-    const shelfLifeInput = document.getElementById('shelfLifeInput');
-    const expiryDisplay = document.getElementById('expiryDisplay');
-    if (!dateInput || !shelfLifeInput || !expiryDisplay) return;
-    const date = dateInput.value;
-    const months = parseInt(shelfLifeInput.value) || 0;
-    if (date && months > 0) {
-        const expiry = new Date(date);
-        expiry.setMonth(expiry.getMonth() + months);
-        expiryDisplay.textContent = expiry.toLocaleDateString('sr-RS', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    } else {
-        expiryDisplay.textContent = '-';
-    }
+    const entryDateVal = document.getElementById('entryDate')?.value;
+    const monthsVal = parseInt(document.getElementById('expiryMonths')?.value || '0', 10);
+    const expiryDisplay = document.getElementById('calculatedExpiry');
+    
+    if (!entryDateVal || isNaN(monthsVal) || !expiryDisplay) return;
+    
+    const d = new Date(entryDateVal);
+    d.setMonth(d.getMonth() + monthsVal);
+    
+    const formattedDate = d.toISOString().split('T')[0];
+    expiryDisplay.textContent = formattedDate;
 }
 
-// ===== ČUVANJE PROIZVODA =====
-function saveProduct() {
-    const product = document.getElementById('productInput')?.value.trim();
-    const piece = document.getElementById('pieceInput')?.value.trim();
-    const quantity = document.getElementById('quantityInput')?.value.trim();
-    const shelfLife = document.getElementById('shelfLifeInput')?.value.trim();
+// Skladištenje i Upravljanje Zalihama
+function sacuvajZalihe() {
+    const quantity = document.getElementById('itemQuantity')?.value;
+    const unit = document.getElementById('itemUnit')?.value;
+    const entryDate = document.getElementById('entryDate')?.value;
+    const expiryMonths = document.getElementById('expiryMonths')?.value;
+    const calculatedExpiry = document.getElementById('calculatedExpiry')?.textContent;
     
-    if (!product) {
-        showModernAlert(t('missing_info'), t('enter_product_name'), '📝');
-        document.getElementById('productInput')?.focus();
-        return;
-    }
-    if (!piece) {
-        showModernAlert(t('missing_info'), 'Unesite komad!', '📝');
-        document.getElementById('pieceInput')?.focus();
-        return;
-    }
-    if (!quantity || isNaN(parseFloat(quantity))) {
-        showModernAlert(t('missing_info'), t('enter_quantity'), '📝');
-        document.getElementById('quantityInput')?.focus();
-        return;
-    }
-    if (!shelfLife || isNaN(parseInt(shelfLife))) {
-        showModernAlert(t('missing_info'), 'Unesite rok trajanja (meseci)!', '📝');
-        document.getElementById('shelfLifeInput')?.focus();
+    if (!quantity || quantity <= 0) {
+        showModernAlert(t('warning'), t('enter_valid_quantity'), '⚠️');
         return;
     }
     
-    const productData = {
+    const newItem = {
         id: Date.now(),
-        product_name: product,
-        description: document.getElementById('descriptionInput')?.value.trim() || '',
-        piece: piece,
+        category: currentCategory,
+        subcategory: currentSubcategory,
+        part: currentPart,
         quantity: parseFloat(quantity),
-        unit: document.getElementById('unitSelect')?.value || 'kg',
-        entry_date: document.getElementById('dateInput')?.value || new Date().toISOString().split('T')[0],
-        shelf_life_months: parseInt(shelfLife),
-        storage_location: document.getElementById('storageSelect')?.value || 'Ostalo',
-        isNew: true
+        unit: unit,
+        entryDate: entryDate,
+        expiryMonths: parseInt(expiryMonths, 10),
+        expiryDate: calculatedExpiry
     };
     
     let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    zalihe.push(productData);
+    zalihe.push(newItem);
     localStorage.setItem('zalihe', JSON.stringify(zalihe));
-    prikaziSveUnose();
     
-    document.getElementById('pieceInput').value = '';
-    document.getElementById('quantityInput').value = '';
-    document.getElementById('shelfLifeInput').value = '';
-    document.getElementById('descriptionInput').value = '';
-    document.getElementById('productInput').focus();
-    document.getElementById('productInput').select();
-    
-    showModernAlert(t('success'), t('product_saved'), '✅');
+    showModernAlert(t('success'), t('item_saved_success'), '✅');
+    showCategories();
 }
 
-// ===== ZALIHE =====
+// Prikaz Liste Zaliha
 function renderInventory() {
-    console.log('📦 renderInventory pozvan za jezik:', currentLang);
-    
-    const mainScreen = document.getElementById('mainScreen');
-    if (mainScreen && mainScreen.style.display !== 'flex') {
-        document.querySelectorAll('.screen').forEach(s => {
-            s.style.display = 'none';
-            s.classList.remove('active');
-        });
-        mainScreen.style.display = 'flex';
-        mainScreen.classList.add('active');
-    }
-    
-    currentScreenState = 'inventory';
-    const content = document.getElementById('mainContent');
-    if (!content) return;
+    const container = document.getElementById('inventoryListContainer');
+    if (!container) return;
     
     const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    const aktivneZalihe = zalihe.filter(p => p.quantity > 0);
+    container.innerHTML = '';
     
-    let html = `<div class="title">${t('stanje')}</div>`;
-    html += `<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">`;
-    html += `<button onclick="azurirajZalihe()" style="background:#4CAF50; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">✅ ${t('azuriraj')}</button>`;
-    html += `<button onclick="obrisiZalihe()" style="background:#666; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">🗑️ ${t('obrisi')}</button>`;
-    html += `<button onclick="renderCategories()" style="background:#f44336; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">✖ ${t('odustani')}</button>`;
-    html += `</div>`;
-    
-    html += `<div class="table-container" style="max-height:400px; overflow-y:auto;">`;
-    html += `<div class="table-title">📦 ${t('stanje')}</div>`;
-    html += `<div id="inventoryTable">`;
-    html += `<div class="table-row header-row" style="display:grid; grid-template-columns:40px 1.2fr 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap:2px; background:#f0f0f0; font-weight:bold; border-bottom:2px solid #ccc; padding:5px 0;">`;
-    html += `<div class="cell" style="text-align:center;"><input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes()"></div>`;
-    html += `<div class="cell">${t('naziv_proizvoda')}</div>`;
-    html += `<div class="cell">${t('opis')}</div>`;
-    html += `<div class="cell">${t('komad')}</div>`;
-    html += `<div class="cell">${t('kolicina')}</div>`;
-    html += `<div class="cell">${t('jedinica_mere')}</div>`;
-    html += `<div class="cell">${t('rok_trajanja')}</div>`;
-    html += `<div class="cell">${t('mesto_skladistenja')}</div>`;
-    html += `</div>`;
-    
-    if (aktivneZalihe.length === 0) {
-        html += `<div class="table-row"><div class="cell" style="grid-column:span 8;padding:30px;color:#999;text-align:center;">${t('nema_proizvoda')}</div></div>`;
-    } else {
-        aktivneZalihe.forEach((p) => {
-            const originalIndex = zalihe.indexOf(p);
-            const expiry = new Date(p.entry_date);
-            expiry.setMonth(expiry.getMonth() + p.shelf_life_months);
-            const expiryDisplay = expiry.toLocaleDateString('sr-RS', { month: '2-digit', year: '2-digit' });
-            
-            const isNew = p.isNew === true;
-            const isLow = (p.unit === 'g' && p.quantity < 400) || (p.unit === 'kg' && p.quantity < 0.4) || ((p.unit === 'kom' || p.unit === 'pcs') && p.quantity <= 2);
-            
-            let bgColor = '';
-            if (isNew) {
-                bgColor = '#90CAF9';
-            } else if (isLow) {
-                bgColor = '#F9AA65';
-            }
-            
-            html += `<div class="table-row" style="display:grid; grid-template-columns:40px 1.2fr 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap:2px; border-bottom:1px solid #eee; padding:5px 0; background:${bgColor};">`;
-            html += `<div class="cell" style="text-align:center;"><input type="checkbox" class="row-checkbox" data-index="${originalIndex}"></div>`;
-            html += `<div class="cell">${p.product_name}</div>`;
-            html += `<div class="cell">${p.description || ''}</div>`;
-            html += `<div class="cell">${p.piece || '-'}</div>`;
-            html += `<div class="cell">${p.quantity}</div>`;
-            html += `<div class="cell">${p.unit}</div>`;
-            html += `<div class="cell">${expiryDisplay}</div>`;
-            html += `<div class="cell">${p.storage_location}</div>`;
-            html += `</div>`;
-        });
-    }
-    html += `</div></div>`;
-    content.innerHTML = html;
-    
-    clearNewFlags();
-}
-
-function clearNewFlags() {
-    let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    let changed = false;
-    zalihe.forEach(p => {
-        if (p.isNew === true) {
-            p.isNew = false;
-            changed = true;
-        }
-    });
-    if (changed) {
-        localStorage.setItem('zalihe', JSON.stringify(zalihe));
-        console.log('✅ Oznake "novo" uklonjene');
-    }
-}
-
-function toggleAllCheckboxes() {
-    const selectAll = document.getElementById('selectAll');
-    const checkboxes = document.querySelectorAll('.row-checkbox');
-    checkboxes.forEach(cb => cb.checked = selectAll.checked);
-}
-
-// ===== BRISANJE ZALIHA =====
-function obrisiZalihe() {
-    const selected = document.querySelectorAll('.row-checkbox:checked');
-    if (selected.length === 0) {
-        showModernAlert(t('no_selection'), t('no_items_selected'), '⚠️');
+    if (zalihe.length === 0) {
+        container.innerHTML = `<p class="empty-msg">${t('no_items_in_stock')}</p>`;
         return;
     }
     
+    zalihe.forEach(item => {
+        const card = document.createElement('div');
+        
+        // Isticanje ako su zalihe pri kraju
+        let isLow = false;
+        if ((item.unit === 'g' && item.quantity < 400) || 
+            (item.unit === 'kg' && item.quantity < 0.4) || 
+            (item.unit === 'kom' && item.quantity <= 2)) {
+            isLow = true;
+        }
+        
+        card.className = `inventory-card ${isLow ? 'low-stock' : ''}`;
+        card.innerHTML = `
+            <div class="inv-info">
+                <strong>${t(item.part) || item.part}</strong>
+                <span>${item.quantity} ${item.unit}</span>
+                <small>${t('expires')}: ${item.expiryDate}</small>
+            </div>
+            <div class="inv-actions">
+                <button onclick="urediZalihe(${item.id})">✏️</button>
+                <button onclick="obrisiZalihe(${item.id})">🗑️</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function obrisiZalihe(id) {
     showModernConfirm(
-        t('delete_confirm_title'),
-        t('delete_confirm').replace('{count}', selected.length),
-        function() {
-            const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-            const indices = Array.from(selected).map(cb => parseInt(cb.dataset.index));
-            indices.sort((a, b) => b - a);
-            indices.forEach(i => zalihe.splice(i, 1));
+        t('delete_confirm_title') || 'Brisanje',
+        t('delete_confirm_msg') || 'Da li ste sigurni da želite da obrišete ovu stavku?',
+        '🗑️',
+        function onYes() {
+            let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
+            zalihe = zalihe.filter(item => item.id !== id);
             localStorage.setItem('zalihe', JSON.stringify(zalihe));
             renderInventory();
-        },
-        null,
-        '🗑️'
+        }
     );
 }
 
-// ===== AŽURIRANJE ZALIHA =====
-function azurirajZalihe() {
-    const selected = document.querySelectorAll('.row-checkbox:checked');
-    if (selected.length === 0) {
-        showModernAlert(t('no_selection'), t('no_items_selected'), '⚠️');
-        return;
-    }
-    if (selected.length > 1) {
-        showModernAlert(t('error'), 'Možete ažurirati samo jedan red odjednom!', '❌');
-        return;
-    }
-    const index = parseInt(selected[0].dataset.index);
-    const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    renderUpdateEntry(zalihe[index], index);
-}
-
-function renderUpdateEntry(proizvod, index) {
-    currentScreenState = 'dataEntry';
-    const content = document.getElementById('mainContent');
-    if (!content) return;
-    const today = proizvod.entry_date || new Date().toISOString().split('T')[0];
-    
-    content.innerHTML = `
-        <div class="title">✏️ Ažuriraj - ${proizvod.product_name}</div>
-        <div class="row"><label>${t('naziv_proizvoda')}</label><input type="text" id="updateProductInput" value="${proizvod.product_name || ''}"></div>
-        <div class="row"><label>${t('opis')}</label><input type="text" id="updateDescriptionInput" value="${proizvod.description || ''}"></div>
-        <div class="row">
-            <label>${t('komad')}</label>
-            <div class="inline-group">
-                <input type="text" id="updatePieceInput" value="${proizvod.piece || ''}">
-                <label>${t('kolicina')}</label>
-                <input type="number" id="updateQuantityInput" value="${proizvod.quantity || 1}" step="0.1">
-                <label>${t('jedinica_mere')}</label>
-                <select id="updateUnitSelect">
-                    <option value="kg" ${proizvod.unit === 'kg' ? 'selected' : ''}>${t('kg')}</option>
-                    <option value="g" ${proizvod.unit === 'g' ? 'selected' : ''}>${t('g')}</option>
-                    <option value="kom" ${proizvod.unit === 'kom' ? 'selected' : ''}>${t('kom')}</option>
-                    <option value="l" ${proizvod.unit === 'l' ? 'selected' : ''}>${t('l')}</option>
-                    <option value="ml" ${proizvod.unit === 'ml' ? 'selected' : ''}>${t('ml')}</option>
-                    <option value="pak" ${proizvod.unit === 'pak' ? 'selected' : ''}>${t('pak')}</option>
-                    <option value="kutija" ${proizvod.unit === 'kutija' ? 'selected' : ''}>${t('kutija')}</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <label>${t('datum_unosa')}</label>
-            <div class="inline-group">
-                <input type="date" id="updateDateInput" value="${today}">
-                <label>${t('rok_trajanja')}</label>
-                <input type="number" id="updateShelfLifeInput" value="${proizvod.shelf_life_months || 12}">
-                <span style="font-size:18px;">mes</span>
-            </div>
-        </div>
-        <div class="row">
-            <label>${t('automatski_rok')}</label>
-            <div class="inline-group"><span id="updateExpiryDisplay">-</span></div>
-        </div>
-        <div class="row">
-            <label>${t('mesto_skladistenja')}</label>
-            <select id="updateStorageSelect">
-                <option value="${t('zamrzivac_1')}" ${proizvod.storage_location === t('zamrzivac_1') ? 'selected' : ''}>❄️ ${t('zamrzivac_1')}</option>
-                <option value="${t('zamrzivac_2')}" ${proizvod.storage_location === t('zamrzivac_2') ? 'selected' : ''}>❄️ ${t('zamrzivac_2')}</option>
-                <option value="${t('zamrzivac_3')}" ${proizvod.storage_location === t('zamrzivac_3') ? 'selected' : ''}>❄️ ${t('zamrzivac_3')}</option>
-                <option value="${t('frizider')}" ${proizvod.storage_location === t('frizider') ? 'selected' : ''}>🧊 ${t('frizider')}</option>
-                <option value="${t('ostava')}" ${proizvod.storage_location === t('ostava') ? 'selected' : ''}>🏠 ${t('ostava')}</option>
-                <option value="${t('Ostalo')}" ${proizvod.storage_location === t('Ostalo') ? 'selected' : ''}>📦 ${t('Ostalo')}</option>
-            </select>
-        </div>
-        <div class="btn-group">
-            <button class="btn-save" onclick="sacuvajAzuriranje(${index})">✅ Sačuvaj</button>
-            <button class="btn-cancel" onclick="renderInventory()">✖ Odustani</button>
-        </div>
-    `;
-    document.getElementById('updateDateInput')?.addEventListener('change', updateUpdateExpiryDate);
-    document.getElementById('updateDateInput')?.addEventListener('input', updateUpdateExpiryDate);
-    document.getElementById('updateShelfLifeInput')?.addEventListener('change', updateUpdateExpiryDate);
-    document.getElementById('updateShelfLifeInput')?.addEventListener('input', updateUpdateExpiryDate);
-    updateUpdateExpiryDate();
-}
-
-function updateUpdateExpiryDate() {
-    const dateInput = document.getElementById('updateDateInput');
-    const shelfLifeInput = document.getElementById('updateShelfLifeInput');
-    const expiryDisplay = document.getElementById('updateExpiryDisplay');
-    if (!dateInput || !shelfLifeInput || !expiryDisplay) return;
-    const date = dateInput.value;
-    const months = parseInt(shelfLifeInput.value) || 0;
-    if (date && months > 0) {
-        const expiry = new Date(date);
-        expiry.setMonth(expiry.getMonth() + months);
-        expiryDisplay.textContent = expiry.toLocaleDateString('sr-RS', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    } else {
-        expiryDisplay.textContent = '-';
-    }
-}
-
-function sacuvajAzuriranje(index) {
-    const product = document.getElementById('updateProductInput')?.value.trim();
-    const quantity = document.getElementById('updateQuantityInput')?.value.trim();
-    if (!product) {
-        showModernAlert(t('missing_info'), t('enter_product_name'), '📝');
-        return;
-    }
-    if (!quantity || isNaN(parseFloat(quantity))) {
-        showModernAlert(t('missing_info'), t('enter_quantity'), '📝');
-        return;
-    }
-    
-    const novaKolicina = parseFloat(quantity);
-    let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    let shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-    
-    // Ako je količina 0, prebaci u spisak potreba
-    if (novaKolicina === 0) {
-        const proizvod = zalihe[index];
-        if (proizvod) {
-            shopping.push({
-                product_name: proizvod.product_name,
-                description: proizvod.description || '',
-                quantity: 0,
-                unit: proizvod.unit || 'kom'
-            });
-            localStorage.setItem('shoppingList', JSON.stringify(shopping));
-            zalihe.splice(index, 1);
-            localStorage.setItem('zalihe', JSON.stringify(zalihe));
-            showModernAlert(t('success'), t('shopping_moved'), '🛒');
-            renderInventory();
-            return;
-        }
-    }
-    
-    zalihe[index] = {
-        product_name: product,
-        description: document.getElementById('updateDescriptionInput')?.value.trim() || '',
-        piece: document.getElementById('updatePieceInput')?.value.trim() || '-',
-        quantity: novaKolicina,
-        unit: document.getElementById('updateUnitSelect')?.value || 'kg',
-        entry_date: document.getElementById('updateDateInput')?.value || new Date().toISOString().split('T')[0],
-        shelf_life_months: parseInt(document.getElementById('updateShelfLifeInput')?.value) || 12,
-        storage_location: document.getElementById('updateStorageSelect')?.value || 'Ostalo'
-    };
-    
-    localStorage.setItem('zalihe', JSON.stringify(zalihe));
-    showModernAlert(t('success'), t('product_updated'), '✅');
-    renderInventory();
-}
-
-// ===== SPISAK POTREBA =====
+// Spisak Za Kupovinu (Shopping List)
 function renderShoppingList() {
-    console.log('🛒 renderShoppingList pozvan za jezik:', currentLang);
+    const container = document.getElementById('shoppingListContainer');
+    if (!container) return;
     
-    const mainScreen = document.getElementById('mainScreen');
-    if (mainScreen && mainScreen.style.display !== 'flex') {
-        document.querySelectorAll('.screen').forEach(s => {
-            s.style.display = 'none';
-            s.classList.remove('active');
-        });
-        mainScreen.style.display = 'flex';
-        mainScreen.classList.add('active');
-    }
+    const shoppingList = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+    container.innerHTML = '';
     
-    currentScreenState = 'shopping';
-    const content = document.getElementById('mainContent');
-    if (!content) return;
-    
-    const shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-    
-    let html = `<div class="title">${t('spisak_potreba')}</div>`;
-    html += `<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">`;
-    html += `<button onclick="oznaciSveShopping()" style="background:#2196F3; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">☑️ ${t('oznaci_sve')}</button>`;
-    html += `<button onclick="kopirajShopping()" style="background:#4CAF50; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">📋 ${t('kopiraj')}</button>`;
-    html += `<button onclick="obrisiOznacenoShopping()" style="background:#f44336; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">🗑️ ${t('obrisi_oznaceno')}</button>`;
-    html += `<button onclick="renderCategories()" style="background:#666; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">✖ ${t('odustani')}</button>`;
-    html += `</div>`;
-    
-    html += `<div class="table-container" style="max-height:400px; overflow-y:auto;">`;
-    html += `<div class="table-title">🛒 ${t('spisak_potreba')}</div>`;
-    html += `<div id="shoppingTable">`;
-    html += `<div class="table-row header-row" style="display:grid; grid-template-columns:40px 1.5fr 1.5fr; gap:2px; background:#f0f0f0; font-weight:bold; border-bottom:2px solid #ccc; padding:5px 0;">`;
-    html += `<div class="cell" style="text-align:center;"><input type="checkbox" id="selectAllShopping" onchange="toggleAllShopping()"></div>`;
-    html += `<div class="cell">${t('naziv_proizvoda')}</div>`;
-    html += `<div class="cell">${t('opis')}</div>`;
-    html += `</div>`;
-    
-    if (shopping.length === 0) {
-        html += `<div class="table-row"><div class="cell" style="grid-column:span 3;padding:30px;color:#999;text-align:center;">${t('nema_proizvoda')}</div></div>`;
-    } else {
-        shopping.forEach((p, index) => {
-            html += `<div class="table-row" style="display:grid; grid-template-columns:40px 1.5fr 1.5fr; gap:2px; border-bottom:1px solid #eee; padding:5px 0;">`;
-            html += `<div class="cell" style="text-align:center;"><input type="checkbox" class="shopping-checkbox" data-index="${index}"></div>`;
-            html += `<div class="cell">${p.product_name}</div>`;
-            html += `<div class="cell">${p.description || ''}</div>`;
-            html += `</div>`;
-        });
-    }
-    html += `</div></div>`;
-    content.innerHTML = html;
-}
-
-function oznaciSveShopping() {
-    const checkboxes = document.querySelectorAll('.shopping-checkbox');
-    const selectAll = document.getElementById('selectAllShopping');
-    if (checkboxes.length === 0) return;
-    const sviOznaceni = Array.from(checkboxes).every(cb => cb.checked);
-    checkboxes.forEach(cb => cb.checked = !sviOznaceni);
-    if (selectAll) selectAll.checked = !sviOznaceni;
-}
-
-function toggleAllShopping() {
-    const selectAll = document.getElementById('selectAllShopping');
-    const checkboxes = document.querySelectorAll('.shopping-checkbox');
-    checkboxes.forEach(cb => cb.checked = selectAll ? selectAll.checked : false);
-}
-
-function oznaciSveShopping() {
-    const checkboxes = document.querySelectorAll('.shopping-checkbox');
-    const selectAll = document.getElementById('selectAllShopping');
-    if (checkboxes.length === 0) return;
-    const sviOznaceni = Array.from(checkboxes).every(cb => cb.checked);
-    checkboxes.forEach(cb => cb.checked = !sviOznaceni);
-    if (selectAll) selectAll.checked = !sviOznaceni;
-}
-
-function kopirajShopping() {
-    const shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-    if (shopping.length === 0) {
-        showModernAlert(t('error'), t('list_empty'), '⚠️');
+    if (shoppingList.length === 0) {
+        container.innerHTML = `<p class="empty-msg">${t('shopping_list_empty')}</p>`;
         return;
     }
-    const tekst = shopping.map(p => `- ${p.product_name}${p.description ? ' (' + p.description + ')' : ''}`).join('\n');
-    navigator.clipboard.writeText(tekst).then(() => {
-        showModernAlert(t('success'), t('copied'), '📋');
-    }).catch(() => {
-        showModernAlert(t('error'), t('copy_error'), '❌');
+    
+    shoppingList.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'shopping-item';
+        div.innerHTML = `
+            <input type="checkbox" id="shop_${index}" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${index})">
+            <label for="shop_${index}">${t(item.name) || item.name} - ${item.quantity} ${item.unit}</label>
+            <button onclick="obrisiSaSpiska(${index})">❌</button>
+        `;
+        container.appendChild(div);
     });
+}
+
+function toggleShoppingItem(index) {
+    let list = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+    if (list[index]) {
+        list[index].checked = !list[index].checked;
+        localStorage.setItem('shoppingList', JSON.stringify(list));
+    }
+}
+
+function obrisiSaSpiska(index) {
+    showModernConfirm(
+        t('delete_confirm_title') || 'Brisanje',
+        t('delete_confirm_msg') || 'Da li želite da uklonite stavku sa spiska?',
+        '❌',
+        function onYes() {
+            let list = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+            list.splice(index, 1);
+            localStorage.setItem('shoppingList', JSON.stringify(list));
+            renderShoppingList();
+        }
+    );
 }
 
 function obrisiOznacenoShopping() {
-    const selected = document.querySelectorAll('.shopping-checkbox:checked');
-    if (selected.length === 0) {
-        showModernAlert(t('no_selection'), t('no_items_selected'), '⚠️');
-        return;
-    }
     showModernConfirm(
-        t('delete_confirm_title'),
-        t('delete_confirm').replace('{count}', selected.length),
-        function() {
-            let shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-            const indices = Array.from(selected).map(cb => parseInt(cb.dataset.index)).sort((a, b) => b - a);
-            indices.forEach(i => shopping.splice(i, 1));
-            localStorage.setItem('shoppingList', JSON.stringify(shopping));
+        t('delete_confirm_title') || 'Čišćenje spiska',
+        t('delete_selected_msg') || 'Da li želite da obrišete sve označene stavke?',
+        '🧹',
+        function onYes() {
+            let list = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+            list = list.filter(item => !item.checked);
+            localStorage.setItem('shoppingList', JSON.stringify(list));
             renderShoppingList();
-        },
-        null,
-        '🗑️'
+        }
     );
 }
 
-// ===== INICIJALIZACIJA DUGMADI I DOGAĐAJA =====
-// ===== INICIJALIZACIJA DUGMADI I DOGAĐAJA =====
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ DOM je spreman!');
-
-    // Login dugmad
-    document.getElementById('loginBtn')?.addEventListener('click', triggerLogin);
-
-    document.getElementById('supportBtn')?.addEventListener('click', () => {
-        document.getElementById('supportDialog')?.classList.add('active');
-    });
-
-    document.getElementById('closeSupportBtn')?.addEventListener('click', () => {
-        document.getElementById('supportDialog')?.classList.remove('active');
-    });
-
-    document.getElementById('closeSupportBtn2')?.addEventListener('click', () => {
-        document.getElementById('supportDialog')?.classList.remove('active');
-    });
-
-    // Exit dugmad
-    document.getElementById('exitLoginBtn')?.addEventListener('click', exitApp);
-    document.getElementById('exitLangBtn')?.addEventListener('click', exitApp);
-    document.getElementById('exitMainBtn')?.addEventListener('click', exitApp);
-
-    // Header navigacija
-    document.getElementById('backBtn')?.addEventListener('click', handleBackAction);
-    document.getElementById('invBtn')?.addEventListener('click', () => {
-        if (typeof renderInventory === 'function') renderInventory();
-    });
-    document.getElementById('shopBtn')?.addEventListener('click', () => {
-        if (typeof renderShoppingList === 'function') renderShoppingList();
-    });
-
-    updateHeaderLanguage();
-});
-
+// Navigacija Unazad (Back Action)
 function handleBackAction() {
-    if (currentScreenState === 'subcategories' || currentScreenState === 'inventory' || currentScreenState === 'shopping') {
-        renderCategories();
-    } else if (currentScreenState === 'productParts') {
-        renderSubcategories(currentCategory);
-    } else if (currentScreenState === 'dataEntry') {
-        if (currentSubcategory) {
-            renderProductParts(currentSubcategory);
-        } else if (currentCategory) {
-            renderSubcategories(currentCategory);
-        } else {
-            renderCategories();
-        }
-    } else {
-        showScreen('languageScreen');
+    switch (currentScreenState) {
+        case 'dataEntry':
+            showProductParts(currentSubcategory);
+            break;
+        case 'productParts':
+            showSubcategories(currentCategory);
+            break;
+        case 'subcategories':
+            showCategories();
+            break;
+        case 'categories':
+            hideAllScreens();
+            document.getElementById('languagesScreen')?.classList.remove('hidden');
+            currentScreenState = 'languages';
+            break;
+        default:
+            break;
     }
 }
 
-// ===== LOGIN =====
-function triggerLogin() {
-    console.log("🔐 triggerLogin pozvan!");
-    const phoneInput = document.getElementById('phoneInput');
-    if (!phoneInput) {
-        showModernAlert('Greška', 'Polje za telefon nije pronađeno!', '❌');
+// Pomoćna funkcija za sakrivanje svih ekrana
+function hideAllScreens() {
+    const screens = document.querySelectorAll('.screen-container');
+    screens.forEach(s => s.classList.add('hidden'));
+}
+
+// Događaji / Event Listeners
+function setupEventListeners() {
+    document.getElementById('btnBack')?.addEventListener('click', handleBackAction);
+    document.getElementById('entryDate')?.addEventListener('change', updateExpiryDate);
+    document.getElementById('expiryMonths')?.addEventListener('input', updateExpiryDate);
+    document.getElementById('btnSaveData')?.addEventListener('click', sacuvajZalihe);
+}
+
+// Modern Modal Dialog Helpers
+function showModernAlert(title, message, icon = 'ℹ️') {
+    const alertModal = document.getElementById('customAlertModal');
+    if (!alertModal) {
+        alert(message);
         return;
     }
-    const phone = phoneInput.value.trim();
-    console.log("📱 Unet broj:", phone);
-    if (phone.length >= 9) {
-        console.log("✅ Login uspešan");
-        showScreen('languageScreen');
-        renderLanguages();
-    } else {
-        showModernAlert('Greška', 'Unesite validan broj telefona (9+ cifara)!', '📱');
-    }
+    document.getElementById('alertIcon').textContent = icon;
+    document.getElementById('alertTitle').textContent = title;
+    document.getElementById('alertMessage').textContent = message;
+    alertModal.classList.remove('hidden');
 }
 
-// ===== AŽURIRANJE JEZIKA HEDERA =====
-function updateHeaderLanguage() {
-    const lang = currentLang || 'en';
+function showModernConfirm(title, message, icon = '❓', onYesCallback) {
+    const confirmModal = document.getElementById('customConfirmModal');
+    if (!confirmModal) {
+        if (confirm(message)) onYesCallback();
+        return;
+    }
+    document.getElementById('confirmIcon').textContent = icon;
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
     
-    const backText = document.getElementById('backText');
-    const invText = document.getElementById('invText');
-    const shopText = document.getElementById('shopText');
-    const exitText = document.getElementById('exitText');
+    const btnYes = document.getElementById('confirmBtnYes');
+    const btnNo = document.getElementById('confirmBtnNo');
     
-    if (backText) backText.textContent = t('nazad');
-    if (invText) invText.textContent = t('stanje');
-    if (shopText) shopText.textContent = t('spisak');
-    if (exitText) exitText.textContent = t('odustani');
+    const closeConfirm = () => confirmModal.classList.add('hidden');
     
-    console.log('✅ Header ažuriran na:', lang);
+    btnYes.onclick = () => {
+        closeConfirm();
+        if (onYesCallback) onYesCallback();
+    };
+    btnNo.onclick = () => closeConfirm();
+    
+    confirmModal.classList.remove('hidden');
 }
-// ============================================
-// GLAVNI DOGAĐAJI
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('✅ DOM je spreman!');
-
-    updateHeaderLanguage();
-
-    // ===== DIREKTNO BACK DUGME =====
-    const backBtn = document.getElementById('backBtn');
-    if (backBtn) {
-        backBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('⬅ Direktan klik na Back dugme');
-            handleBackAction();
-        });
-        console.log('✅ Back dugme direktno povezano');
-    }
-
-    // ===== ENTER TASTER =====
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            const activeElement = document.activeElement;
-            if (activeElement && activeElement.id === 'phoneInput') {
-                e.preventDefault();
-                console.log('⌨️ Enter taster pritisnut na phoneInput-u');
-                triggerLogin();
-            }
-        }
-        if (e.key === 'Escape') {
-            closeModernConfirm();
-        }
-    });
-
-    // ===== CONFIRM DUGMAD =====
-    const yesBtn = document.getElementById('confirmYesBtn');
-    const noBtn = document.getElementById('confirmNoBtn');
-    
-    if (yesBtn) {
-        yesBtn.addEventListener('click', function() {
-            if (confirmCallback && confirmCallback.onYes) {
-                confirmCallback.onYes();
-            }
-            closeModernConfirm();
-        });
-    }
-    
-    if (noBtn) {
-        noBtn.addEventListener('click', function() {
-            if (confirmCallback && confirmCallback.onNo) {
-                confirmCallback.onNo();
-            }
-            closeModernConfirm();
-        });
-    }
-
-    console.log('✅ Svi događaji uspešno inicijalizovani!');
-});
-
-// ===== DELEGIRANI KLIKOVI =====
-document.addEventListener('click', function(e) {
-    const target = e.target;
-    
-    if (target.id === 'loginBtn' || target.closest('#loginBtn')) {
-        e.preventDefault();
-        console.log('🖱️ Klik na ENTER dugme');
-        triggerLogin();
-    }
-
-    if (target.id === 'exitLoginBtn' || target.closest('#exitLoginBtn') ||
-        target.id === 'exitLangBtn'  || target.closest('#exitLangBtn')  ||
-        target.id === 'exitMainBtn'  || target.closest('#exitMainBtn')) {
-        console.log('🚪 Exit dugme kliknuto');
-        exitApp();
-    }
-
-    if (target.id === 'backBtn' || target.closest('#backBtn') ||
-        target.closest('.btn-back') || target.closest('#headerBackBtn') ||
-        target.closest('.back-arrow') || target.closest('.header-back')) {
-        e.preventDefault();
-        console.log('⬅ Kliknuto dugme Nazad/Odustani');
-        handleBackAction();
-    }
-
-    if (target.id === 'inventoryBtn' || target.closest('#inventoryBtn')) {
-        console.log('📦 Inventory klik');
-        renderInventory();
-    }
-
-    if (target.id === 'shoppingBtn' || target.closest('#shoppingBtn')) {
-        console.log('🛒 Shopping klik');
-        renderShoppingList();
-    }
-
-    if (target.id === 'supportBtn' || target.closest('#supportBtn')) {
-        openSupportDialog();
-    }
-    if (target.id === 'closeSupportBtn' || target.closest('#closeSupportBtn') ||
-        target.id === 'closeSupportBtn2' || target.closest('#closeSupportBtn2')) {
-        closeSupportDialog();
-    }
-}, true);
-
-// ============================================
-// GLOBALNE FUNKCIJE
-// ============================================
-window.renderInventory = renderInventory;
-window.renderShoppingList = renderShoppingList;
-window.renderCategories = renderCategories;
-window.renderDataEntry = renderDataEntry;
-window.renderSubcategories = renderSubcategories;
-window.renderProductParts = renderProductParts;
-window.showScreen = showScreen;
-window.exitApp = exitApp;
-window.t = t;
-window.currentLang = currentLang;
-window.handleBackAction = handleBackAction;
-window.selectLanguage = selectLanguage;
-window.saveProduct = saveProduct;
-window.azurirajZalihe = azurirajZalihe;
-window.obrisiZalihe = obrisiZalihe;
-window.sacuvajAzuriranje = sacuvajAzuriranje;
-window.toggleAllCheckboxes = toggleAllCheckboxes;
-window.toggleAllShopping = toggleAllShopping;
-window.oznaciSveShopping = oznaciSveShopping;
-window.kopirajShopping = kopirajShopping;
-window.obrisiOznacenoShopping = obrisiOznacenoShopping;
-window.triggerLogin = triggerLogin;
-window.updateHeaderLanguage = updateHeaderLanguage;
-
-console.log('✅ Sve funkcije izvezene!');
-console.log('✅ App spreman!');
