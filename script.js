@@ -229,14 +229,13 @@ function renderInventory() {
     container.innerHTML = '';
     
     if (zalihe.length === 0) {
-        container.innerHTML = `<p class="empty-msg">${t('no_items_in_stock')}</p>`;
+        container.innerHTML = `<p class="empty-msg">${t('no_items_in_stock') || 'Nema stavki na zalihama.'}</p>`;
         return;
     }
     
     zalihe.forEach(item => {
         const card = document.createElement('div');
         
-        // Isticanje ako su zalihe pri kraju
         let isLow = false;
         if ((item.unit === 'g' && item.quantity < 400) || 
             (item.unit === 'kg' && item.quantity < 0.4) || 
@@ -249,7 +248,7 @@ function renderInventory() {
             <div class="inv-info">
                 <strong>${t(item.part) || item.part}</strong>
                 <span>${item.quantity} ${item.unit}</span>
-                <small>${t('expires')}: ${item.expiryDate}</small>
+                <small>${t('expires') || 'Ističe'}: ${item.expiryDate}</small>
             </div>
             <div class="inv-actions">
                 <button onclick="urediZalihe(${item.id})">✏️</button>
@@ -259,7 +258,6 @@ function renderInventory() {
         container.appendChild(card);
     });
 }
-
 function obrisiZalihe(id) {
     showModernConfirm(
         t('delete_confirm_title') || 'Brisanje',
