@@ -395,7 +395,10 @@ function showModernConfirm(title, message, icon = '❓', onYesCallback) {
     const btnYes = document.getElementById('confirmBtnYes');
     const btnNo = document.getElementById('confirmBtnNo');
     
-    const closeConfirm = () => confirmModal.classList.add('hidden');
+    const closeConfirm = () => {
+        confirmModal.classList.add('hidden');
+        document.removeEventListener('keydown', handleModalEnter); // Uklanja slušalac nakon zatvaranja
+    };
     
     btnYes.onclick = () => {
         closeConfirm();
@@ -403,5 +406,44 @@ function showModernConfirm(title, message, icon = '❓', onYesCallback) {
     };
     btnNo.onclick = () => closeConfirm();
     
+    // Omogućava pritisak na Enter za potvrdu modala (čak i ako fokus nije na inputu)
+    const handleModalEnter = (e) => {
+        if (e.key === 'Enter' && !confirmModal.classList.contains('hidden')) {
+            e.preventDefault();
+            btnYes.click();
+        }
+    };
+    document.addEventListener('keydown', handleModalEnter);
+
     confirmModal.classList.remove('hidden');
+    btnYes.focus(); // Stavlja fokus na "DA" dugme
 }
+
+// Omogućava rad tipke Enter za sva polja za unos (Input) u aplikaciji
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        const aktivniElement = document.activeElement;
+        
+        // Provjerava da li je korisnik trenutno u polju za unos (input ili textarea)
+        if (aktivniElement && (aktivniElement.tagName === 'INPUT' || aktivniElement.tagName === 'TEXTAREA')) {
+            
+            // Ako je otvoren custom confirm modal, preskačemo ovaj dio jer ga hendla sam modal
+            const confirmModal = document.getElementById('customConfirmModal');
+            if (confirmModal && !confirmModal.classList.contains('hidden')) {
+                return;
+            }
+
+            event.preventDefault(); // Sprečava neočekivano ponovno učitavanje stranice
+            
+            // Pronalazi kontejner/formu u kojoj se input nalazi
+            const roditelj = aktivniElement.closest('.modal, .login-card, form, div') || document;
+            
+            // Pronalazi glavno dugme za potvrdu/prijavu/čuvanje
+            const potvrdnoDugme = roditelj.querySelector('button[type="submit"], .btn-primary, #btnLogin, .btn-save, #btnSave, .btn-submit');
+            
+            if (potvrdnoDugme) {
+                potvrdnoDugme.click(); // Automatski simulira klik na dugme
+            }
+        }
+    }
+});
