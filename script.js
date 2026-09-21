@@ -43,6 +43,33 @@ function updateUIStaticTexts() {
     });
 }
 
+// OVDJE DODAJETE LOGIKU ZA ENTER:
+function setupEventListeners() {
+    // 1. Osluškivanje Enter tastera za Login formu
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Sprečava osvežavanje stranice
+            if (loginBtn) {
+                loginBtn.click(); // Pokreće funkciju za login
+            }
+        });
+    }
+
+    // 2. Dodatno osiguranje ako korisnik pritisne Enter dok je u polju za unos broja telefona
+    const phoneInput = document.getElementById('phoneInput');
+    if (phoneInput) {
+        phoneInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                if (loginBtn) loginBtn.click();
+            }
+        });
+    }
+}
+
 // Generisanje jezika
 function renderLanguages() {
     const grid = document.getElementById('languagesGrid');
