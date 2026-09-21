@@ -1628,7 +1628,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Header navigacija
     document.getElementById('backBtn')?.addEventListener('click', handleBackAction);
-    document.getElementById('invBtn')?.addEventListener('click', renderInventory);
+    document.getElementById('invBtn')?.addEventListener('click', () => {renderInventory();
+});
     document.getElementById('shopBtn')?.addEventListener('click', renderShoppingList);
 });
 
