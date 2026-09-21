@@ -1,13 +1,13 @@
-const CACHE_NAME = 'zalihe-v110'; // Povećan broj verzije za prisilno osvežavanje!
+const CACHE_NAME = 'zalihe-v111'; // Povećana verzija za prisilno osvježavanje
 
 const urlsToCache = [
-  '/Household_supplies/',
-  '/Household_supplies/index.html',
-  '/Household_supplies/script1.js',
-  '/Household_supplies/voiceCommands.js',
-  '/Household_supplies/productParts.js',
-  '/Household_supplies/manifest.json',
-  '/Household_supplies/icons/logo.png'
+  '/APP-Home-Supplies/',
+  '/APP-Home-Supplies/index.html',
+  '/APP-Home-Supplies/script.js',
+  '/APP-Home-Supplies/voiceCommands.js',
+  '/APP-Home-Supplies/productParts.js',
+  '/APP-Home-Supplies/manifest.json',
+  '/APP-Home-Supplies/icons/logo.png'
 ];
 
 self.addEventListener('install', event => {
@@ -18,7 +18,7 @@ self.addEventListener('install', event => {
                 return cache.addAll(urlsToCache);
             })
             .then(() => {
-                console.log('✅ Svi fajlovi uspesno keširani');
+                console.log('✅ Svi fajlovi uspješno keširani');
                 return self.skipWaiting();
             })
             .catch(error => {
@@ -37,7 +37,7 @@ self.addEventListener('activate', event => {
                 }
             }));
         }).then(() => {
-            console.log('✅ Service Worker v110 aktiviran');
+            console.log('✅ Service Worker v111 aktiviran');
             return self.clients.claim();
         })
     );
@@ -48,7 +48,7 @@ self.addEventListener('fetch', event => {
         return;
     }
     
-    // Za JavaScript fajlove uvek idi prvo na MREŽU da se ne zaglavi stari kod
+    // Za JavaScript fajlove uvijek idi prvo na MREŽU da se ne zaglavi stari kod
     if (event.request.url.endsWith('.js')) {
         event.respondWith(
             fetch(event.request)
@@ -77,6 +77,6 @@ self.addEventListener('fetch', event => {
                     return response;
                 });
             })
-            .catch(() => caches.match('/Household_supplies/index.html'))
+            .catch(() => caches.match('/APP-Home-Supplies/index.html'))
     );
 });
