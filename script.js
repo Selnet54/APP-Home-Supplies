@@ -9,6 +9,7 @@ let currentCategory = '';
 let currentSubcategory = '';
 let currentProductPart = '';
 let currentScreenState = 'languages';
+let newlyAddedIds = new Set(); // id-jevi stavki dodatih/ažuriranih u ovoj sesiji (za plavo isticanje)
 
 // ===== 0. EXIT FUNKCIJA =====
 function exitApp() {
@@ -1070,20 +1071,46 @@ function saveProduct() {
         return;
     }
     
-    const productData = {
-        id: Date.now(),
-        product_name: product,
-        description: document.getElementById('descriptionInput')?.value.trim() || '',
-        piece: piece,
-        quantity: parseFloat(quantity),
-        unit: document.getElementById('unitSelect')?.value || 'kg',
-        entry_date: document.getElementById('dateInput')?.value || new Date().toISOString().split('T')[0],
-        shelf_life_months: parseInt(shelfLife),
-        storage_location: document.getElementById('storageSelect')?.value || 'Ostalo'
-    };
-    
+    const novaKolicina = parseFloat(quantity);
+    const noviUnit = document.getElementById('unitSelect')?.value || 'kg';
+    const noviDatum = document.getElementById('dateInput')?.value || new Date().toISOString().split('T')[0];
+    const noviRok = parseInt(shelfLife);
+    const novoSkladiste = document.getElementById('storageSelect')?.value || 'Ostalo';
+    const novOpis = document.getElementById('descriptionInput')?.value.trim() || '';
+
     let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    zalihe.push(productData);
+
+    // Isti proizvod (po nazivu) na istom skladištu i istoj jedinici mere -> saberi količinu
+    const postojeci = zalihe.find(p =>
+        p.quantity > 0 &&
+        p.product_name.trim().toLowerCase() === product.trim().toLowerCase() &&
+        p.storage_location === novoSkladiste &&
+        p.unit === noviUnit
+    );
+
+    if (postojeci) {
+        postojeci.quantity = parseFloat((postojeci.quantity + novaKolicina).toFixed(3));
+        postojeci.piece = piece;
+        postojeci.description = novOpis;
+        postojeci.entry_date = noviDatum;
+        postojeci.shelf_life_months = noviRok;
+        newlyAddedIds.add(postojeci.id);
+    } else {
+        const productData = {
+            id: Date.now(),
+            product_name: product,
+            description: novOpis,
+            piece: piece,
+            quantity: novaKolicina,
+            unit: noviUnit,
+            entry_date: noviDatum,
+            shelf_life_months: noviRok,
+            storage_location: novoSkladiste
+        };
+        zalihe.push(productData);
+        newlyAddedIds.add(productData.id);
+    }
+
     localStorage.setItem('zalihe', JSON.stringify(zalihe));
     prikaziSveUnose();
     
@@ -1134,10 +1161,20 @@ function renderInventory() {
             const expiry = new Date(p.entry_date);
             expiry.setMonth(expiry.getMonth() + p.shelf_life_months);
             const expiryDisplay = expiry.toLocaleDateString('sr-RS', { month: '2-digit', year: '2-digit' });
-            const isLow = (p.unit === 'g' && p.quantity < 400) || (p.unit === 'kg' && p.quantity < 0.4) || ((p.unit === 'kom' || p.unit === 'pcs') && p.quantity <= 2);
-            const bgColor = isLow ? '#F9AA65' : '';
-            
-            html += `<div class="table-row" style="display:grid; grid-template-columns:40px 1.2fr 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap:2px; border-bottom:1px solid #eee; padding:5px 0; background:${bgColor};">`;
+            const isLow = (p.unit === 'g' && p.quantity <= 1000) || (p.unit === 'kg' && p.quantity <= 1) || ((p.unit === 'kom' || p.unit === 'pcs') && p.quantity <= 2);
+            const isNew = newlyAddedIds.has(p.id);
+
+            let bgColor = '';
+            let textColor = '';
+            if (isLow) {
+                bgColor = '#f44336';
+                textColor = 'white';
+            } else if (isNew) {
+                bgColor = '#BBDEFB';
+            }
+            const rowStyle = `display:grid; grid-template-columns:40px 1.2fr 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 1fr; gap:2px; border-bottom:1px solid #eee; padding:5px 0; background:${bgColor}; color:${textColor};`;
+
+            html += `<div class="table-row" style="${rowStyle}">`;
             html += `<div class="cell" style="text-align:center;"><input type="checkbox" class="row-checkbox" data-index="${originalIndex}"></div>`;
             html += `<div class="cell">${p.product_name}</div>`;
             html += `<div class="cell">${p.description || ''}</div>`;
