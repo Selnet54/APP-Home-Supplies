@@ -166,8 +166,7 @@
 <!-- ===== EKRAN 1: LOGIN ===== -->
 <div id="loginScreen" class="screen" style="display: flex;">
     <div class="login-container">
-        <!-- Dodata form oznaka sa onsubmit spriječavanjem osvježavanja -->
-        <form class="login-box" onsubmit="event.preventDefault(); document.getElementById('loginBtn').click();">
+        <form class="login-box" id="loginForm" onsubmit="return false;">
             <img src="icons/logo.png" alt="Zalihe" class="logo-img" id="logoImg" onerror="this.style.display='none'">
             <div class="logo-text">SUPPLIES</div>
             <div style="font-size:18px;color:#aaa;margin-bottom:15px;">Home inventory management</div>
@@ -175,7 +174,6 @@
             
             <input type="tel" id="phoneInput" placeholder="Enter phone number" maxlength="15">
             
-            <!-- Dodat type="submit" da Enter automatski pokreće ENTER dugme -->
             <button type="submit" id="loginBtn" class="btn btn-green">ENTER</button>
             <button type="button" id="supportBtn" class="btn btn-orange">📧 Support</button>
             
