@@ -1,14 +1,14 @@
-const CACHE_NAME = 'zalihe-v113'; // Nova verzija - obriše stari keš
+const CACHE_NAME = 'zalihe-v114'; // Nova verzija - osigurava punjenje novog keša
 
 const urlsToCache = [
-  '/Household_supplies/',
-  '/Household_supplies/index.html',
-  '/Household_supplies/script.js',
-  '/Household_supplies/productParts.js',
-  '/Household_supplies/manifest.json',
-  '/Household_supplies/icons/logo.png',
-  '/Household_supplies/icons/192.png',
-  '/Household_supplies/icons/512.png'
+  '/APP-Home-Supplies/',
+  '/APP-Home-Supplies/index.html',
+  '/APP-Home-Supplies/script.js',
+  '/APP-Home-Supplies/productParts.js',
+  '/APP-Home-Supplies/manifest.json',
+  '/APP-Home-Supplies/icons/logo.png',
+  '/APP-Home-Supplies/icons/192.png',
+  '/APP-Home-Supplies/icons/512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -38,7 +38,7 @@ self.addEventListener('activate', event => {
                 }
             }));
         }).then(() => {
-            console.log('✅ Service Worker v113 aktiviran');
+            console.log('✅ Service Worker v114 aktiviran');
             return self.clients.claim();
         })
     );
@@ -78,6 +78,6 @@ self.addEventListener('fetch', event => {
                     return response;
                 });
             })
-            .catch(() => caches.match('/Household_supplies/index.html'))
+            .catch(() => caches.match('/APP-Home-Supplies/index.html'))
     );
 });
