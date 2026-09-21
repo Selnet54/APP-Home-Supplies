@@ -1597,17 +1597,12 @@ function obrisiOznacenoShopping() {
 }
 
 // ===== INICIJALIZACIJA DUGMADI I DOGAĐAJA =====
+// ===== INICIJALIZACIJA DUGMADI I DOGAĐAJA =====
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ DOM je spreman!');
+
     // Login dugmad
-    document.getElementById('loginBtn')?.addEventListener('click', () => {
-        const phone = document.getElementById('phoneInput')?.value.trim();
-        if (!phone || phone.length < 9) {
-            showModernAlert(t('invalid_input'), t('please_enter_phone'), '📱');
-            return;
-        }
-        showScreen('languageScreen');
-        renderLanguages();
-    });
+    document.getElementById('loginBtn')?.addEventListener('click', triggerLogin);
 
     document.getElementById('supportBtn')?.addEventListener('click', () => {
         document.getElementById('supportDialog')?.classList.add('active');
@@ -1634,18 +1629,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('shopBtn')?.addEventListener('click', () => {
         if (typeof renderShoppingList === 'function') renderShoppingList();
     });
-}); // <--- Ovdje je nedostajalo zatvaranje!
 
-    // Exit dugmad
-    document.getElementById('exitLoginBtn')?.addEventListener('click', exitApp);
-    document.getElementById('exitLangBtn')?.addEventListener('click', exitApp);
-    document.getElementById('exitMainBtn')?.addEventListener('click', exitApp);
-
-    // Header navigacija
-    document.getElementById('backBtn')?.addEventListener('click', handleBackAction);
-    document.getElementById('invBtn')?.addEventListener('click', () => {renderInventory();
-});
-    document.getElementById('shopBtn')?.addEventListener('click', renderShoppingList);
+    updateHeaderLanguage();
 });
 
 function handleBackAction() {
@@ -1701,7 +1686,6 @@ function updateHeaderLanguage() {
     
     console.log('✅ Header ažuriran na:', lang);
 }
-
 // ============================================
 // GLAVNI DOGAĐAJI
 // ============================================
