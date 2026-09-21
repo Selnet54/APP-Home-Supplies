@@ -1,6 +1,6 @@
 // ============================================
 // APP-HOME-SUPPLIES - script.js
-// OČIŠĆENA I ISPRAVLJENA VERZIJA
+// OČIŠĆENA VERZIJA - 
 // ============================================
 console.log('✅ Script.js je učitan!');
 
@@ -11,7 +11,7 @@ let currentSubcategory = '';
 let currentPart = '';
 let currentScreenState = 'languages'; // Pristutna stanja: 'languages', 'categories', 'subcategories', 'productParts', 'dataEntry'
 
-// Pomoćna funkcija za prevode
+// Pomocna funkcija za prevode
 function t(key) {
     if (typeof translations !== 'undefined' && translations[currentLanguage] && translations[currentLanguage][key]) {
         return translations[currentLanguage][key];
@@ -43,29 +43,26 @@ function updateUIStaticTexts() {
     });
 }
 
-// SVI EVENT LISTENERI SAKUPLJENI NA JEDNO MJESTO
-function setupEventListeners() {
-    // 1. Događaji za dugmad navigacije i forme
-    document.getElementById('btnBack')?.addEventListener('click', handleBackAction);
-    document.getElementById('entryDate')?.addEventListener('change', updateExpiryDate);
-    document.getElementById('expiryMonths')?.addEventListener('input', updateExpiryDate);
-    document.getElementById('btnSaveData')?.addEventListener('click', sacuvajZalihe);
+// OVDJE DODAJETE LOGIKU ZA ENTER:
+// Stvarna login funkcija - proverava broj telefona i prelazi na ekran za izbor jezika
+function handleLogin() {
+    const phoneInput = document.getElementById('phoneInput');
+    const phone = phoneInput ? phoneInput.value.trim() : '';
 
-    // 2. Presretanje slanja login forme (Enter na mobilnim tastaturama)
-    const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            if (loginBtn) loginBtn.click();
-        });
+    if (!phone) {
+        showModernAlert(t('warning') || 'Upozorenje', t('enter_phone_number') || 'Unesite broj telefona.', '⚠️');
+        return;
     }
+
+    localStorage.setItem('userPhone', phone);
+
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('languageScreen').style.display = 'flex';
 }
 
 // Generisanje jezika
 function renderLanguages() {
-    const grid = document.getElementById('languagesGrid');
+    const grid = document.getElementById('languageGrid');
     if (!grid || typeof languages === 'undefined') return;
     
     grid.innerHTML = '';
@@ -183,6 +180,7 @@ function showDataEntryScreen() {
     const screen = document.getElementById('dataEntryScreen');
     if (!screen) return;
     
+    // Postavljanje podrazumevanog datuma na današnji
     const today = new Date().toISOString().split('T')[0];
     const dateInput = document.getElementById('entryDate');
     if (dateInput) dateInput.value = today;
@@ -277,24 +275,6 @@ function renderInventory() {
         container.appendChild(card);
     });
 }
-
-// Uređivanje zaliha (Dodano da ne izbacuje grešku)
-function urediZalihe(id) {
-    let zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
-    const item = zalihe.find(i => i.id === id);
-    if (item) {
-        currentCategory = item.category;
-        currentSubcategory = item.subcategory;
-        currentPart = item.part;
-        showDataEntryScreen();
-        
-        setTimeout(() => {
-            if (document.getElementById('itemQuantity')) document.getElementById('itemQuantity').value = item.quantity;
-            if (document.getElementById('itemUnit')) document.getElementById('itemUnit').value = item.unit;
-        }, 100);
-    }
-}
-
 function obrisiZalihe(id) {
     showModernConfirm(
         t('delete_confirm_title') || 'Brisanje',
@@ -398,6 +378,40 @@ function hideAllScreens() {
     screens.forEach(s => s.classList.add('hidden'));
 }
 
+// Događaji / Event Listeners
+function setupEventListeners() {
+    // Login: klik na dugme ENTER
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) {
+        loginBtn.addEventListener('click', handleLogin);
+    }
+
+    // Login: taster Enter na formi (sprečava reload i zove istu login funkciju)
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            handleLogin();
+        });
+    }
+
+    // Login: taster Enter direktno u polju za broj telefona (dodatna sigurnost)
+    const phoneInput = document.getElementById('phoneInput');
+    if (phoneInput) {
+        phoneInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleLogin();
+            }
+        });
+    }
+
+    document.getElementById('btnBack')?.addEventListener('click', handleBackAction);
+    document.getElementById('entryDate')?.addEventListener('change', updateExpiryDate);
+    document.getElementById('expiryMonths')?.addEventListener('input', updateExpiryDate);
+    document.getElementById('btnSaveData')?.addEventListener('click', sacuvajZalihe);
+}
+
 // Modern Modal Dialog Helpers
 function showModernAlert(title, message, icon = 'ℹ️') {
     const alertModal = document.getElementById('customAlertModal');
@@ -426,7 +440,7 @@ function showModernConfirm(title, message, icon = '❓', onYesCallback) {
     
     const closeConfirm = () => {
         confirmModal.classList.add('hidden');
-        document.removeEventListener('keydown', handleModalEnter);
+        document.removeEventListener('keydown', handleModalEnter); // Uklanja slušalac nakon zatvaranja
     };
     
     btnYes.onclick = () => {
@@ -435,6 +449,7 @@ function showModernConfirm(title, message, icon = '❓', onYesCallback) {
     };
     btnNo.onclick = () => closeConfirm();
     
+    // Omogućava pritisak na Enter za potvrdu modala (čak i ako fokus nije na inputu)
     const handleModalEnter = (e) => {
         if (e.key === 'Enter' && !confirmModal.classList.contains('hidden')) {
             e.preventDefault();
@@ -444,30 +459,34 @@ function showModernConfirm(title, message, icon = '❓', onYesCallback) {
     document.addEventListener('keydown', handleModalEnter);
 
     confirmModal.classList.remove('hidden');
-    btnYes.focus();
+    btnYes.focus(); // Stavlja fokus na "DA" dugme
 }
 
-// UNIVERZALNI ENTER LISTENER ZA SVA POLJA ZA UNOS
+// Omogućava rad tipke Enter za login i sve ostale unose
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         const aktivniElement = document.activeElement;
         
+        // Provjera da li je fokus na bilo kom unosu (input ili select)
         if (aktivniElement && (aktivniElement.tagName === 'INPUT' || aktivniElement.tagName === 'SELECT')) {
             
+            // Provjera za custom confirm modal
             const confirmModal = document.getElementById('customConfirmModal');
             if (confirmModal && !confirmModal.classList.contains('hidden')) {
                 return;
             }
 
-            event.preventDefault();
+            event.preventDefault(); // Sprečava osvežavanje stranice
 
+            // 1. Potraga za dugmetom unutar iste forme ili bloka
             const roditelj = aktivniElement.closest('form, .login-card, .login-container, .modal, div');
             
             let potvrdnoDugme = null;
             if (roditelj) {
-                potvrdnoDugme = roditelj.querySelector('button[type="submit"], #btnLogin, .btn-login, #loginBtn, .btn-primary, .btn-save, #btnSaveData');
+                potvrdnoDugme = roditelj.querySelector('button[type="submit"], #btnLogin, .btn-login, #loginBtn, .btn-primary, .btn-save');
             }
 
+            // 2. Ako nije nađeno u roditelju, traži globalno login dugme na stranici
             if (!potvrdnoDugme) {
                 potvrdnoDugme = document.getElementById('btnLogin') || 
                                 document.getElementById('loginBtn') || 
@@ -475,6 +494,7 @@ document.addEventListener('keydown', function(event) {
                                 document.querySelector('button[type="submit"]');
             }
 
+            // Ako je dugme pronađeno i vidljivo je na ekranu — klikni ga
             if (potvrdnoDugme && potvrdnoDugme.offsetParent !== null) {
                 potvrdnoDugme.click();
             }
