@@ -419,30 +419,41 @@ function showModernConfirm(title, message, icon = '❓', onYesCallback) {
     btnYes.focus(); // Stavlja fokus na "DA" dugme
 }
 
-// Omogućava rad tipke Enter za sva polja za unos (Input) u aplikaciji
+// Omogućava rad tipke Enter za login i sve ostale unose
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         const aktivniElement = document.activeElement;
         
-        // Provjerava da li je korisnik trenutno u polju za unos (input ili textarea)
-        if (aktivniElement && (aktivniElement.tagName === 'INPUT' || aktivniElement.tagName === 'TEXTAREA')) {
+        // Provjera da li je fokus na bilo kom unosu (input ili select)
+        if (aktivniElement && (aktivniElement.tagName === 'INPUT' || aktivniElement.tagName === 'SELECT')) {
             
-            // Ako je otvoren custom confirm modal, preskačemo ovaj dio jer ga hendla sam modal
+            // Provjera za custom confirm modal
             const confirmModal = document.getElementById('customConfirmModal');
             if (confirmModal && !confirmModal.classList.contains('hidden')) {
                 return;
             }
 
-            event.preventDefault(); // Sprečava neočekivano ponovno učitavanje stranice
+            event.preventDefault(); // Sprečava osvežavanje stranice
+
+            // 1. Potraga za dugmetom unutar iste forme ili bloka
+            const roditelj = aktivniElement.closest('form, .login-card, .login-container, .modal, div');
             
-            // Pronalazi kontejner/formu u kojoj se input nalazi
-            const roditelj = aktivniElement.closest('.modal, .login-card, form, div') || document;
-            
-            // Pronalazi glavno dugme za potvrdu/prijavu/čuvanje
-            const potvrdnoDugme = roditelj.querySelector('button[type="submit"], .btn-primary, #btnLogin, .btn-save, #btnSave, .btn-submit');
-            
-            if (potvrdnoDugme) {
-                potvrdnoDugme.click(); // Automatski simulira klik na dugme
+            let potvrdnoDugme = null;
+            if (roditelj) {
+                potvrdnoDugme = roditelj.querySelector('button[type="submit"], #btnLogin, .btn-login, #loginBtn, .btn-primary, .btn-save');
+            }
+
+            // 2. Ako nije nađeno u roditelju, traži globalno login dugme na stranici
+            if (!potvrdnoDugme) {
+                potvrdnoDugme = document.getElementById('btnLogin') || 
+                                document.getElementById('loginBtn') || 
+                                document.querySelector('.btn-login') || 
+                                document.querySelector('button[type="submit"]');
+            }
+
+            // Ako je dugme pronađeno i vidljivo je na ekranu — klikni ga
+            if (potvrdnoDugme && potvrdnoDugme.offsetParent !== null) {
+                potvrdnoDugme.click();
             }
         }
     }
