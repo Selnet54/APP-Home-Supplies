@@ -1628,6 +1628,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Header navigacija
     document.getElementById('backBtn')?.addEventListener('click', handleBackAction);
+    document.getElementById('invBtn')?.addEventListener('click', () => {
+        if (typeof renderInventory === 'function') renderInventory();
+    });
+    document.getElementById('shopBtn')?.addEventListener('click', () => {
+        if (typeof renderShoppingList === 'function') renderShoppingList();
+    });
+}); // <--- Ovdje je nedostajalo zatvaranje!
+
+    // Exit dugmad
+    document.getElementById('exitLoginBtn')?.addEventListener('click', exitApp);
+    document.getElementById('exitLangBtn')?.addEventListener('click', exitApp);
+    document.getElementById('exitMainBtn')?.addEventListener('click', exitApp);
+
+    // Header navigacija
+    document.getElementById('backBtn')?.addEventListener('click', handleBackAction);
     document.getElementById('invBtn')?.addEventListener('click', () => {renderInventory();
 });
     document.getElementById('shopBtn')?.addEventListener('click', renderShoppingList);
