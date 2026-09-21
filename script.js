@@ -1308,15 +1308,17 @@ function performInventorySearch(searchTerm) {
     if (!query) return;
     
     const rows = document.querySelectorAll('[data-search-row]');
-    let foundRow = null;
-    let matchCount = 0;
+    let foundRows = [];  // ✅ NIZ umesto jednog foundRow
     
     rows.forEach(row => {
         const rowKey = row.getAttribute('data-search-row');
+        
         // Resetuj prethodno isticanje
         row.style.background = '';
         row.style.color = '';
         row.style.outline = '';
+        row.style.outlineOffset = '';
+        row.style.fontWeight = '';
         
         // Vrati originalnu boju
         const originalIndex = parseInt(row.getAttribute('data-original-index'));
@@ -1335,26 +1337,32 @@ function performInventorySearch(searchTerm) {
         
         // Traži poklapanje
         if (rowKey === query || rowKey.includes(query)) {
-            matchCount++;
-            if (!foundRow) foundRow = row;
+            foundRows.push(row);  // ✅ Dodaj u niz
         }
     });
     
-    if (foundRow) {
-        // Označi pronađeni red - ROYAL PLAVA pozadina sa ŽUTIM slovima
-        foundRow.style.background = '#1a237e'; // Royal blue
-        foundRow.style.color = '#FFD700';       // Gold/žuto
-        foundRow.style.fontWeight = 'bold';
-        foundRow.style.outline = '2px solid #FFD700';
-        foundRow.style.outlineOffset = '-2px';
+    if (foundRows.length > 0) {
+        // ✅ Označi SVE pronađene redove - ROYAL PLAVA + ŽUTA
+        foundRows.forEach(row => {
+            row.style.background = '#1a237e'; // Royal blue
+            row.style.color = '#FFD700';       // Gold/žuto
+            row.style.fontWeight = 'bold';
+            row.style.outline = '2px solid #FFD700';
+            row.style.outlineOffset = '-2px';
+            
+            // Označi checkbox u tom redu
+            const checkbox = row.querySelector('.row-checkbox');
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        });
         
-        // Skroluj do reda
-        foundRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Skroluj do PRVOG pronađenog reda
+        foundRows[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        // Označi checkbox u tom redu
-        const checkbox = foundRow.querySelector('.row-checkbox');
-        if (checkbox) {
-            checkbox.checked = true;
+        // Opciono: prikaži koliko je pronađeno
+        if (foundRows.length > 1) {
+            console.log(`🔍 Pronađeno ${foundRows.length} stavki za "${searchTerm}"`);
         }
     } else {
         showModernAlert(t('nema_proizvoda'), `"${searchTerm}" - ${t('nema_proizvoda')}`, '🔍');
