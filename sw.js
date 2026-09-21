@@ -1,15 +1,14 @@
-const CACHE_NAME = 'zalihe-v111'; // Nova verzija - obriše stari keš
+const CACHE_NAME = 'zalihe-v113'; // Nova verzija - obriše stari keš
 
 const urlsToCache = [
   '/Household_supplies/',
   '/Household_supplies/index.html',
-  '/Household_supplies/script.js',           // ✅ dodat
+  '/Household_supplies/script.js',
   '/Household_supplies/productParts.js',
   '/Household_supplies/manifest.json',
   '/Household_supplies/icons/logo.png',
   '/Household_supplies/icons/192.png',
   '/Household_supplies/icons/512.png'
-  // script1.js i voiceCommands.js OBRISANI
 ];
 
 self.addEventListener('install', event => {
@@ -39,7 +38,7 @@ self.addEventListener('activate', event => {
                 }
             }));
         }).then(() => {
-            console.log('✅ Service Worker v111 aktiviran');
+            console.log('✅ Service Worker v113 aktiviran');
             return self.clients.claim();
         })
     );
