@@ -916,10 +916,9 @@ function selectLanguage(langCode) {
     window.currentLang = langCode;
     localStorage.setItem('appLanguage', langCode);
     
-    if (typeof updateHeaderLanguage === 'function') {
-        updateHeaderLanguage();
-    }
+    updateHeaderTexts();
 
+    // Sakrij sve ekrane i prikaži glavni ekran sa kategorijama
     showScreen('mainScreen');
     renderCategories();
 }
@@ -1550,44 +1549,30 @@ function oznaciSveShopping() {
 function toggleAllShopping() {
     const selectAll = document.getElementById('selectAllShopping');
     const checkboxes = document.querySelectorAll('.shopping-checkbox');
-    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    checkboxes.forEach(cb => cb.checked = selectAll ? selectAll.checked : false);
+}
+
+function oznaciSveShopping() {
+    const checkboxes = document.querySelectorAll('.shopping-checkbox');
+    const selectAll = document.getElementById('selectAllShopping');
+    if (checkboxes.length === 0) return;
+    const sviOznaceni = Array.from(checkboxes).every(cb => cb.checked);
+    checkboxes.forEach(cb => cb.checked = !sviOznaceni);
+    if (selectAll) selectAll.checked = !sviOznaceni;
 }
 
 function kopirajShopping() {
     const shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
     if (shopping.length === 0) {
-        showModernAlert(t('list_empty'), t('no_items_selected'), '🛒');
+        showModernAlert(t('error'), t('list_empty'), '⚠️');
         return;
     }
-    let tekst = `${t('spisak_potreba')}\n${'='.repeat(30)}\n\n`;
-    shopping.forEach((p, index) => {
-        tekst += `${index + 1}. ${p.product_name}`;
-        if (p.description) tekst += ` - ${p.description}`;
-        tekst += `\n`;
-    });
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(tekst).then(() => {
-            showModernAlert(t('success'), t('copied'), '✅');
-        }).catch(() => kopirajFallback(tekst));
-    } else {
-        kopirajFallback(tekst);
-    }
-}
-
-function kopirajFallback(tekst) {
-    const textarea = document.createElement('textarea');
-    textarea.value = tekst;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    try { 
-        document.execCommand('copy'); 
-        showModernAlert(t('success'), t('copied'), '✅');
-    } catch (err) { 
+    const tekst = shopping.map(p => `- ${p.product_name}${p.description ? ' (' + p.description + ')' : ''}`).join('\n');
+    navigator.clipboard.writeText(tekst).then(() => {
+        showModernAlert(t('success'), t('copied'), '📋');
+    }).catch(() => {
         showModernAlert(t('error'), t('copy_error'), '❌');
-    }
-    document.body.removeChild(textarea);
+    });
 }
 
 function obrisiOznacenoShopping() {
@@ -1601,8 +1586,7 @@ function obrisiOznacenoShopping() {
         t('delete_confirm').replace('{count}', selected.length),
         function() {
             let shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-            const indices = Array.from(selected).map(cb => parseInt(cb.dataset.index));
-            indices.sort((a, b) => b - a);
+            const indices = Array.from(selected).map(cb => parseInt(cb.dataset.index)).sort((a, b) => b - a);
             indices.forEach(i => shopping.splice(i, 1));
             localStorage.setItem('shoppingList', JSON.stringify(shopping));
             renderShoppingList();
@@ -1612,13 +1596,48 @@ function obrisiOznacenoShopping() {
     );
 }
 
-// ===== NAZAD =====
+// ===== INICIJALIZACIJA DUGMADI I DOGAĐAJA =====
+document.addEventListener('DOMContentLoaded', () => {
+    // Login dugmad
+    document.getElementById('loginBtn')?.addEventListener('click', () => {
+        const phone = document.getElementById('phoneInput')?.value.trim();
+        if (!phone || phone.length < 9) {
+            showModernAlert(t('invalid_input'), t('please_enter_phone'), '📱');
+            return;
+        }
+        showScreen('languageScreen');
+        renderLanguages();
+    });
+
+    document.getElementById('supportBtn')?.addEventListener('click', () => {
+        document.getElementById('supportDialog')?.classList.add('active');
+    });
+
+    document.getElementById('closeSupportBtn')?.addEventListener('click', () => {
+        document.getElementById('supportDialog')?.classList.remove('active');
+    });
+
+    document.getElementById('closeSupportBtn2')?.addEventListener('click', () => {
+        document.getElementById('supportDialog')?.classList.remove('active');
+    });
+
+    // Exit dugmad
+    document.getElementById('exitLoginBtn')?.addEventListener('click', exitApp);
+    document.getElementById('exitLangBtn')?.addEventListener('click', exitApp);
+    document.getElementById('exitMainBtn')?.addEventListener('click', exitApp);
+
+    // Header navigacija
+    document.getElementById('backBtn')?.addEventListener('click', handleBackAction);
+    document.getElementById('invBtn')?.addEventListener('click', renderInventory);
+    document.getElementById('shopBtn')?.addEventListener('click', renderShoppingList);
+});
+
 function handleBackAction() {
-    console.log('⬅️ Trenutni ekran stanje:', currentScreenState);
-    console.log('📌 currentCategory:', currentCategory);
-    console.log('📌 currentSubcategory:', currentSubcategory);
-    
-    if (currentScreenState === 'dataEntry') {
+    if (currentScreenState === 'subcategories' || currentScreenState === 'inventory' || currentScreenState === 'shopping') {
+        renderCategories();
+    } else if (currentScreenState === 'productParts') {
+        renderSubcategories(currentCategory);
+    } else if (currentScreenState === 'dataEntry') {
         if (currentSubcategory) {
             renderProductParts(currentSubcategory);
         } else if (currentCategory) {
@@ -1626,23 +1645,8 @@ function handleBackAction() {
         } else {
             renderCategories();
         }
-    } else if (currentScreenState === 'productParts') {
-        if (currentCategory) {
-            renderSubcategories(currentCategory);
-        } else {
-            renderCategories();
-        }
-    } else if (currentScreenState === 'subcategories') {
-        renderCategories();
-    } else if (currentScreenState === 'categories') {
-        showScreen('languageScreen');
-        renderLanguages();
-    } else if (currentScreenState === 'shopping' || currentScreenState === 'inventory') {
-        showScreen('mainScreen');
-        renderCategories();
     } else {
-        showScreen('mainScreen');
-        renderCategories();
+        showScreen('languageScreen');
     }
 }
 
