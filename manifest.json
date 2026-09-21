@@ -1,23 +1,23 @@
 {
-  "id": "/Household_supplies/",
+  "id": "/APP-Home-Supplies/",
   "name": "Zalihe - Household Supplies",
   "short_name": "Zalihe",
   "description": "Home inventory management app",
-  "start_url": "/Household_supplies/",
-  "scope": "/Household_supplies/",
+  "start_url": "/APP-Home-Supplies/",
+  "scope": "/APP-Home-Supplies/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#1a237e",
   "theme_color": "#1a237e",
   "icons": [
     {
-      "src": "/Household_supplies/icons/192.png",
+      "src": "/APP-Home-Supplies/icons/192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/Household_supplies/icons/512.png",
+      "src": "/APP-Home-Supplies/icons/512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
