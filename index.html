@@ -9,12 +9,12 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Standardne Ikonice za Pretraživač i Android / iOS -->
+    <!-- Ikonice -->
     <link rel="icon" type="image/png" sizes="192x192" href="icons/192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icons/512.png">
     <link rel="apple-touch-icon" href="icons/192.png">
 
-    <!-- iOS / Apple Podešavanja -->
+    <!-- iOS Podešavanja -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -118,21 +118,6 @@
         .support-note { background: rgba(255,215,0,0.15); border-left: 3px solid #FFD700; padding: 15px; border-radius: 5px; margin-top: 15px; }
         .support-note p { margin: 5px 0; }
 
-        /* ===== IZBOR NAČINA UNOSA ===== */
-        .choice-container { width: 100%; max-width: 500px; padding: 25px; }
-        .choice-box { background: #3E4095; border-radius: 20px; padding: 40px 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .choice-btn { width: 100%; padding: 25px; border: none; border-radius: 16px; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: transform 0.2s; }
-        .choice-btn:hover { transform: scale(1.02); }
-        .choice-voice { background: #4FC3F7; color: #1a237e; }
-        .choice-manual { background: #FFB300; color: #1a237e; }
-
-        /* ===== ZVUČNI MENI ===== */
-        .voice-menu-container { width: 100%; max-width: 600px; padding: 25px; }
-        .voice-menu-box { background: #3E4095; border-radius: 20px; padding: 40px 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .voice-btn { padding: 30px 15px; border: 2px solid #FFD700; border-radius: 16px; background: rgba(255,255,255,0.05); color: white; cursor: pointer; transition: all 0.3s; text-align: center; }
-        .voice-btn:hover { background: #FFD700; color: #1a237e; transform: scale(1.05); }
-
         /* ===== MODERN ALERT ===== */
         #modernAlert, #modernConfirm {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -179,7 +164,6 @@
 <body>
 
 <!-- ===== EKRAN 1: LOGIN ===== -->
-<!-- Promenite ovu liniju: -->
 <div id="loginScreen" class="screen" style="display: flex;">
     <div class="login-container">
         <div class="login-box">
@@ -189,12 +173,12 @@
             <h2>Login</h2>
             <input type="tel" id="phoneInput" placeholder="Enter phone number" maxlength="15">
             <button id="loginBtn" class="btn btn-green">ENTER</button>
-            <button id="supportBtn" class="btn btn-orange" onclick="document.getElementById('supportDialog').style.display='flex'; document.getElementById('supportDialog').classList.add('active');">📧 Support</button>
+            <button id="supportBtn" class="btn btn-orange">📧 Support</button>
             <div class="login-limits">
                 <span>📱 4: Maximum number of phone numbers.</span>
                 <span>🔒 3: Maximum attempts</span>
             </div>
-            <button id="exitLoginBtn" class="btn btn-red" onclick="exitApp();">✖ EXIT</button>
+            <button id="exitLoginBtn" class="btn btn-red">✖ EXIT</button>
         </div>
     </div>
 </div>
@@ -202,7 +186,7 @@
 <!-- ===== SUPPORT DIJALOG ===== -->
 <div id="supportDialog" class="support-overlay">
     <div class="support-box">
-        <button class="support-close" onclick="document.getElementById('supportDialog').style.display='none'; document.getElementById('supportDialog').classList.remove('active');">✖</button>
+        <button class="support-close" id="closeSupportBtn">✖</button>
         <h2>📧 Support</h2>
         <div class="support-content">
             <h3>How to use this app</h3>
@@ -227,7 +211,7 @@
                 <p>Please keep it safe and accessible.</p>
             </div>
         </div>
-        <button class="btn btn-green" style="margin-top:20px;" onclick="document.getElementById('supportDialog').style.display='none'; document.getElementById('supportDialog').classList.remove('active');">✅ Got it</button>
+        <button class="btn btn-green" style="margin-top:20px;" id="closeSupportBtn2">✅ Got it</button>
     </div>
 </div>
 
@@ -237,21 +221,22 @@
         <div class="languages-box">
             <div class="languages-title" id="langTitle">Izaberite jezik / Choose Language / Sprache auswählen / Válasszon nyelvet / Виберіть мову / Выберите язык / 选择语言 / Elija idioma / Escolha o idioma / Choisir la langue</div>
             <div class="languages-grid" id="languageGrid"></div>
-            <button id="exitLangBtn" class="btn btn-red" style="margin-top:20px;" onclick="exitApp();">EXIT</button>
+            <button id="exitLangBtn" class="btn btn-red" style="margin-top:20px;">EXIT</button>
         </div>
     </div>
 </div>
-<!-- ===== EKRAN 5: GLAVNI EKRAN ===== -->
+
+<!-- ===== EKRAN 3: GLAVNI EKRAN ===== -->
 <div id="mainScreen" class="screen" style="display:none; flex-direction:column; background:#f5f5f5; min-height:100vh;">
-    <!-- ===== HEADER ===== -->
-<div class="header">
-    <button id="backBtn" class="btn-header btn-back" onclick="handleHeaderBack()"><span id="backText">Nazad</span></button>
-    <button id="invBtn" class="btn-header btn-inventory" onclick="renderInventory()"><span id="invText">Zalihe</span></button>
-    <button id="shopBtn" class="btn-header btn-shopping" onclick="renderShoppingList()"><span id="shopText">Spisak</span></button>
-    <button id="exitMainBtn" class="btn-header btn-exit" onclick="exitApp()">
-        <span id="exitText">🚪 EXIT</span>
-    </button>
-</div>
+    <!-- HEADER -->
+    <div class="header">
+        <button id="backBtn" class="btn-header btn-back"><span id="backText">Nazad</span></button>
+        <button id="invBtn" class="btn-header btn-inventory"><span id="invText">Zalihe</span></button>
+        <button id="shopBtn" class="btn-header btn-shopping"><span id="shopText">Spisak</span></button>
+        <button id="exitMainBtn" class="btn-header btn-exit">
+            <span id="exitText">🚪 EXIT</span>
+        </button>
+    </div>
     <div id="mainContent" class="container"></div>
 </div>
 
@@ -272,15 +257,14 @@
         <h2 class="confirm-title" id="confirmTitle">Potvrda</h2>
         <p class="confirm-message" id="confirmMessage">Da li ste sigurni?</p>
         <div class="confirm-buttons">
-            <button class="confirm-yes" onclick="closeModernConfirm(); if(confirmCallback && confirmCallback.onYes) confirmCallback.onYes();">✅ Da</button>
-            <button class="confirm-no" onclick="closeModernConfirm(); if(confirmCallback && confirmCallback.onNo) confirmCallback.onNo();">✖ Ne</button>
+            <button class="confirm-yes" id="confirmYesBtn">✅ Da</button>
+            <button class="confirm-no" id="confirmNoBtn">✖ Ne</button>
         </div>
     </div>
 </div>
 
-<!-- JS FUNKCIJE -->
+<!-- ===== WAKE LOCK (sprečava sleep mode) ===== -->
 <script>
-// Spreči sleep mode na mobilnom
 function preventSleep() {
     if (navigator.wakeLock) {
         navigator.wakeLock.request('screen').catch(() => {});
@@ -289,161 +273,40 @@ function preventSleep() {
 document.addEventListener('click', preventSleep);
 document.addEventListener('touchstart', preventSleep);
 
-// RENDER DATA ENTRY
-function renderDataEntry(category) {
-    console.log('📝 renderDataEntry pozvan, category:', category);
-    
-    if (window._keepFormData && window._isVoiceInput) {
-        console.log('⏸️ Preskačem reset forme (voice input)');
-        const mainScreen = document.getElementById('mainScreen');
-        if (mainScreen && mainScreen.style.display !== 'flex') {
-            mainScreen.style.display = 'flex';
-            mainScreen.classList.add('active');
-        }
-        return;
-    }
-    
-    document.querySelectorAll('.screen').forEach(s => {
-        s.style.display = 'none';
-        s.classList.remove('active');
-    });
-    
-    const mainScreen = document.getElementById('mainScreen');
-    if (mainScreen) {
-        mainScreen.style.display = 'flex';
-        mainScreen.classList.add('active');
-    }
-    
-    const mainContent = document.getElementById('mainContent');
-    if (mainContent) {
-        mainContent.innerHTML = `
-            <div id="dataEntryScreen" style="display:block; padding:20px;">
-                <h2 class="title" id="dataEntryTitle">📝 Unos podataka</h2>
-                
-                <div class="row">
-                    <label for="productInput">Proizvod:</label>
-                    <input type="text" id="productInput" placeholder="Npr. mleko" style="flex:1; padding:16px; border:2px solid #ddd; border-radius:12px; font-size:24px;">
-                </div>
-                
-                <div class="row">
-                    <label>Količina:</label>
-                    <div class="inline-group">
-                        <input type="number" id="pieceInput" value="1" style="flex:1; padding:16px; border:2px solid #ddd; border-radius:12px; font-size:24px;">
-                        <label style="font-size:18px;">komada</label>
-                        <input type="number" id="quantityInput" value="1" style="flex:1; padding:16px; border:2px solid #ddd; border-radius:12px; font-size:24px;">
-                        <label style="font-size:18px;">kg/l/kom</label>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <label for="unitSelect">Jedinica:</label>
-                    <select id="unitSelect" style="flex:1; padding:16px; border:2px solid #ddd; border-radius:12px; font-size:24px;">
-                        <option value="kom">komad</option>
-                        <option value="kg">kilogram</option>
-                        <option value="g">gram</option>
-                        <option value="l">litar</option>
-                        <option value="pak">paket</option>
-                    </select>
-                </div>
-                
-                <div class="row">
-                    <label for="storageSelect">Skladište:</label>
-                    <select id="storageSelect" style="flex:1; padding:16px; border:2px solid #ddd; border-radius:12px; font-size:24px;">
-                        <option value="Zamrzivač 1">Zamrzivač 1</option>
-                        <option value="Zamrzivač 2">Zamrzivač 2</option>
-                        <option value="Zamrzivač 3">Zamrzivač 3</option>
-                        <option value="Frižider">Frižider</option>
-                        <option value="Ostava">Ostava</option>
-                    </select>
-                </div>
-                
-                <div class="row">
-                    <label for="shelfLifeInput">Rok (meseci):</label>
-                    <input type="number" id="shelfLifeInput" value="12" style="flex:1; padding:16px; border:2px solid #ddd; border-radius:12px; font-size:24px;">
-                    <div id="expiryDisplay" style="padding:16px; background:#f0f0f0; border-radius:12px; font-weight:bold; color:#1a237e; text-align:center; font-size:24px; min-width:120px;">
-                        📅 12 meseci
-                    </div>
-                </div>
-                
-                <div class="btn-group">
-                    <button class="btn-save" onclick="saveProduct()">💾 Sačuvaj</button>
-                    <button class="btn-cancel" onclick="renderInventory()">❌ Otkaži</button>
-                </div>
-            </div>
-        `;
-        
-        const shelfInput = document.getElementById('shelfLifeInput');
-        const expiryDisplay = document.getElementById('expiryDisplay');
-        if (shelfInput && expiryDisplay) {
-            shelfInput.addEventListener('input', function() {
-                const val = this.value || '0';
-                expiryDisplay.textContent = `📅 ${val} meseci`;
-            });
-        }
-        
-        if (typeof prikaziPoljaZaUnos === 'function') {
-            prikaziPoljaZaUnos();
-        } else {
-            console.log('⏳ prikaziPoljaZaUnos još nije dostupan, čekam...');
-            setTimeout(function() {
-                if (typeof prikaziPoljaZaUnos === 'function') {
-                    prikaziPoljaZaUnos();
-                }
-            }, 500);
-        }
-    }
-}
-
-window.renderDataEntry = renderDataEntry;
-
-window.addEventListener('load', function() {
-    console.log('🔍 Provera funkcija:');
-    console.log('prikaziPoljaZaUnos:', typeof window.prikaziPoljaZaUnos);
-    console.log('saveProduct:', typeof window.saveProduct);
-    console.log('renderDataEntry:', typeof window.renderDataEntry);
-    console.log('startVoiceRecognition:', typeof window.startVoiceRecognition);
-
-    // PRIKAZI PRVI EKRAN (LOGIN ILI JEZIKE)
-    const loginScreen = document.getElementById('loginScreen');
-    if (loginScreen) {
-        loginScreen.style.display = 'flex';
-        loginScreen.classList.add('active');
-    }
-});
-
-console.log('✅ renderDataEntry funkcija definisana!');
+console.log('✅ HTML spreman!');
 </script>
 
-<!-- GLAVNE SKRIPTE -->
+<!-- ===== GLAVNE SKRIPTE ===== -->
 <script src="productParts.js"></script>
 <script src="script.js"></script>
+
+<!-- ===== SERVICE WORKER ===== -->
 <script>
-  if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/Household_supplies/sw.js', {
-      scope: '/Household_supplies/'
+        scope: '/Household_supplies/'
     }).then(function(reg) {
-      console.log('✅ SW registrovan:', reg.scope);
+        console.log('✅ SW registrovan:', reg.scope);
 
-      // 🔥 Proveri ima li nove verzije čim se app otvori/vrati u fokus
-      reg.update();
-      document.addEventListener('visibilitychange', function() {
-        if (document.visibilityState === 'visible') reg.update();
-      });
+        // Proveri ima li nove verzije čim se app otvori/vrati u fokus
+        reg.update();
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') reg.update();
+        });
     }).catch(function(err) {
-      console.error('❌ SW greška:', err);
+        console.error('❌ SW greška:', err);
     });
-  }
-</script>
 
-    // 🔥 Kad novi SW preuzme kontrolu, automatski osveži stranicu
+    // Kad novi SW preuzme kontrolu, automatski osveži stranicu
     let reloadedOnce = false;
     navigator.serviceWorker.addEventListener('controllerchange', function() {
-      if (reloadedOnce) return;
-      reloadedOnce = true;
-      console.log('🔄 Nova verzija app-a - osvežavam...');
-      window.location.reload();
+        if (reloadedOnce) return;
+        reloadedOnce = true;
+        console.log('🔄 Nova verzija app-a - osvežavam...');
+        window.location.reload();
     });
-  }
+}
 </script>
+
 </body>
 </html>
