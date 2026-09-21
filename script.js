@@ -1569,14 +1569,7 @@ function renderShoppingList() {
     content.innerHTML = html;
 }
 
-function obrisiSaSpiska(index) {
-    if (!confirm(t('delete_from_shopping'))) return;
-    let shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
-    shopping.splice(index, 1);
-    localStorage.setItem('shoppingList', JSON.stringify(shopping));
-    renderShoppingList();
-    showModernAlert(t('success'), 'Stavka je obrisana!', '✅');
-}
+
 function oznaciSveShopping() {
     const checkboxes = document.querySelectorAll('.shopping-checkbox');
     const selectAll = document.getElementById('selectAllShopping');
@@ -1674,6 +1667,8 @@ function handleBackAction() {
     } else if (currentScreenState === 'categories') {
         showScreen('languageScreen');
         renderLanguages();
+    } else if (currentScreenState === 'inventory' || currentScreenState === 'shopping') {
+        renderCategories();
     } else {
         showScreen('mainScreen');
         renderCategories();
