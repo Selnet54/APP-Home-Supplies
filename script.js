@@ -44,6 +44,7 @@ function buildAutoProductName(subcategory, part) {
 }
 
 // ===== 0. EXIT FUNKCIJA =====
+// ===== 0. EXIT FUNKCIJA =====
 function exitApp() {
     console.log("🚪 Exit dugme kliknuto!");
     
@@ -74,7 +75,7 @@ function exitApp() {
     
     document.body.innerHTML = `
         <div style="text-align: center; color: #FFD700;">
-            <div style="font-size: 80px; margin-bottom: 20px;">👋</div>
+            <img src="icons/logo.png" alt="Supplies" style="width: 120px; height: 120px; border-radius: 50%; background: #FFD700; padding: 15px; object-fit: contain; margin-bottom: 20px;" onerror="this.style.display='none'">
             <div style="font-size: 32px; font-weight: bold;">${poruka}</div>
             <div style="font-size: 16px; color: #888; margin-top: 30px;">© Supplies App</div>
             <button onclick="location.reload()" style="margin-top:30px; padding:12px 30px; background:#FFD700; color:#1a237e; border:none; border-radius:8px; font-size:18px; cursor:pointer; font-weight:bold;">
