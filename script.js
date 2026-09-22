@@ -33,6 +33,10 @@ const SUBCATEGORY_NAME_TEMPLATE = {
 
 function buildAutoProductName(subcategory, part) {
     if (!part) return '';
+    // Izuzeci: delovi koji su već kompletan naziv proizvoda (ne treba prefiks podkategorije)
+    const NO_PREFIX_PARTS = ['gril pile'];
+    if (NO_PREFIX_PARTS.includes(part.trim().toLowerCase())) return part;
+
     if (!subcategory) return part;
     const template = SUBCATEGORY_NAME_TEMPLATE[subcategory];
     if (template) return template(part);
@@ -940,16 +944,28 @@ function renderDataEntry(productName) {
         }
     }
 
-    pieceInput?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); quantityInput?.focus(); }
-    });
-    quantityInput?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); openDropdown(unitSelect); }
-    });
+    // Pomeranje na sledeće polje 1 sekundu nakon poslednjeg kucanja (bez čekanja na Enter),
+    // plus Enter odmah pomera dalje za one koji žele brže.
+    function autoAdvance(inputEl, nextAction) {
+        if (!inputEl) return;
+        let timer = null;
+        inputEl.addEventListener('input', () => {
+            clearTimeout(timer);
+            timer = setTimeout(nextAction, 1000);
+        });
+        inputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(timer);
+                nextAction();
+            }
+        });
+    }
+
+    autoAdvance(pieceInput, () => quantityInput?.focus());
+    autoAdvance(quantityInput, () => openDropdown(unitSelect));
     unitSelect?.addEventListener('change', () => { shelfLifeInput?.focus(); });
-    shelfLifeInput?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); openDropdown(storageSelect); }
-    });
+    autoAdvance(shelfLifeInput, () => openDropdown(storageSelect));
     storageSelect?.addEventListener('change', () => { saveBtn?.focus(); });
 
     pieceInput?.focus();
@@ -1086,8 +1102,7 @@ function saveProduct() {
     document.getElementById('quantityInput').value = '';
     document.getElementById('shelfLifeInput').value = '';
     document.getElementById('descriptionInput').value = '';
-    document.getElementById('productInput').focus();
-    document.getElementById('productInput').select();
+    document.getElementById('pieceInput').focus();
     
     console.log('✅ Proizvod sačuvan bez popup-a');
 }
