@@ -11,6 +11,34 @@ let currentProductPart = '';
 let currentScreenState = 'languages';
 let newlyAddedIds = new Set();
 
+// ===== Automatski naziv proizvoda na osnovu podkategorije =====
+// Za poznate podkategorije koristi prirodan srpski oblik (npr. "Pileći batak").
+// Za ostale, jednostavno spaja naziv podkategorije i dela ("Podkategorija Deo") - lako izmenjivo ručno u polju.
+const SUBCATEGORY_NAME_TEMPLATE = {
+    'Pileće': (part) => `Pileći ${part.toLowerCase()}`,
+    'Ćureće': (part) => `Ćureći ${part.toLowerCase()}`,
+    'Guska': (part) => `${part} guske`,
+    'Patka': (part) => `${part} patke`,
+    'Svinjsko': (part) => `Svinjski ${part.toLowerCase()}`,
+    'Juneće': (part) => `Juneći ${part.toLowerCase()}`,
+    'Govedina': (part) => `Goveđi ${part.toLowerCase()}`,
+    'Jagnjeće': (part) => `Jagnjeći ${part.toLowerCase()}`,
+    'Ovčije': (part) => `Ovčiji ${part.toLowerCase()}`,
+    'Prepelica': (part) => `${part} prepelice`,
+    'Fazan': (part) => `${part} fazana`,
+    'Jarebica': (part) => `${part} jarebice`,
+    'Zečije': (part) => `Zečiji ${part.toLowerCase()}`,
+    'Konjsko': (part) => `Konjski ${part.toLowerCase()}`
+};
+
+function buildAutoProductName(subcategory, part) {
+    if (!part) return '';
+    if (!subcategory) return part;
+    const template = SUBCATEGORY_NAME_TEMPLATE[subcategory];
+    if (template) return template(part);
+    return `${subcategory} ${part}`;
+}
+
 // ===== 0. EXIT FUNKCIJA =====
 function exitApp() {
     console.log("🚪 Exit dugme kliknuto!");
@@ -836,9 +864,10 @@ function renderDataEntry(productName) {
     const content = document.getElementById('mainContent');
     if (!content) return;
     const today = new Date().toISOString().split('T')[0];
+    const autoName = buildAutoProductName(currentSubcategory, productName);
     content.innerHTML = `
         <div class="title">${t('unos_podataka')}</div>
-        <div class="row"><label>${t('naziv_proizvoda')}</label><input type="text" id="productInput" value="${productName || ''}"></div>
+        <div class="row"><label>${t('naziv_proizvoda')}</label><input type="text" id="productInput" value="${autoName}"></div>
         <div class="row"><label>${t('opis')}</label><input type="text" id="descriptionInput"></div>
         <div class="row">
             <label>${t('komad')} <span style="color:red;">*</span></label>
@@ -883,7 +912,7 @@ function renderDataEntry(productName) {
             </select>
         </div>
         <div class="btn-group">
-            <button class="btn-save" onclick="saveProduct()">✅ ${t('unesi')}</button>
+            <button class="btn-save" id="btnSaveData" onclick="saveProduct()">✅ ${t('unesi')}</button>
             <button class="btn-cancel" onclick="handleBackAction()">✖ ${t('odustani')}</button>
         </div>
         <div class="table-container">
@@ -895,7 +924,35 @@ function renderDataEntry(productName) {
     document.getElementById('dateInput')?.addEventListener('input', updateExpiryDate);
     document.getElementById('shelfLifeInput')?.addEventListener('change', updateExpiryDate);
     document.getElementById('shelfLifeInput')?.addEventListener('input', updateExpiryDate);
-    document.getElementById('productInput')?.focus();
+
+    // ===== Redosled polja: komad -> količina -> jedinica mere -> rok (meseci) -> skladište -> unesi =====
+    const pieceInput = document.getElementById('pieceInput');
+    const quantityInput = document.getElementById('quantityInput');
+    const unitSelect = document.getElementById('unitSelect');
+    const shelfLifeInput = document.getElementById('shelfLifeInput');
+    const storageSelect = document.getElementById('storageSelect');
+    const saveBtn = document.getElementById('btnSaveData');
+
+    function openDropdown(select) {
+        select.focus();
+        if (typeof select.showPicker === 'function') {
+            try { select.showPicker(); } catch (e) { /* nije podržano - samo fokus */ }
+        }
+    }
+
+    pieceInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); quantityInput?.focus(); }
+    });
+    quantityInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); openDropdown(unitSelect); }
+    });
+    unitSelect?.addEventListener('change', () => { shelfLifeInput?.focus(); });
+    shelfLifeInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); openDropdown(storageSelect); }
+    });
+    storageSelect?.addEventListener('change', () => { saveBtn?.focus(); });
+
+    pieceInput?.focus();
     updateExpiryDate();
     prikaziSveUnose();
 }
