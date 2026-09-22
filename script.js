@@ -881,6 +881,7 @@ function renderDataEntry(productName) {
                 <input type="number" id="quantityInput" step="0.1">
                 <label>${t('jedinica_mere')}</label>
                 <select id="unitSelect">
+                    <option value="" selected disabled>-- ${t('jedinica_mere')} --</option>
                     <option value="kg">${t('kg')}</option>
                     <option value="g">${t('g')}</option>
                     <option value="kom">${t('kom')}</option>
@@ -907,6 +908,7 @@ function renderDataEntry(productName) {
         <div class="row">
             <label>${t('mesto_skladistenja')}</label>
             <select id="storageSelect">
+                <option value="" selected disabled>-- ${t('mesto_skladistenja')} --</option>
                 <option value="${t('zamrzivac_1')}">❄️ ${t('zamrzivac_1')}</option>
                 <option value="${t('zamrzivac_2')}">❄️ ${t('zamrzivac_2')}</option>
                 <option value="${t('zamrzivac_3')}">❄️ ${t('zamrzivac_3')}</option>
