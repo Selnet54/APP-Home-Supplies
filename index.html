@@ -124,22 +124,17 @@
             background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 9999;
             backdrop-filter: blur(5px);
         }
-        #modernAlert .alert-box {
-            background: #b71c1c; border: 3px solid #FFD600; border-radius: 12px; padding: 16px;
-            max-width: 160px; width: 90%;
+        #modernAlert .alert-box, #modernConfirm .confirm-box {
+            background: #b71c1c; border: 3px solid #FFD600; border-radius: 12px; padding: 18px;
+            max-width: 184px; width: 90%;
             text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: slideIn 0.3s ease;
         }
-        #modernConfirm .confirm-box {
-            background: white; border-radius: 24px; padding: 40px; max-width: 400px; width: 90%;
-            text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: slideIn 0.3s ease;
-        }
-        #modernAlert .alert-icon { display: none; }
-        #modernConfirm .confirm-icon { font-size: 64px; margin-bottom: 15px; }
-        #modernAlert .alert-title { color: #FFD600; margin-bottom: 6px; font-size: 12px; }
-        #modernConfirm .confirm-title { color: #1a237e; margin-bottom: 10px; font-size: 28px; }
-        #modernAlert .alert-message { font-size: 9px; color: #FFD600; margin-bottom: 10px; }
-        #modernConfirm .confirm-message { font-size: 18px; color: #555; margin-bottom: 25px; }
-        #modernAlert .alert-btn { background: transparent; color: #FFD600; border: 2px solid #FFD600; padding: 5px 16px; border-radius: 6px; font-size: 9px; cursor: pointer; font-weight: bold; }
+        #modernAlert .alert-icon, #modernConfirm .confirm-icon { display: none; }
+        #modernAlert .alert-title, #modernConfirm .confirm-title { color: #FFD600; margin-bottom: 6px; font-size: 14px; }
+        #modernAlert .alert-message, #modernConfirm .confirm-message { font-size: 10px; color: #FFD600; margin-bottom: 10px; }
+        #modernAlert .alert-btn { background: transparent; color: #FFD600; border: 2px solid #FFD600; padding: 6px 18px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: bold; }
+        #modernConfirm .confirm-buttons { display: flex; gap: 8px; }
+        #modernConfirm .confirm-yes, #modernConfirm .confirm-no { flex: 1; background: transparent; color: #FFD600; border: 2px solid #FFD600; padding: 6px; border-radius: 6px; font-size: 10px; cursor: pointer; font-weight: bold; }
         #modernConfirm .confirm-buttons { display: flex; gap: 10px; }
         #modernConfirm .confirm-yes { flex: 1; background: #4CAF50; color: white; border: none; padding: 12px; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: bold; }
         #modernConfirm .confirm-no { flex: 1; background: #f44336; color: white; border: none; padding: 12px; border-radius: 12px; font-size: 18px; cursor: pointer; font-weight: bold; }
