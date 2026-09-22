@@ -1104,6 +1104,8 @@ function saveProduct() {
     document.getElementById('quantityInput').value = '';
     document.getElementById('shelfLifeInput').value = '';
     document.getElementById('descriptionInput').value = '';
+    document.getElementById('unitSelect').value = '';
+    document.getElementById('storageSelect').value = '';
     document.getElementById('pieceInput').focus();
     
     console.log('✅ Proizvod sačuvan bez popup-a');
