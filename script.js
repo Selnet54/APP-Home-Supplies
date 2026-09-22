@@ -966,9 +966,9 @@ function renderDataEntry(productName) {
 
     autoAdvance(pieceInput, () => quantityInput?.focus());
     autoAdvance(quantityInput, () => openDropdown(unitSelect));
-    unitSelect?.addEventListener('change', () => { setTimeout(() => shelfLifeInput?.focus(), 200); });
+    unitSelect?.addEventListener('change', () => { setTimeout(() => shelfLifeInput?.focus(), 150); });
     autoAdvance(shelfLifeInput, () => openDropdown(storageSelect));
-    storageSelect?.addEventListener('change', () => { setTimeout(() => saveBtn?.focus(), 200); });
+    storageSelect?.addEventListener('change', () => { setTimeout(() => saveBtn?.focus(), 150); });
 
     pieceInput?.focus();
     updateExpiryDate();
