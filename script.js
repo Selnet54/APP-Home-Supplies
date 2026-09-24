@@ -99,6 +99,32 @@ function showModernAlert(title, message, icon = '📢') {
     setTimeout(() => { closeModernAlert(); }, 2000);
 }
 
+// ===== MODERNA POTVRDA (Da/Ne) =====
+function showModernConfirm(title, message, icon = '❓', onYesCallback) {
+    const confirmDiv = document.getElementById('modernConfirm');
+    if (!confirmDiv) {
+        if (confirm(message)) onYesCallback();
+        return;
+    }
+    document.getElementById('confirmIcon').textContent = icon;
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
+
+    const btnYes = document.getElementById('confirmYesBtn');
+    const btnNo = document.getElementById('confirmNoBtn');
+
+    const zatvoriPotvrdu = () => {
+        confirmDiv.style.display = 'none';
+        confirmDiv.classList.remove('active');
+    };
+
+    btnYes.onclick = () => { zatvoriPotvrdu(); if (onYesCallback) onYesCallback(); };
+    btnNo.onclick = () => zatvoriPotvrdu();
+
+    confirmDiv.style.display = 'flex';
+    confirmDiv.classList.add('active');
+}
+
 function closeModernAlert() {
     const alertDiv = document.getElementById('modernAlert');
     if (alertDiv) {
@@ -1521,6 +1547,7 @@ function renderShoppingList() {
     html += `<div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">`;
     html += `<button onclick="oznaciSveShopping()" style="background:#2196F3; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">☑️ ${t('oznaci_sve')}</button>`;
     html += `<button onclick="kopirajShopping()" style="background:#4CAF50; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">📋 ${t('kopiraj')}</button>`;
+    html += `<button onclick="posaljiShoppingListu()" style="background:#2196F3; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">📤 Pošalji</button>`;
     html += `<button onclick="obrisiOznacenoShopping()" style="background:#f44336; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">🗑️ ${t('obrisi_oznaceno')}</button>`;
     html += `<button onclick="renderCategories()" style="background:#666; color:white; border:none; padding:10px 20px; border-radius:8px; font-size:16px; cursor:pointer;">✖ ${t('odustani')}</button>`;
     html += `</div>`;
@@ -1599,6 +1626,33 @@ function kopirajFallback(tekst) {
         showModernAlert(t('error'), t('copy_error'), '❌');
     }
     document.body.removeChild(textarea);
+}
+
+// ===== POŠALJI SPISAK ZA KUPOVINU (Viber/WhatsApp/SMS preko native share menija) =====
+async function posaljiShoppingListu() {
+    const shopping = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+    if (shopping.length === 0) {
+        showModernAlert(t('list_empty'), t('no_items_selected'), '🛒');
+        return;
+    }
+    let tekst = `${t('spisak_potreba')}\n${'='.repeat(30)}\n\n`;
+    shopping.forEach((p, index) => {
+        tekst += `${index + 1}. ${p.product_name}`;
+        if (p.description) tekst += ` - ${p.description}`;
+        tekst += `\n`;
+    });
+
+    if (navigator.share) {
+        try {
+            await navigator.share({ title: t('spisak_potreba'), text: tekst });
+        } catch (e) {
+            // korisnik je otkazao deljenje - nema potrebe za daljom akcijom
+        }
+    } else {
+        // Browser ne podržava direktno deljenje - rezervni plan je kopiranje
+        kopirajShopping();
+        showModernAlert('Info', 'Ovaj browser ne podržava direktno slanje - spisak je kopiran, nalepite ga ručno.', 'ℹ️');
+    }
 }
 
 function obrisiOznacenoShopping() {
@@ -1700,6 +1754,14 @@ document.addEventListener('DOMContentLoaded', function() {
             renderShoppingList();
         }
 
+        // POŠALJI / PRIMI IZMENU
+        if (e.target && (e.target.id === 'sendBtn' || e.target.closest('#sendBtn'))) {
+            posaljiIzmenu();
+        }
+        if (e.target && (e.target.id === 'receiveBtn' || e.target.closest('#receiveBtn'))) {
+            document.getElementById('receiveFileInput').click();
+        }
+
         // SUPPORT DUGMAD
         if (e.target && (e.target.id === 'supportBtn' || e.target.closest('#supportBtn'))) {
             openSupportDialog();
@@ -1725,4 +1787,90 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     console.log('✅ Svi događaji uspešno povezani preko delegiranja!');
+
+    // Fajl izabran u "Primi" dijalogu
+    document.getElementById('receiveFileInput')?.addEventListener('change', primiIzmenu);
 });
+
+// ===== POŠALJI IZMENU (izvoz zaliha + spiska, bez servera) =====
+async function posaljiIzmenu() {
+    const zalihe = JSON.parse(localStorage.getItem('zalihe') || '[]');
+    const shoppingList = JSON.parse(localStorage.getItem('shoppingList') || '[]');
+    const podaci = {
+        zalihe,
+        shoppingList,
+        poslato: new Date().toISOString()
+    };
+    const jsonStr = JSON.stringify(podaci, null, 2);
+    const imeFajla = `zalihe_${new Date().toISOString().slice(0, 10)}.json`;
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+
+    try {
+        const file = new File([blob], imeFajla, { type: 'application/json' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: 'Zalihe - ažuriranje', text: 'Evo najnovijih zaliha.' });
+            return;
+        }
+        if (navigator.share) {
+            await navigator.share({ title: 'Zalihe - ažuriranje', text: jsonStr });
+            return;
+        }
+    } catch (e) {
+        // korisnik je otkazao deljenje - nema potrebe za daljom akcijom
+        return;
+    }
+
+    // Rezervni plan: browser ne podržava deljenje - preuzmi fajl da se ručno pošalje
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = imeFajla;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showModernAlert('Preuzeto', 'Fajl je sačuvan. Sada ga ručno pošaljite preko WhatsApp/email/Bluetooth.', '📤');
+}
+
+// ===== PRIMI IZMENU (uvoz zaliha + spiska sa drugog telefona) =====
+function primiIzmenu(event) {
+    const fileInput = event.target;
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        let podaci;
+        try {
+            podaci = JSON.parse(e.target.result);
+        } catch (err) {
+            showModernAlert('Greška', 'Fajl nije ispravan (nije prepoznat format).', '⚠️');
+            fileInput.value = '';
+            return;
+        }
+
+        if (!podaci || !Array.isArray(podaci.zalihe)) {
+            showModernAlert('Greška', 'Fajl ne sadrži očekivane podatke o zalihama.', '⚠️');
+            fileInput.value = '';
+            return;
+        }
+
+        showModernConfirm(
+            'Primena podataka',
+            'Ovo će ZAMENITI trenutne zalihe i spisak za kupovinu primljenim podacima. Nastaviti?',
+            '📥',
+            function onYes() {
+                localStorage.setItem('zalihe', JSON.stringify(podaci.zalihe || []));
+                localStorage.setItem('shoppingList', JSON.stringify(podaci.shoppingList || []));
+                showModernAlert('Uspešno', 'Podaci su ažurirani.', '✅');
+                if (currentScreenState === 'shopping') {
+                    renderShoppingList();
+                } else {
+                    renderInventory();
+                }
+            }
+        );
+        fileInput.value = '';
+    };
+    reader.readAsText(file);
+}
